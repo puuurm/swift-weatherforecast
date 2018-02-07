@@ -14,6 +14,7 @@
 		C90A7C06202AF91600B8DD95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C90A7C05202AF91600B8DD95 /* Assets.xcassets */; };
 		C90A7C09202AF91600B8DD95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C90A7C07202AF91600B8DD95 /* LaunchScreen.storyboard */; };
 		C90A7C14202AF91600B8DD95 /* WeatherForecastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C13202AF91600B8DD95 /* WeatherForecastTests.swift */; };
+		C90A7C1F202AFB2900B8DD95 /* APIConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C1E202AFB2900B8DD95 /* APIConstant.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		C90A7C0F202AF91600B8DD95 /* WeatherForecastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherForecastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C90A7C13202AF91600B8DD95 /* WeatherForecastTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastTests.swift; sourceTree = "<group>"; };
 		C90A7C15202AF91600B8DD95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C90A7C1E202AFB2900B8DD95 /* APIConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstant.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -115,6 +117,7 @@
 				C90A7C05202AF91600B8DD95 /* Assets.xcassets */,
 				C90A7C07202AF91600B8DD95 /* LaunchScreen.storyboard */,
 				C90A7C0A202AF91600B8DD95 /* Info.plist */,
+				C90A7C1E202AFB2900B8DD95 /* APIConstant.swift */,
 			);
 			path = WeatherForecast;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 			files = (
 				C90A7C01202AF91600B8DD95 /* ViewController.swift in Sources */,
 				C90A7BFF202AF91600B8DD95 /* AppDelegate.swift in Sources */,
+				C90A7C1F202AFB2900B8DD95 /* APIConstant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
