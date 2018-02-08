@@ -21,7 +21,7 @@ class WeatherForecastTests: XCTestCase {
     
     func test_weatherURL() {
         let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?id=1835841")
-        let testURL = WeatherAPI.weatherURL(id: .korea)
+        let testURL = WeatherAPI.url(id: .korea)
         XCTAssertEqual(testURL, url)
     }
 

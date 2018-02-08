@@ -13,13 +13,17 @@ enum ID: Int {
 }
 
 struct WeatherAPI {
+
     private static let baseURLString = "https://api.openweathermap.org/data/2.5/forecast"
 
-    static func weatherURL(id: ID) -> URL? {
+    static func url(id: ID) -> URL? {
         guard var components = URLComponents(string: baseURLString) else { return nil }
         var queryItems = [URLQueryItem]()
-        let item = URLQueryItem(name: "id", value: String(id.rawValue))
-        queryItems.append(item)
+        let baseParams = ["id": String(id.rawValue), "APPID": APIConstant.apiKey]
+        for (key, value) in baseParams {
+            let item = URLQueryItem(name: key, value: value)
+            queryItems.append(item)
+        }
         components.queryItems = queryItems
         return components.url
     }
