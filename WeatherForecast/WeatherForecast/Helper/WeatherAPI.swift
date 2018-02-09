@@ -8,10 +8,6 @@
 
 import Foundation
 
-enum ID: Int {
-    case korea = 1835841
-}
-
 struct WeatherAPI {
 
     private static let baseURLString = "https://api.openweathermap.org/data/2.5/forecast"
@@ -28,4 +24,21 @@ struct WeatherAPI {
         return components.url
     }
 
+    static func objectFromJSONData(data: Data) -> ResponseResult {
+        do {
+            let jsonObject =  try JSONDecoder().decode(Response.self, from: data)
+            return .success(jsonObject)
+        } catch let error {
+            return .failure(error)
+        }
+    }
+}
+
+enum ID: Int {
+    case korea = 1835841
+}
+
+enum ResponseResult {
+    case success(Response)
+    case failure(Error)
 }

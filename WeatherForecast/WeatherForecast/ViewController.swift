@@ -10,14 +10,16 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var weatherContainer: WeatherContainer?
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        weatherContainer = WeatherContainer()
-        weatherContainer?.fetchWeatherInfo(id: .korea)
+        let dataManager = DataManager()
+        dataManager.fetchForecastInfo(id: .korea) {
+            (result) -> Void in
+            switch result {
+            case let .success(r) : print(r)
+            case let .failure(error): print(error)
+            }
+        }
     }
-
-
 }
 

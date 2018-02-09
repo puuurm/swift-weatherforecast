@@ -18,11 +18,18 @@ class WeatherForecastTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
     }
-    
-    func test_weatherURL() {
-        let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?id=1835841")
-        let testURL = WeatherAPI.url(id: .korea)
-        XCTAssertEqual(testURL, url)
+
+    func test_fetchForecastInfo() {
+        let dataManager = DataManager()
+        var response: Response?
+        dataManager.fetchForecastInfo(id: .korea) {
+            (result) -> Void in
+            switch result {
+            case let .success(r) : response = r
+            case let .failure(error): print(error)
+            }
+        }
+        XCTAssertNotNil(response)
     }
 
 }
