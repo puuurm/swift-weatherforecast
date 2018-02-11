@@ -12,7 +12,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let dataManager = DataManager()
+        let dataManager = DataManager(session: URLSession.shared)
         dataManager.fetchForecastInfo(id: .korea) {
             (result) -> Void in
             switch result {

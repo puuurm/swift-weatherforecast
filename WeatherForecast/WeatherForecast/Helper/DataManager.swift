@@ -10,10 +10,15 @@ import Foundation
 
 struct DataManager {
 
+    private let session: URLSessionProtocol
+
+    init(session: URLSessionProtocol) {
+        self.session = session
+    }
+
     func fetchForecastInfo(id: ID, completion: @escaping (ResponseResult) -> Void) {
         guard let url = WeatherAPI.url(id: id) else { return }
-        let request = URLRequest(url: url)
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        session.dataTask(with: url) { (data, response, error) in
             guard let result = self.processForecastRequest(data: data, error: error) else { return }
             completion(result)
         }.resume()
@@ -25,3 +30,26 @@ struct DataManager {
         return nil
     }
 }
+
+protocol URLSessionProtocol {
+    typealias DataTaskResult = (Data?, URLResponse?, Error?) -> Void
+    func dataTask(
+        with url: URL,
+        completionHandler: @escaping DataTaskResult
+        ) -> URLSessionDataTaskProtocol
+}
+
+protocol URLSessionDataTaskProtocol {
+    func resume()
+}
+
+extension URLSession: URLSessionProtocol {
+    func dataTask(
+        with url: URL,
+        completionHandler: @escaping URLSessionProtocol.DataTaskResult
+        ) -> URLSessionDataTaskProtocol {
+        return (dataTask(with: url, completionHandler: completionHandler)
+            as URLSessionDataTask) as URLSessionDataTaskProtocol
+    }
+}
+extension URLSessionDataTask: URLSessionDataTaskProtocol { }

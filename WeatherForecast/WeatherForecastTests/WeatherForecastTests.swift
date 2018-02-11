@@ -10,7 +10,7 @@ import XCTest
 @testable import WeatherForecast
 
 class WeatherForecastTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
     }
@@ -18,18 +18,4 @@ class WeatherForecastTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
     }
-
-    func test_fetchForecastInfo() {
-        let dataManager = DataManager()
-        var response: Response?
-        dataManager.fetchForecastInfo(id: .korea) {
-            (result) -> Void in
-            switch result {
-            case let .success(r) : response = r
-            case let .failure(error): print(error)
-            }
-        }
-        XCTAssertNotNil(response)
-    }
-
 }

@@ -32,6 +32,7 @@
 		C90A7C3B202D631D00B8DD95 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C34202C129200B8DD95 /* Coordinate.swift */; };
 		C90A7C3C202D632000B8DD95 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C32202C127100B8DD95 /* City.swift */; };
 		C90A7C3D202D632400B8DD95 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C2C202C0F0700B8DD95 /* Forecast.swift */; };
+		C90A7C40202DD28B00B8DD95 /* DataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C3F202DD28A00B8DD95 /* DataManagerTests.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		C90A7C30202C122C00B8DD95 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		C90A7C32202C127100B8DD95 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		C90A7C34202C129200B8DD95 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
+		C90A7C3F202DD28A00B8DD95 /* DataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerTests.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -153,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				C90A7C13202AF91600B8DD95 /* WeatherForecastTests.swift */,
+				C90A7C3F202DD28A00B8DD95 /* DataManagerTests.swift */,
 				C90A7C15202AF91600B8DD95 /* Info.plist */,
 			);
 			path = WeatherForecastTests;
@@ -415,6 +418,7 @@
 				C90A7C23202B594C00B8DD95 /* WeatherAPI.swift in Sources */,
 				C90A7C29202B687700B8DD95 /* APIConstant.swift in Sources */,
 				C90A7C39202D631700B8DD95 /* Weather.swift in Sources */,
+				C90A7C40202DD28B00B8DD95 /* DataManagerTests.swift in Sources */,
 				C90A7C38202D631500B8DD95 /* Response.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
