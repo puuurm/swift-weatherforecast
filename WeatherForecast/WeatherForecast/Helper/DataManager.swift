@@ -16,8 +16,10 @@ struct DataManager {
         self.session = session
     }
 
-    func fetchForecastInfo(id: ID, completion: @escaping (ResponseResult) -> Void) {
-        guard let url = WeatherAPI.url(id: id) else { return }
+    func fetchForecastInfo(
+        parameters: [String: String]?,
+        completion: @escaping (ResponseResult) -> Void) {
+        guard let url = WeatherAPI.url(parameters: parameters) else { return }
         session.dataTask(with: url) { (data, response, error) in
             guard let result = self.processForecastRequest(data: data, error: error) else { return }
             completion(result)

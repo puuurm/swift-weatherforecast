@@ -12,14 +12,16 @@ struct WeatherAPI {
 
     private static let baseURLString = "https://api.openweathermap.org/data/2.5/forecast"
 
-    static func url(id: ID) -> URL? {
+    static func url(parameters: [String: String]?) -> URL? {
         guard var components = URLComponents(string: baseURLString) else { return nil }
         var queryItems = [URLQueryItem]()
-        let baseParams = ["id": String(id.rawValue), "APPID": APIConstant.apiKey]
-        for (key, value) in baseParams {
-            let item = URLQueryItem(name: key, value: value)
-            queryItems.append(item)
+        if let params = parameters {
+            for (key, value) in params {
+                let item = URLQueryItem(name: key, value: value)
+                queryItems.append(item)
+            }
         }
+        queryItems.append(URLQueryItem(name: "APPID", value: APIConstant.apiKey))
         components.queryItems = queryItems
         return components.url
     }

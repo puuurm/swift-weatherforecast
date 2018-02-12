@@ -11,6 +11,9 @@ import XCTest
 class DataManagerTests: XCTestCase {
     var dataManager: DataManager!
     let session = MockURLSession()
+
+    let params = ["lat": "37.785834", "lon":  "-122.406417"]
+
     override func setUp() {
         super.setUp()
         dataManager = DataManager(session: session)
@@ -21,13 +24,13 @@ class DataManagerTests: XCTestCase {
     }
 
     func test_url() {
-        guard let url = WeatherAPI.url(id: .korea) else { return }
-        dataManager.fetchForecastInfo(id: .korea) { _ -> Void in}
+        guard let url = WeatherAPI.url(parameters: params) else { return }
+        dataManager.fetchForecastInfo(parameters: params) { _ -> Void in}
         XCTAssert(session.url == url)
     }
 
     func test_start_request() {
-        dataManager.fetchForecastInfo(id: .korea) { _ -> Void in }
+        dataManager.fetchForecastInfo(parameters: params) { _ -> Void in }
         XCTAssertTrue(session.dataTask.resumeWasCalled)
     }
 }

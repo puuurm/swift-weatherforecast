@@ -6,12 +6,12 @@
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
-import Foundation
+import CoreLocation
 
 struct City: Decodable {
     private var id: Int
     private var name: String
-    private var coordinate: Coordinate
+    private var coordinate: CLLocationCoordinate2D
     private var country: String
 
     enum CodingKeys: String, CodingKey {
@@ -22,7 +22,7 @@ struct City: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
-        coordinate = try container.decode(Coordinate.self, forKey: .coordinate)
+        coordinate = try container.decode(CLLocationCoordinate2D.self, forKey: .coordinate)
         country = try container.decode(String.self, forKey: .country)
     }
 
