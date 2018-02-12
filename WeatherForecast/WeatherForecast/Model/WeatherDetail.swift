@@ -9,18 +9,18 @@
 import Foundation
 
 struct WeatherDetail: Decodable {
-    private var id: Int
+    private var identifier: Int
     private var main: String
     private var description: String
     private var icon: String
 
     enum CodingKeys: String, CodingKey {
-        case id, main, description, pressure, icon
+        case identifier = "id", main, description, pressure, icon
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(Int.self, forKey: .id)
+        identifier = try container.decode(Int.self, forKey: .identifier)
         main = try container.decode(String.self, forKey: .main)
         description = try container.decode(String.self, forKey: .description)
         icon = try container.decode(String.self, forKey: .icon)

@@ -36,7 +36,7 @@ struct WeatherAPI {
     }
 }
 
-enum ID: Int {
+enum CountryID: Int {
     case korea = 1835841
 }
 

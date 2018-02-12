@@ -36,9 +36,8 @@ extension ViewController: CLLocationManagerDelegate {
         if let coor = manager.location?.coordinate,
             coor.isChange(before: currentLocation) {
             locationManager?.stopMonitoringSignificantLocationChanges()
-            let params = ["lat": coor.latitude.description, "lon":  coor.longitude.description]
-            dataManager?.fetchForecastInfo(parameters: params) {
-                (result) -> Void in
+            let params = ["lat": coor.latitude.description, "lon": coor.longitude.description]
+            dataManager?.fetchForecastInfo(parameters: params) { result -> Void in
                 switch result {
                 case let .success(r) : print(r)
                 case let .failure(error): print(error)
@@ -46,8 +45,5 @@ extension ViewController: CLLocationManagerDelegate {
             }
             currentLocation = coor
         }
-
     }
-
 }
-

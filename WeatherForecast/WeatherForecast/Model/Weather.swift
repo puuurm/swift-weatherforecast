@@ -16,7 +16,6 @@ struct Weather: Decodable {
     private var seaLevel: Float
     private var groundLevel: Float
     private var humidity: Int
-    private var temp_kf: Float
 
     enum CodingKeys: String, CodingKey {
         case temperature = "temp"
@@ -25,7 +24,7 @@ struct Weather: Decodable {
         case pressure
         case seaLevel = "sea_level"
         case groundLevel = "grnd_level"
-        case humidity, temp_kf
+        case humidity
     }
 
     init(from decoder: Decoder) throws {
@@ -37,7 +36,6 @@ struct Weather: Decodable {
         seaLevel = try container.decode(Float.self, forKey: .seaLevel)
         groundLevel = try container.decode(Float.self, forKey: .groundLevel)
         humidity = try container.decode(Int.self, forKey: .humidity)
-        temp_kf = try container.decode(Float.self, forKey: .temp_kf)
     }
 
 }

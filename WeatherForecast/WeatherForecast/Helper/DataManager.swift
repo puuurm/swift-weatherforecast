@@ -20,7 +20,7 @@ struct DataManager {
         parameters: [String: String]?,
         completion: @escaping (ResponseResult) -> Void) {
         guard let url = WeatherAPI.url(parameters: parameters) else { return }
-        session.dataTask(with: url) { (data, response, error) in
+        session.dataTask(with: url) { (data, _, error) in
             guard let result = self.processForecastRequest(data: data, error: error) else { return }
             completion(result)
         }.resume()

@@ -12,13 +12,13 @@ class DataManagerTests: XCTestCase {
     var dataManager: DataManager!
     let session = MockURLSession()
 
-    let params = ["lat": "37.785834", "lon":  "-122.406417"]
+    let params = ["lat": "37.785834", "lon": "-122.406417"]
 
     override func setUp() {
         super.setUp()
         dataManager = DataManager(session: session)
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
