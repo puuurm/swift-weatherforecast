@@ -9,10 +9,10 @@
 import Foundation
 
 struct WeatherDetail: Decodable {
-    private var identifier: Int
-    private var main: String
-    private var description: String
-    private var icon: String
+    private(set) var identifier: Int
+    private(set) var main: String
+    private(set) var description: String
+    private(set) var icon: String
 
     enum CodingKeys: String, CodingKey {
         case identifier = "id", main, description, pressure, icon

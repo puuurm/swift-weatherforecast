@@ -9,11 +9,11 @@
 import Foundation
 
 struct Response: Decodable {
-    private var code: String
-    private var message: Float
-    private var cnt: Int
-    private var forecasts: [Forecast]
-    private var city: City
+    private(set) var code: String
+    private(set) var message: Float
+    private(set) var cnt: Int
+    private(set) var forecasts: [Forecast]
+    private(set) var city: City
 
     enum CodingKeys: String, CodingKey {
         case code = "cod", message, cnt, forecasts = "list", city

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		48AD0081BD6C4D1E68969B1E /* Pods_WeatherForecastTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */; };
 		C90A7BFF202AF91600B8DD95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7BFE202AF91600B8DD95 /* AppDelegate.swift */; };
-		C90A7C01202AF91600B8DD95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C00202AF91600B8DD95 /* ViewController.swift */; };
+		C90A7C01202AF91600B8DD95 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C00202AF91600B8DD95 /* WeatherViewController.swift */; };
 		C90A7C04202AF91600B8DD95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C90A7C02202AF91600B8DD95 /* Main.storyboard */; };
 		C90A7C06202AF91600B8DD95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C90A7C05202AF91600B8DD95 /* Assets.xcassets */; };
 		C90A7C09202AF91600B8DD95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C90A7C07202AF91600B8DD95 /* LaunchScreen.storyboard */; };
@@ -32,6 +32,7 @@
 		C90A7C3D202D632400B8DD95 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C2C202C0F0700B8DD95 /* Forecast.swift */; };
 		C90A7C40202DD28B00B8DD95 /* DataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C3F202DD28A00B8DD95 /* DataManagerTests.swift */; };
 		C90A7C442031C60100B8DD95 /* Extension+CLLocationCoordinate2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C432031C60100B8DD95 /* Extension+CLLocationCoordinate2D.swift */; };
+		C90A7C4A2032BEEC00B8DD95 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C492032BEEC00B8DD95 /* WeatherTableViewCell.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,7 +54,7 @@
 		6D4C9BFFF889ADCC2D98AF0C /* Pods-WeatherForecast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherForecast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherForecast/Pods-WeatherForecast.debug.xcconfig"; sourceTree = "<group>"; };
 		C90A7BFB202AF91600B8DD95 /* WeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C90A7BFE202AF91600B8DD95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C90A7C00202AF91600B8DD95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C90A7C00202AF91600B8DD95 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		C90A7C03202AF91600B8DD95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C90A7C05202AF91600B8DD95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C90A7C08202AF91600B8DD95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -71,6 +72,7 @@
 		C90A7C32202C127100B8DD95 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		C90A7C3F202DD28A00B8DD95 /* DataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerTests.swift; sourceTree = "<group>"; };
 		C90A7C432031C60100B8DD95 /* Extension+CLLocationCoordinate2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+CLLocationCoordinate2D.swift"; sourceTree = "<group>"; };
+		C90A7C492032BEEC00B8DD95 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -137,11 +139,12 @@
 		C90A7BFD202AF91600B8DD95 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				C90A7C482032BEA900B8DD95 /* View */,
 				C90A7C422031C5C200B8DD95 /* Utility */,
 				C90A7C3E202DC29200B8DD95 /* Helper */,
 				C90A7C20202B44BC00B8DD95 /* Model */,
 				C90A7BFE202AF91600B8DD95 /* AppDelegate.swift */,
-				C90A7C00202AF91600B8DD95 /* ViewController.swift */,
+				C90A7C00202AF91600B8DD95 /* WeatherViewController.swift */,
 				C90A7C02202AF91600B8DD95 /* Main.storyboard */,
 				C90A7C05202AF91600B8DD95 /* Assets.xcassets */,
 				C90A7C07202AF91600B8DD95 /* LaunchScreen.storyboard */,
@@ -188,6 +191,14 @@
 				C90A7C432031C60100B8DD95 /* Extension+CLLocationCoordinate2D.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		C90A7C482032BEA900B8DD95 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C90A7C492032BEEC00B8DD95 /* WeatherTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -412,7 +423,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C90A7C01202AF91600B8DD95 /* ViewController.swift in Sources */,
+				C90A7C4A2032BEEC00B8DD95 /* WeatherTableViewCell.swift in Sources */,
+				C90A7C01202AF91600B8DD95 /* WeatherViewController.swift in Sources */,
 				C90A7C2F202C11B700B8DD95 /* WeatherDetail.swift in Sources */,
 				C90A7C25202B603900B8DD95 /* DataManager.swift in Sources */,
 				C90A7C2D202C0F0700B8DD95 /* Forecast.swift in Sources */,

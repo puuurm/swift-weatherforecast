@@ -9,10 +9,10 @@
 import CoreLocation
 
 struct City: Decodable {
-    private var identifier: Int
-    private var name: String
-    private var coordinate: CLLocationCoordinate2D
-    private var country: String
+    private(set) var identifier: Int
+    private(set) var name: String
+    private(set) var coordinate: CLLocationCoordinate2D
+    private(set) var country: String
 
     enum CodingKeys: String, CodingKey {
         case identifier = "id"

@@ -9,13 +9,13 @@
 import Foundation
 
 struct Weather: Decodable {
-    private var temperature: Float
-    private var minTemperature: Float
-    private var maxTemperature: Float
-    private var pressure: Float
-    private var seaLevel: Float
-    private var groundLevel: Float
-    private var humidity: Int
+    private(set) var temperature: Float
+    private(set) var minTemperature: Float
+    private(set) var maxTemperature: Float
+    private(set) var pressure: Float
+    private(set) var seaLevel: Float
+    private(set) var groundLevel: Float
+    private(set) var humidity: Int
 
     enum CodingKeys: String, CodingKey {
         case temperature = "temp"
