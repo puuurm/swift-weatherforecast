@@ -21,9 +21,28 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NqL-5n-Co3">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="8So-bi-bMp">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="47"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A8o-RR-YQ2">
+                                            <rect key="frame" x="340" y="8" width="30" height="36"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <state key="normal" title="+"/>
+                                            <connections>
+                                                <segue destination="1ql-Pd-Eks" kind="presentation" id="dA6-M3-H8K"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="A8o-RR-YQ2" secondAttribute="trailing" constant="5" id="R3a-RJ-xzI"/>
+                                        <constraint firstItem="A8o-RR-YQ2" firstAttribute="top" secondItem="8So-bi-bMp" secondAttribute="top" constant="8" id="tog-bG-mgo"/>
+                                    </constraints>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="WeatherTableViewCell" rowHeight="84" id="WKd-yd-96a" customClass="WeatherTableViewCell" customModule="WeatherForecast" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="84"/>
+                                        <rect key="frame" x="0.0" y="75" width="375" height="84"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WKd-yd-96a" id="Ita-63-lxj">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="83.5"/>
@@ -84,6 +103,70 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="36" y="92.203898050974516"/>
+        </scene>
+        <!--City Search Controller-->
+        <scene sceneID="9GH-Rd-rQw">
+            <objects>
+                <viewController id="1ql-Pd-Eks" customClass="CitySearchController" customModule="WeatherForecast" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1rh-N0-VDa">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" placeholder="Search City" translatesAutoresizingMaskIntoConstraints="NO" id="1Xi-xb-Eqi">
+                                <rect key="frame" x="0.0" y="20" width="375" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="URN-8G-1G3">
+                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchTableViewCell" rowHeight="75" id="akd-Ls-JYp" customClass="SearchTableViewCell" customModule="WeatherForecast" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="75"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="akd-Ls-JYp" id="Fcg-ua-zUb">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="74.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xB8-yF-Rvj">
+                                                    <rect key="frame" x="15" y="27" width="48" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xB8-yF-Rvj" secondAttribute="trailing" constant="20" symbolic="YES" id="8mg-Mt-WzN"/>
+                                                <constraint firstItem="xB8-yF-Rvj" firstAttribute="top" secondItem="Fcg-ua-zUb" secondAttribute="top" constant="27" id="DxH-td-qdn"/>
+                                                <constraint firstItem="xB8-yF-Rvj" firstAttribute="leading" secondItem="Fcg-ua-zUb" secondAttribute="leading" constant="15" id="pMX-E6-yLs"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="cityLabel" destination="xB8-yF-Rvj" id="Yya-eC-6Qi"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="sTg-iR-egs" firstAttribute="bottom" secondItem="URN-8G-1G3" secondAttribute="bottom" id="K4d-ZO-9pA"/>
+                            <constraint firstItem="sTg-iR-egs" firstAttribute="trailing" secondItem="1Xi-xb-Eqi" secondAttribute="trailing" id="PAC-EA-eWI"/>
+                            <constraint firstItem="sTg-iR-egs" firstAttribute="trailing" secondItem="URN-8G-1G3" secondAttribute="trailing" id="QXU-vu-kzu"/>
+                            <constraint firstItem="1Xi-xb-Eqi" firstAttribute="top" secondItem="sTg-iR-egs" secondAttribute="top" id="als-Ko-jz0"/>
+                            <constraint firstItem="URN-8G-1G3" firstAttribute="leading" secondItem="sTg-iR-egs" secondAttribute="leading" id="gem-OS-0vZ"/>
+                            <constraint firstItem="URN-8G-1G3" firstAttribute="top" secondItem="1Xi-xb-Eqi" secondAttribute="bottom" id="rxw-4G-PC2"/>
+                            <constraint firstItem="1Xi-xb-Eqi" firstAttribute="leading" secondItem="sTg-iR-egs" secondAttribute="leading" id="zWA-oi-16X"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="sTg-iR-egs"/>
+                    </view>
+                    <connections>
+                        <outlet property="searchBar" destination="1Xi-xb-Eqi" id="3jT-YP-9W6"/>
+                        <outlet property="tableView" destination="URN-8G-1G3" id="Vx9-VP-ZZf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kuI-Dc-fXX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="784.79999999999995" y="92.203898050974516"/>
         </scene>
     </scenes>
 </document>
