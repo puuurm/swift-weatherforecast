@@ -9,12 +9,18 @@
 import UIKit
 import MapKit
 
-@IBDesignable
 class CitySearchController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    var filterdCities: [String]?
+
+    var filterdCities: [MKLocalSearchCompletion] = [] {
+        willSet {
+            OperationQueue.main.addOperation {
+                self.tableView.reloadData()
+            }
+        }
+    }
     lazy var searchCompleter: MKLocalSearchCompleter = {
         let completer = MKLocalSearchCompleter()
         completer.delegate = self
@@ -33,11 +39,15 @@ class CitySearchController: UIViewController {
         super.viewWillAppear(animated)
         searchBar.becomeFirstResponder()
     }
+
+    private func searchBarIsEmpty() -> Bool {
+        return searchBar.text?.isEmpty ?? true
+    }
 }
 
 extension CitySearchController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filterdCities?.count ?? 0
+        return filterdCities.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -46,7 +56,7 @@ extension CitySearchController: UITableViewDataSource {
             withIdentifier: cellId,
             for: indexPath
             ) as? SearchTableViewCell else { return UITableViewCell() }
-        cell.cityLabel.text = filterdCities?[indexPath.row]
+        cell.cityLabel.text = filterdCities[indexPath.row].title
         return cell
     }
 }
@@ -59,12 +69,10 @@ extension CitySearchController: UITableViewDelegate {
 
 extension CitySearchController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filterdCities?.removeAll()
-            tableView.reloadData()
-        } else {
-            searchCompleter.queryFragment = searchText
+        if searchBarIsEmpty() {
+            filterdCities.removeAll()
         }
+        searchCompleter.queryFragment = searchText
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -75,7 +83,10 @@ extension CitySearchController: UISearchBarDelegate {
 
 extension CitySearchController: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        filterdCities = completer.results.map { $0.title }
-        OperationQueue.main.addOperation { self.tableView.reloadData() }
+        if searchBarIsEmpty() {
+            filterdCities.removeAll()
+        } else {
+            filterdCities = completer.results
+        }
     }
 }
