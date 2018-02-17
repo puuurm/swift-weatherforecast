@@ -13,6 +13,7 @@ class CitySearchController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    var location = [CLLocationCoordinate2D]()
 
     var filterdCities: [MKLocalSearchCompletion] = [] {
         willSet {
@@ -65,14 +66,26 @@ extension CitySearchController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCityName = filterdCities[indexPath.row]
+        let request = MKLocalSearchRequest()
+        request.naturalLanguageQuery = selectedCityName.title
+        MKLocalSearch(request: request).start { (response, _) in
+            guard let mapItem = response?.mapItems.first else { return }
+            let coordinate = mapItem.placemark.coordinate
+            self.location.append(coordinate)
+        }
+    }
 }
 
 extension CitySearchController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBarIsEmpty() {
             filterdCities.removeAll()
+        } else {
+            searchCompleter.queryFragment = searchText
         }
-        searchCompleter.queryFragment = searchText
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

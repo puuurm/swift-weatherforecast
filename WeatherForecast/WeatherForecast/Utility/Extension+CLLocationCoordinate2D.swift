@@ -8,15 +8,7 @@
 
 import CoreLocation
 
-extension CLLocationCoordinate2D: Decodable, Equatable {
-    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-        return lhs.latitude.isEqual(to: rhs.latitude) && lhs.longitude.isEqual(to: rhs.longitude)
-    }
-
-    func isChange(before coordinate: CLLocationCoordinate2D?) -> Bool {
-        guard let c = coordinate else { return true }
-        return self != c
-    }
+extension CLLocationCoordinate2D: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case longitude = "lon"
@@ -29,4 +21,14 @@ extension CLLocationCoordinate2D: Decodable, Equatable {
         self.latitude = try container.decode(CLLocationDegrees.self, forKey: .latitude)
     }
 
+    func isChange(before coordinate: CLLocationCoordinate2D?) -> Bool {
+        guard let c = coordinate else { return true }
+        return self != c
+    }
+}
+
+extension CLLocationCoordinate2D: Equatable {
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        return lhs.latitude.isEqual(to: rhs.latitude) && lhs.longitude.isEqual(to: rhs.longitude)
+    }
 }
