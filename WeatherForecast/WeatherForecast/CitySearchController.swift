@@ -25,6 +25,7 @@ class CitySearchController: UIViewController {
     lazy var searchCompleter: MKLocalSearchCompleter = {
         let completer = MKLocalSearchCompleter()
         completer.delegate = self
+        completer.filterType = .locationsOnly
         return completer
     }()
 
@@ -65,7 +66,21 @@ extension CitySearchController: UITableViewDataSource {
             withIdentifier: cellId,
             for: indexPath
             ) as? SearchTableViewCell else { return UITableViewCell() }
-        cell.cityLabel.text = filterdCities[indexPath.row].title
+        let city = filterdCities[indexPath.row]
+        let mutableAttributedString = NSMutableAttributedString(
+            string: city.title,
+            attributes: [NSAttributedStringKey.font: UIFont(
+                name: "Georgia",
+                size: 18.0)!]
+        )
+        city.titleHighlightRanges.forEach {
+            mutableAttributedString.addAttribute(
+                .foregroundColor,
+                value: UIColor.yellow,
+                range: $0.rangeValue
+            )
+        }
+        cell.cityLabel.attributedText = mutableAttributedString
         return cell
     }
 }

@@ -146,9 +146,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="yx8-6A-EYk" appends="YES" id="emt-Eb-MwY"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -170,11 +167,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kuI-Dc-fXX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="yx8-6A-EYk">
-                    <connections>
-                        <action selector="viewDidPanned:" destination="1ql-Pd-Eks" id="s1r-GK-rTI"/>
-                    </connections>
-                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="767" y="92"/>
         </scene>
