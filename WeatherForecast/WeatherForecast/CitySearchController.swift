@@ -44,6 +44,14 @@ class CitySearchController: UIViewController {
     private func searchBarIsEmpty() -> Bool {
         return searchBar.text?.isEmpty ?? true
     }
+
+    private func dismissKeyboard() {
+        searchBar.resignFirstResponder()
+    }
+
+    @IBAction func viewDidPanned(_ sender: AnyObject) {
+        dismissKeyboard()
+    }
 }
 
 extension CitySearchController: UITableViewDataSource {
@@ -89,7 +97,7 @@ extension CitySearchController: UISearchBarDelegate {
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
+        dismissKeyboard()
         dismiss(animated: true, completion: nil)
     }
 }
