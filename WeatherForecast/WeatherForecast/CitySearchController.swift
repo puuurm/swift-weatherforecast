@@ -69,9 +69,7 @@ extension CitySearchController: UITableViewDataSource {
         let city = filterdCities[indexPath.row]
         let mutableAttributedString = NSMutableAttributedString(
             string: city.title,
-            attributes: [NSAttributedStringKey.font: UIFont(
-                name: "Georgia",
-                size: 18.0)!]
+            attributes: [NSAttributedStringKey.font: UIFont.georgia(ofSize: 18)]
         )
         city.titleHighlightRanges.forEach {
             mutableAttributedString.addAttribute(
