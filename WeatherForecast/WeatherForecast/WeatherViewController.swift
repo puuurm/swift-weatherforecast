@@ -13,21 +13,36 @@ class WeatherViewController: UIViewController {
 
     @IBOutlet weak var weatherTableView: UITableView!
 
-    var dataManager: DataManager?
-    var locationManager: CLLocationManager?
-    var currentLocation: CLLocationCoordinate2D?
-    var response: Response? {
-        didSet {
-            weatherTableView.reloadData()
-        }
-    }
+    var dataManager = DataManager(session: URLSession.shared)
+
+    var locationService: LocationService?
+    var response = [Response]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataManager = DataManager(session: URLSession.shared)
-        initLocationManager()
+        locationService = LocationService()
+        locationService?.delegate = self
+        locationService?.searchCurrentLocation()
         weatherTableView.dataSource = self
         weatherTableView.delegate = self
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+
+    func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
+        dataManager.fetchForecastInfo(parameters: coordinate.query) { result -> Void in
+            switch result {
+            case let .success(r) :
+                OperationQueue.main.addOperation {
+                    if !self.response.isEmpty { self.response.removeFirst() }
+                    self.response.insert(r, at: 0)
+                    self.weatherTableView.reloadData()
+                }
+            case let .failure(error): print(error)
+            }
+        }
     }
 }
 
@@ -40,12 +55,13 @@ extension WeatherViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: cellId,
             for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
-        cell.cityLabel.text = response?.city.name
+        let row = indexPath.row
+        cell.cityLabel.text = response[row].city.name
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return response.count
     }
 }
 
@@ -55,30 +71,8 @@ extension WeatherViewController: UITableViewDelegate {
     }
 }
 
-extension WeatherViewController: CLLocationManagerDelegate {
-    func initLocationManager() {
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager?.requestWhenInUseAuthorization()
-        locationManager?.startUpdatingLocation()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let coor = manager.location?.coordinate,
-            coor.isChange(before: currentLocation) {
-            locationManager?.stopMonitoringSignificantLocationChanges()
-            let params = ["lat": coor.latitude.description, "lon": coor.longitude.description]
-            dataManager?.fetchForecastInfo(parameters: params) { result -> Void in
-                switch result {
-                case let .success(r) :
-                    OperationQueue.main.addOperation {
-                        self.response = r
-                    }
-                case let .failure(error): print(error)
-                }
-            }
-            currentLocation = coor
-        }
+extension WeatherViewController: LocationServiceDelegate {
+    func updateLocation(_ coordinate: CLLocationCoordinate2D) {
+        updateCurrentLocation(coordinate)
     }
 }

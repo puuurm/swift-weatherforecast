@@ -12,7 +12,7 @@ struct WeatherAPI {
 
     private static let baseURLString = "https://api.openweathermap.org/data/2.5/forecast"
 
-    static func url(parameters: [String: String]?) -> URL? {
+    static func url(parameters: Query?) -> URL? {
         guard var components = URLComponents(string: baseURLString) else { return nil }
         var queryItems = [URLQueryItem]()
         if let params = parameters {

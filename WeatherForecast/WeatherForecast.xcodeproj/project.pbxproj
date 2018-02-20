@@ -36,6 +36,7 @@
 		C90A7C502037111700B8DD95 /* CitySearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C4F2037111600B8DD95 /* CitySearchController.swift */; };
 		C90A7C52203727D600B8DD95 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C51203727D600B8DD95 /* SearchTableViewCell.swift */; };
 		C90A7C56203AE5A100B8DD95 /* Extenstion+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C55203AE5A000B8DD95 /* Extenstion+Font.swift */; };
+		C90A7C5C203C088D00B8DD95 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C5B203C088C00B8DD95 /* LocationService.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,7 @@
 		C90A7C4F2037111600B8DD95 /* CitySearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySearchController.swift; sourceTree = "<group>"; };
 		C90A7C51203727D600B8DD95 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		C90A7C55203AE5A000B8DD95 /* Extenstion+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extenstion+Font.swift"; sourceTree = "<group>"; };
+		C90A7C5B203C088C00B8DD95 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -188,6 +190,7 @@
 			children = (
 				C90A7C21202B453300B8DD95 /* WeatherAPI.swift */,
 				C90A7C24202B603900B8DD95 /* DataManager.swift */,
+				C90A7C5B203C088C00B8DD95 /* LocationService.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				C90A7C2B202C0D1200B8DD95 /* Weather.swift in Sources */,
 				C90A7BFF202AF91600B8DD95 /* AppDelegate.swift in Sources */,
 				C90A7C442031C60100B8DD95 /* Extension+CLLocationCoordinate2D.swift in Sources */,
+				C90A7C5C203C088D00B8DD95 /* LocationService.swift in Sources */,
 				C90A7C52203727D600B8DD95 /* SearchTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

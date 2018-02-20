@@ -8,17 +8,24 @@
 
 import CoreLocation
 
+typealias Query = [String: String]
+
 extension CLLocationCoordinate2D: Decodable {
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case longitude = "lon"
         case latitude = "lat"
     }
 
+    var query: Query {
+        return [CodingKeys.latitude.rawValue: latitude.description,
+                CodingKeys.longitude.rawValue: longitude.description]
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.longitude = try container.decode(CLLocationDegrees.self, forKey: .longitude)
-        self.latitude = try container.decode(CLLocationDegrees.self, forKey: .latitude)
+        longitude = try container.decode(CLLocationDegrees.self, forKey: .longitude)
+        latitude = try container.decode(CLLocationDegrees.self, forKey: .latitude)
     }
 
     func isChange(before coordinate: CLLocationCoordinate2D?) -> Bool {
