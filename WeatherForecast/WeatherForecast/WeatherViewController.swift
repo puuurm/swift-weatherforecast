@@ -32,9 +32,11 @@ class WeatherViewController: UIViewController {
     }
 
     func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
+        var params: Query = coordinate.query
+        params["units"] = "metric"
         dataManager.fetchForecastInfo(
         baseURL: .currentWeather,
-        parameters: coordinate.query,
+        parameters: params,
         type: CurrentWeather.self) { result -> Void in
             switch result {
             case let .success(r) :
@@ -59,7 +61,7 @@ extension WeatherViewController: UITableViewDataSource {
             for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
         let row = indexPath.row
         cell.cityLabel.text = currentWeathers[row].cityName
-        cell.temperature.text = "\(currentWeathers[row].weather.temperature)"
+        cell.temperature.text = "\(currentWeathers[row].weather.temperature)°"
         return cell
     }
 
