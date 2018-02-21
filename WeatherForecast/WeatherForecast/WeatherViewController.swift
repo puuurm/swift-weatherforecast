@@ -15,13 +15,7 @@ class WeatherViewController: UIViewController {
 
     var dataManager = DataManager(session: URLSession.shared)
 
-    var currentWeathers: [CurrentWeather] = [] {
-        willSet {
-            OperationQueue.main.addOperation {
-                self.weatherTableView.reloadData()
-            }
-        }
-    }
+    var currentWeathers = [CurrentWeather]()
     var locationService: LocationService?
 
     lazy var dateFormatter: DateFormatter = {
@@ -49,15 +43,20 @@ class WeatherViewController: UIViewController {
     }
 
     func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         var params: Query = coordinate.query
         params["units"] = "metric"
         dataManager.fetchForecastInfo(
         baseURL: .currentWeather,
         parameters: params,
-        type: CurrentWeather.self) { result -> Void in
+        type: CurrentWeather.self) { [weak self] result -> Void in
             switch result {
             case let .success(r) :
-                self.currentWeathers.append(r)
+                self?.currentWeathers.append(r)
+                OperationQueue.main.addOperation {
+                    self?.weatherTableView.reloadData()
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                }
             case let .failure(error): print(error)
             }
         }
