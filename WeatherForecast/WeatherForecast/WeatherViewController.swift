@@ -15,8 +15,8 @@ class WeatherViewController: UIViewController {
 
     var dataManager = DataManager(session: URLSession.shared)
 
+    var currentWeathers = [CurrentWeather]()
     var locationService: LocationService?
-    var response = [Response]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +32,14 @@ class WeatherViewController: UIViewController {
     }
 
     func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
-        dataManager.fetchForecastInfo(parameters: coordinate.query) { result -> Void in
+        dataManager.fetchForecastInfo(
+        baseURL: .currentWeather,
+        parameters: coordinate.query,
+        type: CurrentWeather.self) { result -> Void in
             switch result {
             case let .success(r) :
                 OperationQueue.main.addOperation {
-                    if !self.response.isEmpty { self.response.removeFirst() }
-                    self.response.insert(r, at: 0)
+                    self.currentWeathers.append(r)
                     self.weatherTableView.reloadData()
                 }
             case let .failure(error): print(error)
@@ -56,12 +58,13 @@ extension WeatherViewController: UITableViewDataSource {
             withIdentifier: cellId,
             for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
         let row = indexPath.row
-        cell.cityLabel.text = response[row].city.name
+        cell.cityLabel.text = currentWeathers[row].cityName
+        cell.temperature.text = "\(currentWeathers[row].weather.temperature)"
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return response.count
+        return currentWeathers.count
     }
 }
 

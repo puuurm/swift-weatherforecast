@@ -13,8 +13,8 @@ struct Weather: Decodable {
     private(set) var minTemperature: Float
     private(set) var maxTemperature: Float
     private(set) var pressure: Float
-    private(set) var seaLevel: Float
-    private(set) var groundLevel: Float
+    private(set) var seaLevel: Float?
+    private(set) var groundLevel: Float?
     private(set) var humidity: Int
 
     enum CodingKeys: String, CodingKey {
@@ -33,8 +33,8 @@ struct Weather: Decodable {
         minTemperature = try container.decode(Float.self, forKey: .minTemperature)
         maxTemperature = try container.decode(Float.self, forKey: .maxTemperature)
         pressure = try container.decode(Float.self, forKey: .pressure)
-        seaLevel = try container.decode(Float.self, forKey: .seaLevel)
-        groundLevel = try container.decode(Float.self, forKey: .groundLevel)
+        seaLevel = try? container.decode(Float.self, forKey: .seaLevel)
+        groundLevel = try? container.decode(Float.self, forKey: .groundLevel)
         humidity = try container.decode(Int.self, forKey: .humidity)
     }
 

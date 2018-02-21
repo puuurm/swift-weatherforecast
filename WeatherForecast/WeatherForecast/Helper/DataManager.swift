@@ -16,19 +16,21 @@ struct DataManager {
         self.session = session
     }
 
-    func fetchForecastInfo(
+    func fetchForecastInfo<T>(
+        baseURL: WeatherAPI.BaseURL,
         parameters: [String: String]?,
-        completion: @escaping (ResponseResult) -> Void) {
-        guard let url = WeatherAPI.url(parameters: parameters) else { return }
+        type: T.Type,
+        completion: @escaping (ResponseResult<T>) -> Void) {
+        guard let url = WeatherAPI.url(baseURL: baseURL, parameters: parameters) else { return }
         session.dataTask(with: url) { (data, _, error) in
-            guard let result = self.processForecastRequest(data: data, error: error) else { return }
+            guard let result = self.processRequest(type, data: data, error: error) else { return }
             completion(result)
         }.resume()
     }
 
-    private func processForecastRequest(data: Data?, error: Error?) -> ResponseResult? {
+    private func processRequest<T>(_ type: T.Type, data: Data?, error: Error?) -> ResponseResult<T>? {
         if let error = error { return .failure(error) }
-        if let jsonData = data { return WeatherAPI.objectFromJSONData(data: jsonData) }
+        if let jsonData = data { return WeatherAPI.objectFromJSONData(type, data: jsonData) }
         return nil
     }
 }
