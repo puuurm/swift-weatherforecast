@@ -22,6 +22,7 @@ class CitySearchController: UIViewController {
             }
         }
     }
+
     lazy var searchCompleter: MKLocalSearchCompleter = {
         let completer = MKLocalSearchCompleter()
         completer.delegate = self

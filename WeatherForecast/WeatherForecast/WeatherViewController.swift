@@ -15,8 +15,21 @@ class WeatherViewController: UIViewController {
 
     var dataManager = DataManager(session: URLSession.shared)
 
-    var currentWeathers = [CurrentWeather]()
+    var currentWeathers: [CurrentWeather] = [] {
+        willSet {
+            OperationQueue.main.addOperation {
+                self.weatherTableView.reloadData()
+            }
+        }
+    }
     var locationService: LocationService?
+
+    lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.timeZone = TimeZone.current
+        return formatter
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +57,7 @@ class WeatherViewController: UIViewController {
         type: CurrentWeather.self) { result -> Void in
             switch result {
             case let .success(r) :
-                OperationQueue.main.addOperation {
-                    self.currentWeathers.append(r)
-                    self.weatherTableView.reloadData()
-                }
+                self.currentWeathers.append(r)
             case let .failure(error): print(error)
             }
         }
@@ -66,6 +76,7 @@ extension WeatherViewController: UITableViewDataSource {
         let row = indexPath.row
         cell.cityLabel.text = currentWeathers[row].cityName
         cell.temperature.text = "\(currentWeathers[row].weather.temperature)°"
+        cell.timeLabel.text = dateFormatter.string(from: Date())
         return cell
     }
 
