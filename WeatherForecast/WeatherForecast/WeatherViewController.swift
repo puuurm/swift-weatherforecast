@@ -13,20 +13,11 @@ class WeatherViewController: UIViewController {
 
     @IBOutlet weak var weatherTableView: UITableView!
 
-    var dataManager = DataManager(session: URLSession.shared)
-
-    var currentWeathers = [CurrentWeather]()
     var locationService: LocationService?
-
-    lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.timeZone = TimeZone.current
-        return formatter
-    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initHistoryClosure()
         locationService = LocationService()
         locationService?.delegate = self
         locationService?.searchCurrentLocation()
@@ -42,24 +33,19 @@ class WeatherViewController: UIViewController {
         return .lightContent
     }
 
-    func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        var params: Query = coordinate.query
-        params["units"] = "metric"
-        dataManager.fetchForecastInfo(
-        baseURL: .currentWeather,
-        parameters: params,
-        type: CurrentWeather.self) { [weak self] result -> Void in
-            switch result {
-            case let .success(r) :
-                self?.currentWeathers.append(r)
-                OperationQueue.main.addOperation {
-                    self?.weatherTableView.reloadData()
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                }
-            case let .failure(error): print(error)
-            }
+    func initHistoryClosure() {
+        History.shared.reloadWeatherViewCell = { [weak self] in
+            self?.weatherTableView.reloadData()
         }
+
+        History.shared.onNetworkStatus = {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+
+        History.shared.offNetworkStatus = {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
+
     }
 }
 
@@ -72,15 +58,15 @@ extension WeatherViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: cellId,
             for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
-        let row = indexPath.row
-        cell.cityLabel.text = currentWeathers[row].cityName
-        cell.temperature.text = "\(currentWeathers[row].weather.temperature)°"
-        cell.timeLabel.text = dateFormatter.string(from: Date())
+        let cellViewModel = History.shared.cellViewModel(at: indexPath)
+        cell.cityLabel.text = cellViewModel.cityString
+        cell.temperature.text = cellViewModel.temperatureString
+        cell.timeLabel.text = cellViewModel.timeString
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currentWeathers.count
+        return History.shared.numberOfCell
     }
 }
 
@@ -92,6 +78,6 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ coordinate: CLLocationCoordinate2D) {
-        updateCurrentLocation(coordinate)
+        History.shared.add(coordinate)
     }
 }

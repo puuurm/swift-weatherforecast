@@ -9,8 +9,13 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
-
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperature: UILabel!
+}
+
+struct WeatherTableCellViewModel {
+    var timeString: String
+    var cityString: String
+    var temperatureString: String
 }

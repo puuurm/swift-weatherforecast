@@ -13,7 +13,6 @@ class CitySearchController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    var location = [CLLocationCoordinate2D]()
 
     var filterdCities: [MKLocalSearchCompletion] = [] {
         willSet {
@@ -93,10 +92,12 @@ extension CitySearchController: UITableViewDelegate {
         let selectedCityName = filterdCities[indexPath.row]
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = selectedCityName.title
-        MKLocalSearch(request: request).start { (response, _) in
+        MKLocalSearch(request: request).start { [weak self] (response, _) in
             guard let mapItem = response?.mapItems.first else { return }
             let coordinate = mapItem.placemark.coordinate
-            self.location.append(coordinate)
+            History.shared.add(coordinate)
+            self?.dismissKeyboard()
+            self?.dismiss(animated: true, completion: nil)
         }
     }
 }
