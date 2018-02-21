@@ -20,7 +20,7 @@ class LocationService: NSObject {
     private func initLocationManager() {
         locationManager = CLLocationManager()
         locationManager?.delegate = self
-        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager?.desiredAccuracy = kCLLocationAccuracyKilometer
     }
 
     func searchCurrentLocation() {
