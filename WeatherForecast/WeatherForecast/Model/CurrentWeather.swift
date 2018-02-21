@@ -14,7 +14,7 @@ struct CurrentWeather {
     private var weatherDetail: [WeatherDetail]
     private(set) var weather: Weather
     private(set) var cityName: String
-    private var timeOfLastupdate: Int
+    private(set) var timeOfLastupdate: Int
 }
 
 extension CurrentWeather: Decodable {

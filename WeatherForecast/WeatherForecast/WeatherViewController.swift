@@ -31,6 +31,10 @@ class WeatherViewController: UIViewController {
         super.viewWillAppear(animated)
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
     func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
         var params: Query = coordinate.query
         params["units"] = "metric"
