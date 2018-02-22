@@ -13,6 +13,7 @@ class WeatherViewController: UIViewController {
 
     @IBOutlet weak var weatherTableView: UITableView!
 
+    let indexOfCurrentLocationWeather: Int = 0
     var locationService: LocationService?
 
     override func viewDidLoad() {
@@ -21,8 +22,6 @@ class WeatherViewController: UIViewController {
         locationService = LocationService()
         locationService?.delegate = self
         locationService?.searchCurrentLocation()
-        weatherTableView.dataSource = self
-        weatherTableView.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,7 +44,6 @@ class WeatherViewController: UIViewController {
         History.shared.offNetworkStatus = {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
-
     }
 }
 
@@ -58,7 +56,7 @@ extension WeatherViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: cellId,
             for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
-        let cellViewModel = History.shared.cellViewModel(at: indexPath)
+        let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
         cell.cityLabel.text = cellViewModel.cityString
         cell.temperature.text = cellViewModel.temperatureString
         cell.timeLabel.text = cellViewModel.timeString
@@ -68,16 +66,33 @@ extension WeatherViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return History.shared.numberOfCell
     }
+
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.row == 0 {
+            return false
+        }
+        return true
+    }
+
 }
 
 extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
+
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCellEditingStyle,
+        forRowAt indexPath: IndexPath ) {
+        if editingStyle == .delete {
+            History.shared.delete(at: indexPath)
+        }
+    }
 }
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ coordinate: CLLocationCoordinate2D) {
-        History.shared.add(coordinate)
+        History.shared.requestWeather(coordinate)
     }
 }

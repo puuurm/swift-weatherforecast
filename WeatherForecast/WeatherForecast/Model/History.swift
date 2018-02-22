@@ -15,27 +15,11 @@ final class History {
     }
 
     private var dataManager: DataManager
-    private var coordinates: [CLLocationCoordinate2D] = [] {
-        willSet {
-            if let c = newValue.last {
-                updateCurrentLocation(c)
-            }
-        }
-    }
     private var currentWeathers: [CurrentWeather] = [] {
-        willSet {
-            if let c = newValue.last {
-                cellViewModel(c)
-            }
-        }
-    }
-
-    private var weatherViewCellModels: [WeatherTableCellViewModel] = [] {
         didSet {
             reloadWeatherViewCell?()
         }
     }
-
     private var isNetworking: Bool = false {
         willSet {
             if newValue == true {
@@ -47,7 +31,7 @@ final class History {
     }
 
     var numberOfCell: Int {
-        return weatherViewCellModels.count
+        return currentWeathers.count
     }
 
     private lazy var dateFormatter: DateFormatter = {
@@ -63,16 +47,15 @@ final class History {
 
     private init() {
         dataManager = DataManager(session: URLSession.shared)
-        coordinates = [CLLocationCoordinate2D]()
         currentWeathers = [CurrentWeather]()
     }
 
     // MARK: Internal Method
-    func add(_ coordinate: CLLocationCoordinate2D) {
-        coordinates.append(coordinate)
-    }
-
-    func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
+    func requestWeather(_ coordinate: CLLocationCoordinate2D) {
+        if let coord = currentWeathers.last?.coordinate,
+            !coordinate.isChange(before: coord) {
+            return
+        }
         isNetworking = true
         var params: Query = coordinate.query
         params["units"] = "metric"
@@ -91,16 +74,16 @@ final class History {
         }
     }
 
-    func cellViewModel(at indexPath: IndexPath) -> WeatherTableCellViewModel {
-        return weatherViewCellModels[indexPath.row]
+    func delete(at indexPath: IndexPath) {
+        currentWeathers.remove(at: indexPath.row)
     }
 
-    func cellViewModel(_ currentWeather: CurrentWeather) {
-        let cell = WeatherTableCellViewModel(
+    func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
+        let currentWeather = currentWeathers[indexPath.row]
+        return WeatherTableCellViewModel(
             timeString: dateFormatter.string(from: Date()),
             cityString: currentWeather.cityName,
-            temperatureString: "\(currentWeather.weather.temperature)°"
-        )
-        weatherViewCellModels.append(cell)
+            temperatureString: "\(currentWeather.weather.temperature)°")
     }
+
 }

@@ -31,10 +31,7 @@ class CitySearchController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
         searchBar.showsCancelButton = true
-        tableView.dataSource = self
-        tableView.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -95,7 +92,7 @@ extension CitySearchController: UITableViewDelegate {
         MKLocalSearch(request: request).start { [weak self] (response, _) in
             guard let mapItem = response?.mapItems.first else { return }
             let coordinate = mapItem.placemark.coordinate
-            History.shared.add(coordinate)
+            History.shared.requestWeather(coordinate)
             self?.dismissKeyboard()
             self?.dismiss(animated: true, completion: nil)
         }
