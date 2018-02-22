@@ -73,7 +73,7 @@ extension CitySearchController: UITableViewDataSource {
         )
         city.titleHighlightRanges.forEach {
             mutableAttributedString.addAttribute(
-                .foregroundColor,
+                .backgroundColor,
                 value: UIColor.yellow,
                 range: $0.rangeValue
             )
