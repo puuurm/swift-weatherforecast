@@ -89,6 +89,16 @@ extension WeatherViewController: UITableViewDelegate {
             History.shared.delete(at: indexPath)
         }
     }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let weatherDetailVC = storyboard?.instantiateViewController(
+            withIdentifier: "WeatherDetailViewController"
+            ) as? WeatherDetailViewController else {
+            return
+        }
+        weatherDetailVC.weatherDetailViewModel = History.shared.weatherDetailViewModel(as: indexPath)
+        navigationController?.pushViewController(weatherDetailVC, animated: true)
+    }
 }
 
 extension WeatherViewController: LocationServiceDelegate {

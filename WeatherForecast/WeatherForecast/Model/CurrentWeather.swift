@@ -11,7 +11,7 @@ import CoreLocation
 struct CurrentWeather {
 
     private(set) var coordinate: CLLocationCoordinate2D
-    private var weatherDetail: [WeatherDetail]
+    private(set) var weatherDetail: [WeatherDetail]
     private(set) var weather: Weather
     private(set) var cityName: String
     private(set) var timeOfLastupdate: Int

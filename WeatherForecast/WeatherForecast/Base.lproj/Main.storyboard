@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -186,6 +187,59 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4c5-sS-h0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-434" y="91"/>
+        </scene>
+        <!--Weather Detail View Controller-->
+        <scene sceneID="6vc-3q-iTT">
+            <objects>
+                <viewController storyboardIdentifier="WeatherDetailViewController" id="6Ky-ZY-BzV" customClass="WeatherDetailViewController" customModule="WeatherForecast" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sJo-kk-UfT" customClass="WeatherDetailView" customModule="WeatherForecast" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pzL-uS-fOu">
+                                <rect key="frame" x="162.5" y="87" width="50" height="26"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q9G-nJ-hYp">
+                                <rect key="frame" x="166" y="134" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFr-iB-hCR">
+                                <rect key="frame" x="118" y="177" width="139" height="72"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="60"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="q9G-nJ-hYp" firstAttribute="centerX" secondItem="pzL-uS-fOu" secondAttribute="centerX" id="83P-x6-Mxi"/>
+                            <constraint firstItem="pzL-uS-fOu" firstAttribute="centerX" secondItem="sJo-kk-UfT" secondAttribute="centerX" id="EIh-HM-QRz"/>
+                            <constraint firstItem="q9G-nJ-hYp" firstAttribute="centerX" secondItem="sJo-kk-UfT" secondAttribute="centerX" id="EK7-3X-E1h"/>
+                            <constraint firstItem="iFr-iB-hCR" firstAttribute="top" secondItem="q9G-nJ-hYp" secondAttribute="bottom" constant="22" id="Ivh-pg-3gh"/>
+                            <constraint firstItem="pzL-uS-fOu" firstAttribute="centerY" secondItem="sJo-kk-UfT" secondAttribute="centerY" multiplier="0.3" id="OhC-xP-uRE"/>
+                            <constraint firstItem="iFr-iB-hCR" firstAttribute="centerX" secondItem="q9G-nJ-hYp" secondAttribute="centerX" id="bpx-Iq-AB1"/>
+                            <constraint firstItem="q9G-nJ-hYp" firstAttribute="top" secondItem="pzL-uS-fOu" secondAttribute="bottom" constant="21" id="c2N-Nf-ZGB"/>
+                            <constraint firstItem="iFr-iB-hCR" firstAttribute="centerX" secondItem="JaA-8S-LMO" secondAttribute="centerX" id="l0z-69-wB2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JaA-8S-LMO"/>
+                        <connections>
+                            <outlet property="cityLabel" destination="pzL-uS-fOu" id="mNl-Tv-8Rw"/>
+                            <outlet property="temperatureLabel" destination="iFr-iB-hCR" id="YOB-En-ycw"/>
+                            <outlet property="weatherLabel" destination="q9G-nJ-hYp" id="Q86-sS-coa"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="weatherDetailView" destination="sJo-kk-UfT" id="LIL-Xd-yFs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3Zv-fN-h8i" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="375" y="807"/>
         </scene>
     </scenes>
 </document>

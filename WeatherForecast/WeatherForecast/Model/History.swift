@@ -83,7 +83,18 @@ final class History {
         return WeatherTableCellViewModel(
             timeString: dateFormatter.string(from: Date()),
             cityString: currentWeather.cityName,
-            temperatureString: "\(currentWeather.weather.temperature)°")
+            temperatureString: "\(currentWeather.weather.temperature)º")
+    }
+
+    func weatherDetailViewModel(as indexPath: IndexPath) -> WeatherDetailViewModel? {
+        let currentWeather = currentWeathers[indexPath.row]
+        guard let weather = currentWeather.weatherDetail.last?.main else {
+            return nil
+        }
+        return WeatherDetailViewModel(
+            city: currentWeather.cityName,
+            weather: weather,
+            temperature: "\(currentWeather.weather.temperature)º")
     }
 
 }

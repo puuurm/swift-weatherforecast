@@ -89,7 +89,8 @@ extension CitySearchController: UITableViewDelegate {
         let selectedCityName = filterdCities[indexPath.row]
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = selectedCityName.title
-        MKLocalSearch(request: request).start { [weak self] (response, _) in
+        MKLocalSearch(request: request).start { [weak self] (response, error) in
+            if let error = error { print(error.localizedDescription) }
             guard let mapItem = response?.mapItems.first else { return }
             let coordinate = mapItem.placemark.coordinate
             History.shared.requestWeather(coordinate)
