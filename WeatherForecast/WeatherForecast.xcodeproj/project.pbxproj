@@ -40,7 +40,8 @@
 		C90A7C5E203CACC700B8DD95 /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C5D203CACC700B8DD95 /* CurrentWeather.swift */; };
 		C90A7C62203DC8CC00B8DD95 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C61203DC8CC00B8DD95 /* History.swift */; };
 		C90A7C64203ED2B900B8DD95 /* WeatherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C63203ED2B900B8DD95 /* WeatherDetailViewController.swift */; };
-		C90A7C66203ED80C00B8DD95 /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C65203ED80C00B8DD95 /* WeatherDetailView.swift */; };
+		C90A7C66203ED80C00B8DD95 /* WeatherDetailHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C65203ED80C00B8DD95 /* WeatherDetailHeaderCell.swift */; };
+		C90A7CA9203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7CA8203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -88,7 +89,8 @@
 		C90A7C5D203CACC700B8DD95 /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 		C90A7C61203DC8CC00B8DD95 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		C90A7C63203ED2B900B8DD95 /* WeatherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewController.swift; sourceTree = "<group>"; };
-		C90A7C65203ED80C00B8DD95 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
+		C90A7C65203ED80C00B8DD95 /* WeatherDetailHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailHeaderCell.swift; sourceTree = "<group>"; };
+		C90A7CA8203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailContainerViewController.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -218,7 +220,7 @@
 			children = (
 				C90A7C492032BEEC00B8DD95 /* WeatherTableViewCell.swift */,
 				C90A7C51203727D600B8DD95 /* SearchTableViewCell.swift */,
-				C90A7C65203ED80C00B8DD95 /* WeatherDetailView.swift */,
+				C90A7C65203ED80C00B8DD95 /* WeatherDetailHeaderCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -228,6 +230,7 @@
 			children = (
 				C90A7C00202AF91600B8DD95 /* WeatherViewController.swift */,
 				C90A7C63203ED2B900B8DD95 /* WeatherDetailViewController.swift */,
+				C90A7CA8203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift */,
 				C90A7C4F2037111600B8DD95 /* CitySearchController.swift */,
 			);
 			path = Controller;
@@ -467,7 +470,8 @@
 				C90A7C31202C122C00B8DD95 /* Response.swift in Sources */,
 				C90A7C5E203CACC700B8DD95 /* CurrentWeather.swift in Sources */,
 				C90A7C27202B684A00B8DD95 /* WeatherAPI.swift in Sources */,
-				C90A7C66203ED80C00B8DD95 /* WeatherDetailView.swift in Sources */,
+				C90A7CA9203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift in Sources */,
+				C90A7C66203ED80C00B8DD95 /* WeatherDetailHeaderCell.swift in Sources */,
 				C90A7C33202C127100B8DD95 /* City.swift in Sources */,
 				C90A7C28202B686900B8DD95 /* APIConstant.swift in Sources */,
 				C90A7C2B202C0D1200B8DD95 /* Weather.swift in Sources */,
@@ -638,10 +642,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V9TZ6H4V4N;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				INFOPLIST_FILE = WeatherForecast/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompony.WeatherForecast;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codesquad.WeatherForecast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -654,10 +658,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V9TZ6H4V4N;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				INFOPLIST_FILE = WeatherForecast/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompony.WeatherForecast;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codesquad.WeatherForecast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

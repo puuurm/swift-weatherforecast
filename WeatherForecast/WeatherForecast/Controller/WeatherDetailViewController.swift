@@ -10,12 +10,40 @@ import UIKit
 
 class WeatherDetailViewController: UIViewController {
 
-    @IBOutlet weak var weatherDetailView: WeatherDetailView!
-    var weatherDetailViewModel: WeatherDetailViewModel?
+    @IBOutlet weak var tableView: UITableView!
+    var weatherDetailViewModel: WeatherDetailHeaderViewModel?
+    var pageNumber: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        weatherDetailView.load(weatherDetailViewModel)
     }
 
+}
+
+extension WeatherDetailViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let id = "WeatherDetailHeaderCell"
+        let p = pageNumber ?? 0
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: id
+            ) as? WeatherDetailHeaderCell else {
+                return UITableViewCell()
+        }
+
+        cell.load(History.shared.weatherDetailViewModel(at: p))
+        return cell
+    }
+
+}
+
+extension WeatherDetailViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 200
+    }
 }

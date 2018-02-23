@@ -86,15 +86,16 @@ final class History {
             temperatureString: "\(currentWeather.weather.temperature)º")
     }
 
-    func weatherDetailViewModel(as indexPath: IndexPath) -> WeatherDetailViewModel? {
-        let currentWeather = currentWeathers[indexPath.row]
+    func weatherDetailViewModel(at index: Int) -> WeatherDetailHeaderViewModel? {
+        let currentWeather = currentWeathers[index]
         guard let weather = currentWeather.weatherDetail.last?.main else {
             return nil
         }
-        return WeatherDetailViewModel(
+        return WeatherDetailHeaderViewModel (
             city: currentWeather.cityName,
             weather: weather,
-            temperature: "\(currentWeather.weather.temperature)º")
+            temperature: "\(currentWeather.weather.temperature)º",
+            minTemperature: "\(currentWeather.weather.minTemperature)º",
+            maxTemperature: "\(currentWeather.weather.maxTemperature)º" )
     }
-
 }

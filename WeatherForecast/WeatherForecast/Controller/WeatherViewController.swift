@@ -55,7 +55,8 @@ extension WeatherViewController: UITableViewDataSource {
         let cellId = "WeatherTableViewCell"
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: cellId,
-            for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
+            for: indexPath
+            ) as? WeatherTableViewCell else { return UITableViewCell() }
         let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
         cell.cityLabel.text = cellViewModel.cityString
         cell.temperature.text = cellViewModel.temperatureString
@@ -92,11 +93,11 @@ extension WeatherViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let weatherDetailVC = storyboard?.instantiateViewController(
-            withIdentifier: "WeatherDetailViewController"
-            ) as? WeatherDetailViewController else {
+            withIdentifier: "WeatherDetailContainerViewController"
+            ) as? WeatherDetailContainerViewController else {
             return
         }
-        weatherDetailVC.weatherDetailViewModel = History.shared.weatherDetailViewModel(as: indexPath)
+        weatherDetailVC.currentIndex = indexPath.row
         navigationController?.pushViewController(weatherDetailVC, animated: true)
     }
 }
