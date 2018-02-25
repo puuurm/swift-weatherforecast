@@ -47,6 +47,10 @@ class WeatherDetailViewController: UIViewController {
     private func loadHeaderViewContents() {
         headerView.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
     }
+
+    @IBAction func closeButtonDidTap(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 extension WeatherDetailViewController: UITableViewDataSource {

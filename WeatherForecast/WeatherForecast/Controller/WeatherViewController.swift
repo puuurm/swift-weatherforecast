@@ -98,7 +98,7 @@ extension WeatherViewController: UITableViewDelegate {
             return
         }
         weatherDetailVC.currentIndex = indexPath.row
-        navigationController?.pushViewController(weatherDetailVC, animated: true)
+        present(weatherDetailVC, animated: true, completion: nil)
     }
 }
 

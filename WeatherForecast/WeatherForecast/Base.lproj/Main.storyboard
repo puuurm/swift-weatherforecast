@@ -205,6 +205,7 @@
                         <viewLayoutGuide key="safeArea" id="goC-2n-bEt"/>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kxx-aC-6nz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -266,6 +267,15 @@
                                             </label>
                                         </subviews>
                                     </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="taj-uR-Kes">
+                                        <rect key="frame" x="317" y="8" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="34"/>
+                                        <state key="normal" title="x"/>
+                                        <connections>
+                                            <action selector="closeButtonDidTap:" destination="dvd-Yd-d0h" eventType="touchUpInside" id="fN9-yj-7DY"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="sWD-SN-4Pn" firstAttribute="centerX" secondItem="Rad-Hf-R8J" secondAttribute="centerX" id="Bb5-3w-azE"/>
@@ -361,7 +371,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="0YC-9f-APN"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="forecastTableView" destination="5Fj-ya-ZTe" id="Wfu-I9-sQK"/>
                         <outlet property="headerView" destination="j3v-Jb-ViQ" id="mje-Y8-6Ft"/>
