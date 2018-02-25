@@ -64,8 +64,12 @@ extension WeatherDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
-        return cell!
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "TodayWeatherCell"
+            ) as? TodayWeatherCell else {
+            return UITableViewCell()
+        }
+        return cell
     }
 }
 
