@@ -20,6 +20,7 @@ final class History {
             reloadWeatherViewCell?()
         }
     }
+
     private var isNetworking: Bool = false {
         willSet {
             if newValue == true {
@@ -56,11 +57,11 @@ final class History {
             !coordinate.isChange(before: coord) {
             return
         }
-        isNetworking = true
         var params: Query = coordinate.query
         params["units"] = "metric"
+        isNetworking = true
         dataManager.fetchForecastInfo(
-            baseURL: .currentWeather,
+            baseURL: .weather,
             parameters: params,
             type: CurrentWeather.self) { [weak self] result -> Void in
                 switch result {
@@ -72,6 +73,10 @@ final class History {
                 case let .failure(error): print(error)
                 }
         }
+    }
+
+    func coordinate(at index: Int) -> CLLocationCoordinate2D {
+        return currentWeathers[index].coordinate
     }
 
     func delete(at indexPath: IndexPath) {

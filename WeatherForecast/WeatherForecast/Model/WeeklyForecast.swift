@@ -1,5 +1,5 @@
 //
-//  Response.swift
+//  WeeklyForecast.swift
 //  WeatherForecast
 //
 //  Created by yangpc on 2018. 2. 8..
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Response: Decodable {
+struct WeeklyForecast: Decodable {
     private(set) var code: String
     private(set) var message: Float
     private(set) var cnt: Int

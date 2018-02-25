@@ -14,6 +14,7 @@ struct CurrentWeather {
     private(set) var weatherDetail: [WeatherDetail]
     private(set) var weather: Weather
     private(set) var cityName: String
+    private(set) var cityIdentifier: Int
     private(set) var timeOfLastupdate: Int
 }
 
@@ -23,6 +24,7 @@ extension CurrentWeather: Decodable {
         case weatherDetail = "weather"
         case weather = "main"
         case cityName = "name"
+        case cityIdentifier = "id"
         case timeOfLastupdate = "dt"
     }
 
@@ -32,6 +34,7 @@ extension CurrentWeather: Decodable {
         weatherDetail = try container.decode([WeatherDetail].self, forKey: .weatherDetail)
         weather = try container.decode(Weather.self, forKey: .weather)
         cityName = try container.decode(String.self, forKey: .cityName)
+        cityIdentifier = try container.decode(Int.self, forKey: .cityIdentifier)
         timeOfLastupdate = try container.decode(Int.self, forKey: .timeOfLastupdate)
     }
 

@@ -12,17 +12,37 @@ class WeatherDetailViewController: UIViewController {
 
     @IBOutlet weak var headerView: WeatherDetailHeaderView!
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
+    var weeklyForecast: WeeklyForecast?
+    var dataManager: DataManager?
+
     var pageNumber: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        dataManager = DataManager(session: URLSession.shared)
+        loadWeeklyForecaste()
         loadHeaderViewContents()
     }
 
-    private func loadHeaderViewContents() {
-        guard let page = pageNumber else {
-            return
+    func loadWeeklyForecaste() {
+        let coord = History.shared.coordinate(at: pageNumber ?? 0)
+        var params: Query = coord.query
+        params["units"] = "metric"
+        dataManager?.fetchForecastInfo(
+            baseURL: .forecast,
+            parameters: params,
+            type: WeeklyForecast.self) { [weak self] forecast -> Void in
+                switch forecast {
+                case let .success(result) :
+                    OperationQueue.main.addOperation {
+                        self?.weeklyForecast = result
+                    }
+                case let .failure(error): print(error)
+                }
         }
-        headerView.load(History.shared.weatherDetailViewModel(at: page))
+    }
+
+    private func loadHeaderViewContents() {
+        headerView.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
     }
 }

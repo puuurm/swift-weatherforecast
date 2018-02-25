@@ -17,7 +17,7 @@ struct DataManager {
     }
 
     func fetchForecastInfo<T>(
-        baseURL: WeatherAPI.BaseURL,
+        baseURL: BaseURL,
         parameters: [String: String]?,
         type: T.Type,
         completion: @escaping (ResponseResult<T>) -> Void) {
