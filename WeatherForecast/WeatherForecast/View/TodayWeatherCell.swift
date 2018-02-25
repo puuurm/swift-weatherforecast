@@ -10,4 +10,12 @@ import UIKit
 
 class TodayWeatherCell: UITableViewCell {
     @IBOutlet weak var hourWeatherCollectionView: UICollectionView!
+
+    func setDataSource (
+        dataSource: UICollectionViewDataSource,
+        at row: Int) {
+        hourWeatherCollectionView.dataSource = dataSource
+        hourWeatherCollectionView.tag = row
+        hourWeatherCollectionView.reloadData()
+    }
 }

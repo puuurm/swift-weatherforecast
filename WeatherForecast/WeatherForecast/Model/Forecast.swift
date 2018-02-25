@@ -9,7 +9,7 @@
 import Foundation
 
 struct Forecast: Decodable {
-    private(set) var time: Int
+    private(set) var time: Date
     private(set) var mainWeather: Weather
     private(set) var moreWeather: [WeatherDetail]
     private(set) var timeString: String
@@ -23,7 +23,7 @@ struct Forecast: Decodable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        time = try container.decode(Int.self, forKey: .time)
+        time = try container.decode(Date.self, forKey: .time)
         mainWeather = try container.decode(Weather.self, forKey: .main)
         moreWeather = try container.decode([WeatherDetail].self, forKey: .moreWeather)
         timeString = try container.decode(String.self, forKey: .timeString)

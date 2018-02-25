@@ -13,10 +13,21 @@ class WeatherDetailViewController: UIViewController {
     @IBOutlet weak var headerView: WeatherDetailHeaderView!
     @IBOutlet weak var forecastTableView: UITableView!
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
-    var weeklyForecast: WeeklyForecast?
+    var weeklyForecast: WeeklyForecast? = nil {
+        didSet {
+            forecastTableView.reloadData()
+        }
+    }
     var dataManager: DataManager?
 
     var pageNumber: Int?
+
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.timeZone = TimeZone.current
+        return formatter
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,11 +67,11 @@ class WeatherDetailViewController: UIViewController {
 extension WeatherDetailViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,7 +87,7 @@ extension WeatherDetailViewController: UITableViewDataSource {
 extension WeatherDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 142
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -94,4 +105,35 @@ extension WeatherDetailViewController: UITableViewDelegate {
         return cell
     }
 
+    func tableView(_ tableView: UITableView,
+                   willDisplay cell: UITableViewCell,
+                   forRowAt indexPath: IndexPath) {
+
+        guard let tableViewCell = cell as? TodayWeatherCell else { return }
+
+        tableViewCell.setDataSource(dataSource: self, at: indexPath.row)
+    }
+
+}
+
+extension WeatherDetailViewController: UICollectionViewDataSource {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int) -> Int {
+        return weeklyForecast?.forecasts.count ?? 0
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "HourWeatherCell",
+            for: indexPath) as? HourWeatherCell,
+            let forecasts = weeklyForecast?.forecasts else { return UICollectionViewCell() }
+        let row = indexPath.row
+        let current = forecasts[row]
+        cell.hourLabel.text = dateFormatter.string(from: current.time)
+        cell.temperatureLabel.text = "\(current.mainWeather.temperature)º"
+        return cell
+    }
 }
