@@ -11,6 +11,7 @@ import UIKit
 class WeatherDetailViewController: UIViewController {
 
     @IBOutlet weak var headerView: WeatherDetailHeaderView!
+    @IBOutlet weak var forecastTableView: UITableView!
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
     var weeklyForecast: WeeklyForecast?
     var dataManager: DataManager?
@@ -22,6 +23,7 @@ class WeatherDetailViewController: UIViewController {
         dataManager = DataManager(session: URLSession.shared)
         loadWeeklyForecaste()
         loadHeaderViewContents()
+        forecastTableView.backgroundColor = UIColor.clear
     }
 
     func loadWeeklyForecaste() {
@@ -45,4 +47,43 @@ class WeatherDetailViewController: UIViewController {
     private func loadHeaderViewContents() {
         headerView.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
     }
+}
+
+extension WeatherDetailViewController: UITableViewDataSource {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+        return cell!
+    }
+}
+
+extension WeatherDetailViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Header") as? SectionHeaderCell else {
+            return UIView()
+        }
+        return cell
+    }
+
 }

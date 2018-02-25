@@ -43,6 +43,7 @@
 		C90A7C66203ED80C00B8DD95 /* WeatherDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C65203ED80C00B8DD95 /* WeatherDetailHeaderView.swift */; };
 		C90A7CA9203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7CA8203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift */; };
 		C9C0FC0D2043000E002D636F /* Extension+CLLocationCoordinate2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C432031C60100B8DD95 /* Extension+CLLocationCoordinate2D.swift */; };
+		C9C0FC0F20431D7D002D636F /* SectionHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C0FC0E20431D7D002D636F /* SectionHeaderCell.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +93,7 @@
 		C90A7C63203ED2B900B8DD95 /* WeatherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewController.swift; sourceTree = "<group>"; };
 		C90A7C65203ED80C00B8DD95 /* WeatherDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailHeaderView.swift; sourceTree = "<group>"; };
 		C90A7CA8203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailContainerViewController.swift; sourceTree = "<group>"; };
+		C9C0FC0E20431D7D002D636F /* SectionHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderCell.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -222,6 +224,7 @@
 				C90A7C492032BEEC00B8DD95 /* WeatherTableViewCell.swift */,
 				C90A7C51203727D600B8DD95 /* SearchTableViewCell.swift */,
 				C90A7C65203ED80C00B8DD95 /* WeatherDetailHeaderView.swift */,
+				C9C0FC0E20431D7D002D636F /* SectionHeaderCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				C90A7C2D202C0F0700B8DD95 /* Forecast.swift in Sources */,
 				C90A7C31202C122C00B8DD95 /* WeeklyForecast.swift in Sources */,
 				C90A7C5E203CACC700B8DD95 /* CurrentWeather.swift in Sources */,
+				C9C0FC0F20431D7D002D636F /* SectionHeaderCell.swift in Sources */,
 				C90A7C27202B684A00B8DD95 /* WeatherAPI.swift in Sources */,
 				C90A7CA9203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift in Sources */,
 				C90A7C66203ED80C00B8DD95 /* WeatherDetailHeaderView.swift in Sources */,
