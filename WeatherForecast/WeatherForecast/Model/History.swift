@@ -52,7 +52,7 @@ final class History {
 
     // MARK: Internal Method
     func requestWeather(_ coordinate: CLLocationCoordinate2D) {
-        if let coord = currentWeathers.last?.coordinate,
+        if let coord = currentWeathers.first?.coordinate,
             !coordinate.isChange(before: coord) {
             return
         }

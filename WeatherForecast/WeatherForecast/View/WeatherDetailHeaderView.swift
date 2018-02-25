@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherDetailHeaderCell: UITableViewCell {
+class WeatherDetailHeaderView: UIView {
 
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var weatherLabel: UILabel!
