@@ -53,6 +53,7 @@ class WeatherDetailViewController: UIViewController {
                 case let .failure(error): print(error)
                 }
         }
+
     }
 
     private func loadHeaderViewContents() {

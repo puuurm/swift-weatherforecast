@@ -15,7 +15,7 @@ struct CurrentWeather {
     private(set) var weather: Weather
     private(set) var cityName: String
     private(set) var cityIdentifier: Int
-    private(set) var timeOfLastupdate: Int
+    private(set) var timeOfLastupdate: Date
 }
 
 extension CurrentWeather: Decodable {
@@ -35,7 +35,7 @@ extension CurrentWeather: Decodable {
         weather = try container.decode(Weather.self, forKey: .weather)
         cityName = try container.decode(String.self, forKey: .cityName)
         cityIdentifier = try container.decode(Int.self, forKey: .cityIdentifier)
-        timeOfLastupdate = try container.decode(Int.self, forKey: .timeOfLastupdate)
+        timeOfLastupdate = try container.decode(Date.self, forKey: .timeOfLastupdate)
     }
 
 }

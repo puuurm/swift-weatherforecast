@@ -203,7 +203,18 @@
                     <view key="view" contentMode="scaleToFill" id="xdH-YL-fZ6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="weatherBackground" translatesAutoresizingMaskIntoConstraints="NO" id="HTC-da-1ql">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="goC-2n-bEt" firstAttribute="bottom" secondItem="HTC-da-1ql" secondAttribute="bottom" id="D6K-Aq-nAr"/>
+                            <constraint firstItem="goC-2n-bEt" firstAttribute="trailing" secondItem="HTC-da-1ql" secondAttribute="trailing" id="lTx-YQ-d6F"/>
+                            <constraint firstItem="HTC-da-1ql" firstAttribute="leading" secondItem="goC-2n-bEt" secondAttribute="leading" id="pUe-Cj-tEg"/>
+                            <constraint firstItem="HTC-da-1ql" firstAttribute="top" secondItem="xdH-YL-fZ6" secondAttribute="top" id="qyd-1E-Dzp"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="goC-2n-bEt"/>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
@@ -345,7 +356,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="146.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5YT-Hp-elt">
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5YT-Hp-elt">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="146"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PY8-3G-8c8">
@@ -419,7 +430,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="5Fj-ya-ZTe" firstAttribute="leading" secondItem="0YC-9f-APN" secondAttribute="leading" id="1RJ-Km-U1w"/>
                             <constraint firstItem="j3v-Jb-ViQ" firstAttribute="leading" secondItem="0YC-9f-APN" secondAttribute="leading" id="5fU-Ko-Q0T"/>
@@ -444,4 +454,7 @@
             <point key="canvasLocation" x="1069.5999999999999" y="780.35982008995506"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="weatherBackground" width="1400" height="1750"/>
+    </resources>
 </document>
