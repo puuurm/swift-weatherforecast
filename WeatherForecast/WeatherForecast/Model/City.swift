@@ -8,7 +8,7 @@
 
 import CoreLocation
 
-struct City: Decodable {
+struct City: Codable {
     private(set) var identifier: Int
     private(set) var name: String
     private(set) var coordinate: CLLocationCoordinate2D
@@ -27,6 +27,14 @@ struct City: Decodable {
         name = try container.decode(String.self, forKey: .name)
         coordinate = try container.decode(CLLocationCoordinate2D.self, forKey: .coordinate)
         country = try container.decode(String.self, forKey: .country)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(identifier, forKey: .identifier)
+        try container.encode(name, forKey: .name)
+        try container.encode(coordinate, forKey: .coordinate)
+        try container.encode(country, forKey: .country)
     }
 
 }

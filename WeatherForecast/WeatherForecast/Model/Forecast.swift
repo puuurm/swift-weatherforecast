@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Forecast: Decodable {
+struct Forecast: Codable {
     private(set) var time: Date
     private(set) var mainWeather: Weather
     private(set) var moreWeather: [WeatherDetail]
@@ -16,7 +16,7 @@ struct Forecast: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case time = "dt"
-        case main
+        case mainWeather = "main"
         case moreWeather = "weather"
         case timeString = "dt_txt"
     }
@@ -24,8 +24,16 @@ struct Forecast: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         time = try container.decode(Date.self, forKey: .time)
-        mainWeather = try container.decode(Weather.self, forKey: .main)
+        mainWeather = try container.decode(Weather.self, forKey: .mainWeather)
         moreWeather = try container.decode([WeatherDetail].self, forKey: .moreWeather)
         timeString = try container.decode(String.self, forKey: .timeString)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(time, forKey: .time)
+        try container.encode(mainWeather, forKey: .mainWeather)
+        try container.encode(moreWeather, forKey: .moreWeather)
+        try container.encode(timeString, forKey: .timeString)
     }
 }

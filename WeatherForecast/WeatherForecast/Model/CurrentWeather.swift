@@ -18,7 +18,7 @@ struct CurrentWeather {
     private(set) var timeOfLastupdate: Date
 }
 
-extension CurrentWeather: Decodable {
+extension CurrentWeather: Codable {
     private enum CodingKeys: String, CodingKey {
         case coordinate = "coord"
         case weatherDetail = "weather"
@@ -38,4 +38,13 @@ extension CurrentWeather: Decodable {
         timeOfLastupdate = try container.decode(Date.self, forKey: .timeOfLastupdate)
     }
 
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(coordinate, forKey: .coordinate)
+        try container.encode(weatherDetail, forKey: .weatherDetail)
+        try container.encode(weather, forKey: .weather)
+        try container.encode(cityName, forKey: .cityName)
+        try container.encode(cityIdentifier, forKey: .cityIdentifier)
+        try container.encode(timeOfLastupdate, forKey: .timeOfLastupdate)
+    }
 }

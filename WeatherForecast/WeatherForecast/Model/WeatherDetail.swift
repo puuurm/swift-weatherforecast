@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct WeatherDetail: Decodable {
+struct WeatherDetail: Codable {
     private(set) var identifier: Int
     private(set) var main: String
     private(set) var description: String
@@ -26,4 +26,11 @@ struct WeatherDetail: Decodable {
         icon = try container.decode(String.self, forKey: .icon)
     }
 
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(identifier, forKey: .identifier)
+        try container.encode(main, forKey: .main)
+        try container.encode(description, forKey: .description)
+        try container.encode(icon, forKey: .icon)
+    }
 }
