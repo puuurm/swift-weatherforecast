@@ -15,8 +15,12 @@ struct WeeklyForecast: Codable {
     private(set) var forecasts: [Forecast]
     private(set) var city: City
 
-    enum CodingKeys: String, CodingKey {
-        case code = "cod", message, cnt, forecasts = "list", city
+    private enum CodingKeys: String, CodingKey {
+        case code = "cod"
+        case message
+        case cnt
+        case forecasts = "list"
+        case city
     }
 
     init(from decoder: Decoder) throws {

@@ -14,7 +14,7 @@ struct City: Codable {
     private(set) var coordinate: CLLocationCoordinate2D
     private(set) var country: String
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case name
         case coordinate = "coord"

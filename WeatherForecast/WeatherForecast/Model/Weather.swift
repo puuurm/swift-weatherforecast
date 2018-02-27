@@ -17,7 +17,7 @@ struct Weather: Codable {
     private(set) var groundLevel: Float?
     private(set) var humidity: Int
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case temperature = "temp"
         case minTemperature = "temp_min"
         case maxTemperature = "temp_max"

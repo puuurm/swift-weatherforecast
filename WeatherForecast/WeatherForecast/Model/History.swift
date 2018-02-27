@@ -13,13 +13,8 @@ final class History {
     static var shared: History {
         return sharedInstance
     }
-
     private var dataManager: DataManager
-    private var currentWeathers: [CurrentWeather] = [] {
-        didSet {
-            reloadWeatherViewCell?()
-        }
-    }
+    private var currentWeathers = [CurrentWeather]()
 
     private var isNetworking: Bool = false {
         willSet {
@@ -52,6 +47,11 @@ final class History {
     }
 
     // MARK: Internal Method
+
+    static func load(_ history: History) {
+        sharedInstance = history
+    }
+
     func requestWeather(_ coordinate: CLLocationCoordinate2D) {
         if let coord = currentWeathers.first?.coordinate,
             !coordinate.isChange(before: coord) {
@@ -102,5 +102,53 @@ final class History {
             temperature: "\(currentWeather.weather.temperature)º",
             minTemperature: "\(currentWeather.weather.minTemperature)º",
             maxTemperature: "\(currentWeather.weather.maxTemperature)º" )
+    }
+}
+
+extension History: Codable {
+    enum CodingKeys: String, CodingKey {
+        case currentWeathers
+    }
+
+    convenience init(from decoder: Decoder) throws {
+        self.init()
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        currentWeathers = try container.decode([CurrentWeather].self, forKey: .currentWeathers)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(currentWeathers, forKey: .currentWeathers)
+    }
+
+}
+
+class HistoryManager {
+    private enum Key: String {
+        case history
+    }
+    private let encoder = PropertyListEncoder()
+    private let decoder = PropertyListDecoder()
+
+    func save() {
+        var data = Data()
+        do {
+            data = try encoder.encode(History.shared)
+        } catch {
+            print(error.localizedDescription)
+        }
+        UserDefaults.standard.set(data, forKey: Key.history.rawValue)
+    }
+
+    func load() {
+        guard let data = UserDefaults.standard.data(forKey: Key.history.rawValue) else {
+            return
+        }
+        do {
+            let history = try decoder.decode(History.self, from: data)
+            History.load(history)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }

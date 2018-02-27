@@ -14,7 +14,7 @@ struct Forecast: Codable {
     private(set) var moreWeather: [WeatherDetail]
     private(set) var timeString: String
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case mainWeather = "main"
         case moreWeather = "weather"

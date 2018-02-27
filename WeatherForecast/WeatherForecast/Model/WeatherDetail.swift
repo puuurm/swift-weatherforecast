@@ -14,8 +14,12 @@ struct WeatherDetail: Codable {
     private(set) var description: String
     private(set) var icon: String
 
-    enum CodingKeys: String, CodingKey {
-        case identifier = "id", main, description, pressure, icon
+    private enum CodingKeys: String, CodingKey {
+        case identifier = "id"
+        case main
+        case description
+        case pressure
+        case icon
     }
 
     init(from decoder: Decoder) throws {
