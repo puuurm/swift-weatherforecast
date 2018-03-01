@@ -103,7 +103,11 @@ extension WeatherViewController: UITableViewDelegate {
 }
 
 extension WeatherViewController: LocationServiceDelegate {
-    func updateLocation(_ coordinate: CLLocationCoordinate2D) {
-        History.shared.requestWeather(coordinate)
+    func updateLocation(_ location: CLLocation) {
+        locationService?.locationToCity(location: location) { (placeMark) in
+            if let placeMark = placeMark {
+                History.shared.requestWeather(placeMark)
+            }
+        }
     }
 }

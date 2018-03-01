@@ -93,7 +93,7 @@ extension CitySearchController: UITableViewDelegate {
             if let error = error { print(error.localizedDescription) }
             guard let mapItem = response?.mapItems.first else { return }
             let coordinate = mapItem.placemark.coordinate
-            History.shared.requestWeather(coordinate)
+            //History.shared.requestWeather(coordinate)
             self?.dismissKeyboard()
             self?.dismiss(animated: true, completion: nil)
         }

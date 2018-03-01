@@ -7,6 +7,7 @@
 //
 
 import CoreLocation
+import Contacts
 
 final class History {
     private static var sharedInstance = History()
@@ -14,7 +15,8 @@ final class History {
         return sharedInstance
     }
     private var dataManager: DataManager
-    private var currentWeathers = [CurrentWeather]()
+    private var currentWeathers: [CurrentWeather]
+    private var localityList: [String]
 
     private var isNetworking: Bool = false {
         willSet {
@@ -32,7 +34,7 @@ final class History {
 
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ssZZZZZ"
         formatter.timeZone = TimeZone.current
         return formatter
     }()
@@ -44,21 +46,33 @@ final class History {
     private init() {
         dataManager = DataManager(session: URLSession.shared)
         currentWeathers = [CurrentWeather]()
+        localityList = [String]()
     }
 
+    private func updateCurrentWeather(_ newWeather: CurrentWeather) {
+        if !currentWeathers.isEmpty {
+            currentWeathers.remove(at: 0)
+        }
+        currentWeathers.insert(newWeather, at: 0)
+        reloadWeatherViewCell?()
+    }
     // MARK: Internal Method
 
     static func load(_ history: History) {
         sharedInstance = history
     }
 
-    func requestWeather(_ coordinate: CLLocationCoordinate2D) {
-        if let coord = currentWeathers.first?.coordinate,
-            !coordinate.isChange(before: coord) {
+    func requestWeather(_ placeMark: CLPlacemark) {
+        guard let locality = placeMark.locality else { return }
+        if let prev = localityList.first,
+            locality == prev,
+            let preUpdateTime = currentWeathers.first?.UTCOfLastupdate,
+            !preUpdateTime.isMoreThanAnHourSinceNow {
             return
         }
-        var params: Query = coordinate.query
-        params["units"] = "metric"
+        if !localityList.isEmpty { localityList.remove(at: 0) }
+        localityList.insert(locality, at: 0)
+        let params = ["q": locality, "units": "metric"]
         isNetworking = true
         dataManager.fetchForecastInfo(
             baseURL: .weather,
@@ -67,7 +81,7 @@ final class History {
                 switch result {
                 case let .success(r) :
                     OperationQueue.main.addOperation {
-                        self?.currentWeathers.append(r)
+                        self?.updateCurrentWeather(r)
                         self?.isNetworking = false
                     }
                 case let .failure(error): print(error)
@@ -108,17 +122,20 @@ final class History {
 extension History: Codable {
     enum CodingKeys: String, CodingKey {
         case currentWeathers
+        case localityList
     }
 
     convenience init(from decoder: Decoder) throws {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
         currentWeathers = try container.decode([CurrentWeather].self, forKey: .currentWeathers)
+        localityList = try container.decode([String].self, forKey: .localityList)
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(currentWeathers, forKey: .currentWeathers)
+        try container.encode(localityList, forKey: .localityList)
     }
 
 }

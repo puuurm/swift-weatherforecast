@@ -33,15 +33,4 @@ extension CLLocationCoordinate2D: Codable {
         try container.encode(longitude, forKey: .longitude)
         try container.encode(latitude, forKey: .latitude)
     }
-
-    func isChange(before coordinate: CLLocationCoordinate2D?) -> Bool {
-        guard let c = coordinate else { return true }
-        return self != c
-    }
-}
-
-extension CLLocationCoordinate2D: Equatable {
-    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-        return lhs.latitude.isEqual(to: rhs.latitude) && lhs.longitude.isEqual(to: rhs.longitude)
-    }
 }
