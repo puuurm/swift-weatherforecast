@@ -48,6 +48,7 @@
 		C9C0FC17204334C9002D636F /* TodayWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C0FC16204334C9002D636F /* TodayWeatherCell.swift */; };
 		C9C0FC422046F529002D636F /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C0FC412046F528002D636F /* System.swift */; };
 		C9C0FC44204858E7002D636F /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C0FC43204858E7002D636F /* Extension+Date.swift */; };
+		C9C0FC4620494AD3002D636F /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C0FC4520494AD2002D636F /* StorageManager.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +103,7 @@
 		C9C0FC16204334C9002D636F /* TodayWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayWeatherCell.swift; sourceTree = "<group>"; };
 		C9C0FC412046F528002D636F /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 		C9C0FC43204858E7002D636F /* Extension+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Date.swift"; sourceTree = "<group>"; };
+		C9C0FC4520494AD2002D636F /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -214,6 +216,7 @@
 				C90A7C21202B453300B8DD95 /* WeatherAPI.swift */,
 				C90A7C24202B603900B8DD95 /* DataManager.swift */,
 				C90A7C5B203C088C00B8DD95 /* LocationService.swift */,
+				C9C0FC4520494AD2002D636F /* StorageManager.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -495,6 +498,7 @@
 				C90A7C28202B686900B8DD95 /* APIConstant.swift in Sources */,
 				C90A7C2B202C0D1200B8DD95 /* Weather.swift in Sources */,
 				C9C0FC422046F529002D636F /* System.swift in Sources */,
+				C9C0FC4620494AD3002D636F /* StorageManager.swift in Sources */,
 				C90A7BFF202AF91600B8DD95 /* AppDelegate.swift in Sources */,
 				C90A7C442031C60100B8DD95 /* Extension+CLLocationCoordinate2D.swift in Sources */,
 				C90A7C5C203C088D00B8DD95 /* LocationService.swift in Sources */,

@@ -10,6 +10,7 @@ import CoreLocation
 import Contacts
 
 final class History {
+
     private static var sharedInstance = History()
     static var shared: History {
         return sharedInstance
@@ -138,34 +139,4 @@ extension History: Codable {
         try container.encode(localityList, forKey: .localityList)
     }
 
-}
-
-class HistoryManager {
-    private enum Key: String {
-        case history
-    }
-    private let encoder = PropertyListEncoder()
-    private let decoder = PropertyListDecoder()
-
-    func save() {
-        var data = Data()
-        do {
-            data = try encoder.encode(History.shared)
-        } catch {
-            print(error.localizedDescription)
-        }
-        UserDefaults.standard.set(data, forKey: Key.history.rawValue)
-    }
-
-    func load() {
-        guard let data = UserDefaults.standard.data(forKey: Key.history.rawValue) else {
-            return
-        }
-        do {
-            let history = try decoder.decode(History.self, from: data)
-            History.load(history)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
 }
