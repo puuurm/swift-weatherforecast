@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Weather: Codable {
+struct Weather {
     private(set) var temperature: Float
     private(set) var minTemperature: Float
     private(set) var maxTemperature: Float
@@ -16,6 +16,9 @@ struct Weather: Codable {
     private(set) var seaLevel: Float?
     private(set) var groundLevel: Float?
     private(set) var humidity: Int
+}
+
+extension Weather: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case temperature = "temp"

@@ -29,8 +29,12 @@ struct DataManager {
     }
 
     private func processRequest<T>(_ type: T.Type, data: Data?, error: Error?) -> ResponseResult<T>? {
-        if let error = error { return .failure(error) }
-        if let jsonData = data { return WeatherAPI.objectFromJSONData(type, data: jsonData) }
+        if let error = error {
+            return .failure(error)
+        }
+        if let jsonData = data {
+            return WeatherAPI.objectFromJSONData(type, data: jsonData)
+        }
         return nil
     }
 }

@@ -8,12 +8,14 @@
 
 import CoreLocation
 
-struct City: Codable {
+struct City {
     private(set) var identifier: Int
     private(set) var name: String
-    private(set) var coordinate: CLLocationCoordinate2D
+    private(set) var coordinate: Coordinate
     private(set) var country: String
+}
 
+extension City: Codable {
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case name
@@ -25,7 +27,7 @@ struct City: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         identifier = try container.decode(Int.self, forKey: .identifier)
         name = try container.decode(String.self, forKey: .name)
-        coordinate = try container.decode(CLLocationCoordinate2D.self, forKey: .coordinate)
+        coordinate = try container.decode(Coordinate.self, forKey: .coordinate)
         country = try container.decode(String.self, forKey: .country)
     }
 

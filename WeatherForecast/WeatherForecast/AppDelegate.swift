@@ -13,17 +13,15 @@ import CoreLocation
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var storageManager: StorageManager?
+    var storageManager = StorageManager()
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
         ) -> Bool {
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        storageManager = StorageManager()
-        if let obj = storageManager?.object(ofType: History.self, forKey: "history") {
-            History.load(obj)
-        }
+        initData()
         return true
     }
 
@@ -31,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        storageManager?.setObject(History.shared, forKey: "history")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -41,6 +38,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+    }
+
+    private func initData() {
+        do {
+            let object = try storageManager.object(ofType: History.self, forKey: "history")
+            History.load(object)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+
+    private func saveData() {
+        do {
+            try storageManager.setObject(History.shared, forKey: "history")
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
 }

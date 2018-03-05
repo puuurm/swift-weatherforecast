@@ -8,6 +8,7 @@
 
 import Foundation
 
+typealias Query = [String: String]
 struct WeatherAPI {
 
     static func url(baseURL: BaseURL, parameters: Query?) -> URL? {
@@ -29,8 +30,8 @@ struct WeatherAPI {
         data: Data
         ) -> ResponseResult<T> {
         do {
-            let jsonObject =  try JSONDecoder().decode(type, from: data)
-            return .success(jsonObject)
+            let object = try DataSerializer.deserialize(data: data) as T
+            return .success(object)
         } catch let error {
             return .failure(error)
         }

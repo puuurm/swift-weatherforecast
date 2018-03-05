@@ -8,7 +8,8 @@
 
 import CoreLocation
 
-class LocationService: NSObject {
+final class LocationService: NSObject {
+
     private var locationManager: CLLocationManager?
     weak var delegate: LocationServiceDelegate?
 

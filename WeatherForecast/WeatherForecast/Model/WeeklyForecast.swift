@@ -8,12 +8,15 @@
 
 import Foundation
 
-struct WeeklyForecast: Codable {
+struct WeeklyForecast {
     private(set) var code: String
     private(set) var message: Float
     private(set) var cnt: Int
     private(set) var forecasts: [Forecast]
     private(set) var city: City
+}
+
+extension WeeklyForecast: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case code = "cod"
@@ -40,4 +43,5 @@ struct WeeklyForecast: Codable {
         try container.encode(forecasts, forKey: .forecasts)
         try container.encode(city, forKey: .city)
     }
+
 }

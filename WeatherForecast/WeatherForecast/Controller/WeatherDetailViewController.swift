@@ -38,9 +38,8 @@ class WeatherDetailViewController: UIViewController {
     }
 
     func loadWeeklyForecaste() {
-        let coord = History.shared.coordinate(at: pageNumber ?? 0)
-        var params: Query = coord.query
-        params["units"] = "metric"
+        let locality = History.shared.localName(at: pageNumber ?? 0)
+        let params = ["q": locality, "units": "metric"]
         dataManager?.fetchForecastInfo(
             baseURL: .forecast,
             parameters: params,

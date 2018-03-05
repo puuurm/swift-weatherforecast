@@ -90,8 +90,8 @@ final class History {
         }
     }
 
-    func coordinate(at index: Int) -> CLLocationCoordinate2D {
-        return currentWeathers[index].coordinate
+    func localName(at index: Int) -> String {
+        return localityList[index]
     }
 
     func delete(at indexPath: IndexPath) {

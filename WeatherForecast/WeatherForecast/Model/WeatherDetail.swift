@@ -8,11 +8,14 @@
 
 import Foundation
 
-struct WeatherDetail: Codable {
+struct WeatherDetail {
     private(set) var identifier: Int
     private(set) var main: String
     private(set) var description: String
     private(set) var icon: String
+}
+
+extension WeatherDetail: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"

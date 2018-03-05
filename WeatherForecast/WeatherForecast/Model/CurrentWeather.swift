@@ -10,7 +10,7 @@ import CoreLocation
 
 struct CurrentWeather {
 
-    private(set) var coordinate: CLLocationCoordinate2D
+    private(set) var coordinate: Coordinate
     private(set) var weatherDetail: [WeatherDetail]
     private(set) var weather: Weather
     private(set) var cityName: String
@@ -36,7 +36,7 @@ extension CurrentWeather: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        coordinate = try container.decode(CLLocationCoordinate2D.self, forKey: .coordinate)
+        coordinate = try container.decode(Coordinate.self, forKey: .coordinate)
         weatherDetail = try container.decode([WeatherDetail].self, forKey: .weatherDetail)
         weather = try container.decode(Weather.self, forKey: .weather)
         cityName = try container.decode(String.self, forKey: .cityName)

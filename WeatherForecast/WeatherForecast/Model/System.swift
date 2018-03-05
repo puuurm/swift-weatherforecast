@@ -9,14 +9,12 @@
 import Foundation
 
 struct System {
-
     private(set) var type: Int
     private(set) var identifier: Int
     private(set) var message: Double
     private(set) var country: String
     private(set) var sunrise: TimeInterval
     private(set) var sunset: TimeInterval
-
 }
 
 extension System: Codable {

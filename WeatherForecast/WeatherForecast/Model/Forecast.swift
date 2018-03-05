@@ -8,12 +8,14 @@
 
 import Foundation
 
-struct Forecast: Codable {
+struct Forecast {
     private(set) var time: Date
     private(set) var mainWeather: Weather
     private(set) var moreWeather: [WeatherDetail]
     private(set) var timeString: String
+}
 
+extension Forecast: Codable {
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case mainWeather = "main"
@@ -36,4 +38,5 @@ struct Forecast: Codable {
         try container.encode(moreWeather, forKey: .moreWeather)
         try container.encode(timeString, forKey: .timeString)
     }
+
 }

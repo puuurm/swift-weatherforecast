@@ -11,52 +11,45 @@ import Foundation
 final class StorageManager {
 
     private let fileManager: FileManager
-    private let baseURL: URL?
+    private let baseURL: URL
 
     init(fileManager: FileManager = FileManager.default) {
         self.fileManager = fileManager
-        baseURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        baseURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first ?? fileManager.temporaryDirectory
     }
 
-    func setObject<T: Codable>(_ object: T, forKey key: String) {
-        guard let objectURL = url(key: key) else { return }
-        let encoder = PropertyListEncoder()
-        var data = Data()
+    func setObject<T: Codable>(_ object: T, forKey key: String) throws {
+        let objectURL = url(key: key)
         do {
-            data = try encoder.encode(History.shared)
+            let data = try DataSerializer.serialize(object: object)
+            try data.write(to: objectURL, options: .atomicWrite)
         } catch {
-            print(error.localizedDescription)
+            throw error
         }
-        try? data.write(to: objectURL, options: .atomicWrite)
     }
 
-    func object<T: Codable>(ofType type: T.Type, forKey key: String) -> T? {
-        guard let objectURL = url(key: key) else {
-            return nil
-        }
-        let decoder = PropertyListDecoder()
-        var data = Data()
+    func object<T: Codable>(ofType type: T.Type, forKey key: String) throws -> T {
+        let fileURL = url(key: key)
         do {
-            data = try Data(contentsOf: objectURL, options: .mappedIfSafe)
-        } catch {
-            print(error.localizedDescription)
-        }
-        do {
-            let object = try decoder.decode(type.self, from: data)
+            let data = try Data(contentsOf: fileURL, options: .mappedIfSafe)
+            let object = try DataSerializer.deserialize(data: data) as T
             return object
         } catch {
-            print(error.localizedDescription)
+            throw error
         }
-        return nil
     }
 
-    private func url(key: String) -> URL? {
-        return baseURL?.appendingPathComponent(key)
+    func deleteObject(forKey key: String) throws {
+        let fileURL = url(key: key)
+        do {
+            try fileManager.removeItem(at: fileURL)
+        } catch {
+            throw error
+        }
     }
 
-    func deleteObject(forKey key: String) {
-        guard let url = url(key: key) else { return }
-        try? fileManager.removeItem(at: url)
+    private func url(key: String) -> URL {
+        return baseURL.appendingPathComponent(key)
     }
 
 }
