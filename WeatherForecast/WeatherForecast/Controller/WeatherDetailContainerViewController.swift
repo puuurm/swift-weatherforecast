@@ -64,7 +64,7 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
         guard let vc = viewController as? WeatherDetailViewController else { return nil }
         var index = vc.pageNumber ?? 0
         index -= 1
-        if index < 0 || index == History.shared.numberOfCell {
+        if index < 0 || index == History.shared.count {
             return nil
         }
         return self.viewController(at: index)
@@ -78,14 +78,14 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
         guard let vc = viewController as? WeatherDetailViewController else { return nil }
         var index = vc.pageNumber ?? 0
         index += 1
-        if index == History.shared.numberOfCell {
+        if index == History.shared.count {
             return nil
         }
         return self.viewController(at: index)
     }
 
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return History.shared.numberOfCell
+        return History.shared.count
     }
 
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {

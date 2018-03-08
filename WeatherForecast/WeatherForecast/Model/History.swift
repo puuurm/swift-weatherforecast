@@ -5,9 +5,8 @@
 //  Created by yangpc on 2018. 2. 22..
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
-
+import Foundation
 import CoreLocation
-import Contacts
 
 final class History {
 
@@ -15,10 +14,9 @@ final class History {
     static var shared: History {
         return sharedInstance
     }
-    private var dataManager: DataManager
-    private var currentWeathers: [CurrentWeather]
-    private var localityList: [String]
 
+    var dataManager: DataManager?
+    private var forecastStores: [ForecastStore]
     private var isNetworking: Bool = false {
         willSet {
             if newValue == true {
@@ -28,115 +26,131 @@ final class History {
             }
         }
     }
-
-    var numberOfCell: Int {
-        return currentWeathers.count
-    }
-
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ssZZZZZ"
-        formatter.timeZone = TimeZone.current
-        return formatter
-    }()
-
     var onNetworkStatus: (() -> Void)?
     var offNetworkStatus: (() -> Void)?
+    var count: Int {
+        return forecastStores.count
+    }
     var reloadWeatherViewCell: (() -> Void)?
 
     private init() {
         dataManager = DataManager(session: URLSession.shared)
-        currentWeathers = [CurrentWeather]()
-        localityList = [String]()
+        forecastStores = [ForecastStore]()
     }
-
-    private func updateCurrentWeather(_ newWeather: CurrentWeather) {
-        if !currentWeathers.isEmpty {
-            currentWeathers.remove(at: 0)
-        }
-        currentWeathers.insert(newWeather, at: 0)
-        reloadWeatherViewCell?()
-    }
-    // MARK: Internal Method
 
     static func load(_ history: History) {
-        sharedInstance = history
-    }
-
-    func requestWeather(_ placeMark: CLPlacemark) {
-        guard let locality = placeMark.locality else { return }
-        if let prev = localityList.first,
-            locality == prev,
-            let preUpdateTime = currentWeathers.first?.UTCOfLastupdate,
-            !preUpdateTime.isMoreThanAnHourSinceNow {
-            return
-        }
-        if !localityList.isEmpty { localityList.remove(at: 0) }
-        localityList.insert(locality, at: 0)
-        let params = ["q": locality, "units": "metric"]
-        isNetworking = true
-        dataManager.fetchForecastInfo(
-            baseURL: .weather,
-            parameters: params,
-            type: CurrentWeather.self) { [weak self] result -> Void in
-                switch result {
-                case let .success(r) :
-                    OperationQueue.main.addOperation {
-                        self?.updateCurrentWeather(r)
-                        self?.isNetworking = false
-                    }
-                case let .failure(error): print(error)
-                }
-        }
+        self.sharedInstance = history
     }
 
     func localName(at index: Int) -> String {
-        return localityList[index]
+        return forecastStores[index].localName
     }
 
     func delete(at indexPath: IndexPath) {
-        currentWeathers.remove(at: indexPath.row)
+        forecastStores.remove(at: indexPath.row)
     }
 
-    func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
-        let currentWeather = currentWeathers[indexPath.row]
+    func hasValue(at index: Int) -> Bool {
+        if forecastStores.count > index { return true }
+        return false
+    }
+
+    func isWeatherNeedUpdate(_ localName: String, index: Int) -> Bool {
+        guard hasValue(at: index),
+            forecastStores[index].localName == localName,
+            let current = forecastStores[index].current,
+            !current.isOutOfDate else {
+                return true
+        }
+        return false
+    }
+
+    func updateLocation(_ localName: String, index: Int) {
+        if forecastStores.count <= index {
+            forecastStores.append(ForecastStore(localName: localName))
+        } else {
+            forecastStores[index].localName = localName
+        }
+    }
+
+    func updateWeather() {
+        var i = 0
+        forecastStores.forEach {
+            let localName = $0.localName
+            self.updateCurrentWeather(
+                at: i,
+                localName: localName,
+                baseURL: .current,
+                type: CurrentWeather.self
+            )
+            i += 1
+        }
+    }
+
+    func updateCurrentWeather<T: Decodable>(
+        at index: Int,
+        localName: String,
+        baseURL: BaseURL,
+        type: T.Type) {
+        guard isWeatherNeedUpdate(localName, index: index) else { return }
+        updateLocation(localName, index: index)
+        isNetworking = true
+        dataManager?.request(
+            localName,
+            baseURL: baseURL,
+            type: type
+        ) { [weak self] result -> Void in
+            switch result {
+            case let .success(weather):
+                self?.forecastStores[index].fetchData(object: weather)
+                OperationQueue.main.addOperation { [weak self] in
+                    self?.reloadWeatherViewCell?()
+                    self?.isNetworking = false
+                }
+            case let .failure(error): print(error)
+            }
+        }
+    }
+
+    func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel? {
+        guard let currentWeather = forecastStores[indexPath.row].current else {
+            return nil
+        }
         return WeatherTableCellViewModel(
-            timeString: dateFormatter.string(from: Date()),
+            timeString: Date().convertString(format: "HH:mm"),
             cityString: currentWeather.cityName,
             temperatureString: "\(currentWeather.weather.temperature)º")
     }
 
     func weatherDetailViewModel(at index: Int) -> WeatherDetailHeaderViewModel? {
-        let currentWeather = currentWeathers[index]
-        guard let weather = currentWeather.weatherDetail.last?.main else {
+        guard let currentWeather = forecastStores[index].current,
+            let weatherDetail = currentWeather.weatherDetail.last?.main else {
             return nil
         }
         return WeatherDetailHeaderViewModel (
             city: currentWeather.cityName,
-            weather: weather,
+            weather: weatherDetail,
             temperature: "\(currentWeather.weather.temperature)º",
             minTemperature: "\(currentWeather.weather.minTemperature)º",
             maxTemperature: "\(currentWeather.weather.maxTemperature)º" )
     }
+
 }
 
 extension History: Codable {
-    enum CodingKeys: String, CodingKey {
-        case currentWeathers
-        case localityList
+
+    private enum CodingKeys: String, CodingKey {
+        case forecastStores
     }
 
     convenience init(from decoder: Decoder) throws {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        currentWeathers = try container.decode([CurrentWeather].self, forKey: .currentWeathers)
-        localityList = try container.decode([String].self, forKey: .localityList)
+        forecastStores = try container.decode([ForecastStore].self, forKey: .forecastStores)
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(currentWeathers, forKey: .currentWeathers)
-        try container.encode(localityList, forKey: .localityList)
+        try container.encode(forecastStores, forKey: .forecastStores)
     }
-
 }

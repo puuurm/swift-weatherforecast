@@ -13,7 +13,6 @@ class WeatherViewController: UIViewController {
 
     @IBOutlet weak var weatherTableView: UITableView!
 
-    let indexOfCurrentLocationWeather: Int = 0
     var locationService: LocationService?
 
     override func viewDidLoad() {
@@ -32,7 +31,7 @@ class WeatherViewController: UIViewController {
         return .lightContent
     }
 
-    func initHistoryClosure() {
+    private func initHistoryClosure() {
         History.shared.reloadWeatherViewCell = { [weak self] in
             self?.weatherTableView.reloadData()
         }
@@ -56,8 +55,10 @@ extension WeatherViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: cellId,
             for: indexPath
-            ) as? WeatherTableViewCell else { return UITableViewCell() }
-        let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
+            ) as? WeatherTableViewCell,
+            let cellViewModel = History.shared.currentWeatherCell(at: indexPath) else {
+                return UITableViewCell()
+        }
         cell.cityLabel.text = cellViewModel.cityString
         cell.temperature.text = cellViewModel.temperatureString
         cell.timeLabel.text = cellViewModel.timeString
@@ -65,7 +66,7 @@ extension WeatherViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return History.shared.numberOfCell
+        return History.shared.count
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -104,10 +105,13 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ location: CLLocation) {
-        locationService?.locationToCity(location: location) { (placeMark) in
-            if let placeMark = placeMark {
-                History.shared.requestWeather(placeMark)
-            }
+        LocationService.locationToCity(location: location) { (placeMark) in
+            guard let localName = placeMark?.locality else { return }
+            History.shared.updateCurrentWeather(
+                at: 0,
+                localName: localName,
+                baseURL: .current,
+                type: CurrentWeather.self)
         }
     }
 }

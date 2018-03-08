@@ -13,4 +13,11 @@ extension Date {
     var isMoreThanAnHourSinceNow: Bool {
         return self.timeIntervalSinceNow < -3600
     }
+
+    func convertString(format: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        formatter.timeZone = TimeZone.current
+        return formatter.string(from: self)
+    }
 }

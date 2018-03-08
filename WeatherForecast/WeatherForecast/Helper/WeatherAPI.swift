@@ -9,6 +9,7 @@
 import Foundation
 
 typealias Query = [String: String]
+
 struct WeatherAPI {
 
     static func url(baseURL: BaseURL, parameters: Query?) -> URL? {
@@ -48,6 +49,6 @@ enum ResponseResult<T: Decodable> {
 }
 
 enum BaseURL: String {
-    case weather = "https://api.openweathermap.org/data/2.5/weather"
-    case forecast = "https://api.openweathermap.org/data/2.5/forecast"
+    case current = "https://api.openweathermap.org/data/2.5/weather"
+    case weekly = "https://api.openweathermap.org/data/2.5/forecast"
 }

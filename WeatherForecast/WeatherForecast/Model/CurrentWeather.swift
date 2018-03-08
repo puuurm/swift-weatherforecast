@@ -10,17 +10,17 @@ import CoreLocation
 
 struct CurrentWeather {
 
-    private(set) var coordinate: Coordinate
+    private(set) var coordinate: Coordinate?
     private(set) var weatherDetail: [WeatherDetail]
     private(set) var weather: Weather
     private(set) var cityName: String
     private(set) var cityIdentifier: Int
     private var timeOfLastupdate: TimeInterval
     private(set) var system: System
-    var UTCOfLastupdate: Date {
-        return Date(timeIntervalSince1970: timeOfLastupdate)
+    var isOutOfDate: Bool {
+        let lastUpdate = Date(timeIntervalSince1970: timeOfLastupdate)
+        return lastUpdate.isMoreThanAnHourSinceNow
     }
-
 }
 
 extension CurrentWeather: Codable {
@@ -36,7 +36,7 @@ extension CurrentWeather: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        coordinate = try container.decode(Coordinate.self, forKey: .coordinate)
+        coordinate = try? container.decode(Coordinate.self, forKey: .coordinate)
         weatherDetail = try container.decode([WeatherDetail].self, forKey: .weatherDetail)
         weather = try container.decode(Weather.self, forKey: .weather)
         cityName = try container.decode(String.self, forKey: .cityName)
@@ -47,7 +47,7 @@ extension CurrentWeather: Codable {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(coordinate, forKey: .coordinate)
+        try? container.encode(coordinate, forKey: .coordinate)
         try container.encode(weatherDetail, forKey: .weatherDetail)
         try container.encode(weather, forKey: .weather)
         try container.encode(cityName, forKey: .cityName)

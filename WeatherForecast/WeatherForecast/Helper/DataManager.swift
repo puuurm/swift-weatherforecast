@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import UIKit
 
-struct DataManager {
+final class DataManager {
 
     private let session: URLSessionProtocol
 
@@ -16,12 +17,13 @@ struct DataManager {
         self.session = session
     }
 
-    func fetchForecastInfo<T>(
+    func request<T>(
+        _ localName: String,
         baseURL: BaseURL,
-        parameters: [String: String]?,
         type: T.Type,
         completion: @escaping (ResponseResult<T>) -> Void) {
-        guard let url = WeatherAPI.url(baseURL: baseURL, parameters: parameters) else { return }
+        let params = ["q": localName, "units": "metric"]
+        guard let url = WeatherAPI.url(baseURL: baseURL, parameters: params) else { return }
         session.dataTask(with: url) { (data, _, error) in
             guard let result = self.processRequest(type, data: data, error: error) else { return }
             completion(result)

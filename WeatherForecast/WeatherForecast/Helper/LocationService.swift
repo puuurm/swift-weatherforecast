@@ -29,7 +29,7 @@ final class LocationService: NSObject {
         locationManager?.requestLocation()
     }
 
-    func locationToCity(location: CLLocation, completionHandler: @escaping (CLPlacemark?) -> Void) {
+    static func locationToCity(location: CLLocation, completionHandler: @escaping (CLPlacemark?) -> Void) {
         let geocoder = CLGeocoder()
         // Look up the location and pass it to the completion handler
         geocoder.reverseGeocodeLocation(location) { (placemarks, error) in

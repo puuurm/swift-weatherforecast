@@ -18,7 +18,6 @@ class WeatherDetailViewController: UIViewController {
             forecastTableView.reloadData()
         }
     }
-    var dataManager: DataManager?
 
     var pageNumber: Int?
 
@@ -31,28 +30,20 @@ class WeatherDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataManager = DataManager(session: URLSession.shared)
-        loadWeeklyForecaste()
+        loadWeeklyForecast()
         loadHeaderViewContents()
         forecastTableView.backgroundColor = UIColor.clear
     }
 
-    func loadWeeklyForecaste() {
-        let locality = History.shared.localName(at: pageNumber ?? 0)
-        let params = ["q": locality, "units": "metric"]
-        dataManager?.fetchForecastInfo(
-            baseURL: .forecast,
-            parameters: params,
-            type: WeeklyForecast.self) { [weak self] forecast -> Void in
-                switch forecast {
-                case let .success(result) :
-                    OperationQueue.main.addOperation {
-                        self?.weeklyForecast = result
-                    }
-                case let .failure(error): print(error)
-                }
-        }
-
+    func loadWeeklyForecast() {
+        let index = pageNumber ?? 0
+        let localName = History.shared.localName(at: index)
+        History.shared.updateCurrentWeather(
+            at: index,
+            localName: localName,
+            baseURL: .weekly,
+            type: WeeklyForecast.self
+        )
     }
 
     private func loadHeaderViewContents() {

@@ -91,11 +91,19 @@ extension CitySearchController: UITableViewDelegate {
         request.naturalLanguageQuery = selectedCityName.title
         MKLocalSearch(request: request).start { [weak self] (response, error) in
             if let error = error { print(error.localizedDescription) }
-            guard let mapItem = response?.mapItems.first else { return }
-            let coordinate = mapItem.placemark.coordinate
-            //History.shared.requestWeather(coordinate)
-            self?.dismissKeyboard()
-            self?.dismiss(animated: true, completion: nil)
+            guard let mapItem = response?.mapItems.first,
+                let location = mapItem.placemark.location else { return }
+            LocationService.locationToCity(location: location) { [weak self] (placeMark) in
+                guard let localName = placeMark?.locality else { return }
+                History.shared.updateCurrentWeather(
+                    at: History.shared.count,
+                    localName: localName,
+                    baseURL: .current,
+                    type: CurrentWeather.self
+                )
+                self?.dismissKeyboard()
+                self?.dismiss(animated: true, completion: nil)
+            }
         }
     }
 }
