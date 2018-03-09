@@ -105,13 +105,14 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ location: CLLocation) {
-        LocationService.locationToCity(location: location) { (placeMark) in
+        LocationService.locationToCity(location: location) { [weak self](placeMark) in
             guard let localName = placeMark?.locality else { return }
             History.shared.updateCurrentWeather(
                 at: 0,
                 localName: localName,
                 baseURL: .current,
                 type: CurrentWeather.self)
+            self?.locationService?.stopSearchingLocation()
         }
     }
 }
