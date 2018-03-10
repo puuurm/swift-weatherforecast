@@ -11,7 +11,7 @@ import Foundation
 extension Date {
 
     var isMoreThanAnHourSinceNow: Bool {
-        return self.timeIntervalSinceNow < -3600
+        return self.timeIntervalSinceNow <= -3600
     }
 
     func convertString(format: String) -> String {

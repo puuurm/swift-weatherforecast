@@ -14,27 +14,20 @@ final class History {
     static var shared: History {
         return sharedInstance
     }
-
-    var dataManager: DataManager?
-    private var forecastStores: [ForecastStore]
-    private var isNetworking: Bool = false {
-        willSet {
-            if newValue == true {
-                onNetworkStatus?()
-            } else {
-                offNetworkStatus?()
-            }
+    var userLocationForecast: ForecastStore? {
+        get {
+            return forecastStores.first
+        }
+        set {
+            updateUserLocationWeather(newValue)
         }
     }
-    var onNetworkStatus: (() -> Void)?
-    var offNetworkStatus: (() -> Void)?
+    var forecastStores: [ForecastStore]
+
     var count: Int {
         return forecastStores.count
     }
-    var reloadWeatherViewCell: (() -> Void)?
-
     private init() {
-        dataManager = DataManager(session: URLSession.shared)
         forecastStores = [ForecastStore]()
     }
 
@@ -42,80 +35,38 @@ final class History {
         self.sharedInstance = history
     }
 
+    private func updateUserLocationWeather(_ forecastStore: ForecastStore?) {
+        guard let forecast = forecastStore else { return }
+        if forecastStores.isEmpty {
+            forecastStores.append(forecast)
+        } else {
+            forecastStores[0] = forecast
+        }
+    }
+
     func localName(at index: Int) -> String {
         return forecastStores[index].localName
+    }
+
+    func append(forecastStore: ForecastStore) {
+        forecastStores.append(forecastStore)
     }
 
     func delete(at indexPath: IndexPath) {
         forecastStores.remove(at: indexPath.row)
     }
 
-    func hasValue(at index: Int) -> Bool {
-        if forecastStores.count > index { return true }
-        return false
+    func isWeatherNeedUpdate(_ localName: String) -> Bool {
+        if let forecast = userLocationForecast,
+            forecast.localName == localName,
+            !forecast.current.isOutOfDate {
+            return false
+        }
+        return true
     }
 
-    func isWeatherNeedUpdate(_ localName: String, index: Int) -> Bool {
-        guard hasValue(at: index),
-            forecastStores[index].localName == localName,
-            let current = forecastStores[index].current,
-            !current.isOutOfDate else {
-                return true
-        }
-        return false
-    }
-
-    func updateLocation(_ localName: String, index: Int) {
-        if forecastStores.count <= index {
-            forecastStores.append(ForecastStore(localName: localName))
-        } else {
-            forecastStores[index].localName = localName
-        }
-    }
-
-    func updateWeather() {
-        var i = 0
-        forecastStores.forEach {
-            let localName = $0.localName
-            self.updateCurrentWeather(
-                at: i,
-                localName: localName,
-                baseURL: .current,
-                type: CurrentWeather.self
-            )
-            i += 1
-        }
-    }
-
-    func updateCurrentWeather<T: Decodable>(
-        at index: Int,
-        localName: String,
-        baseURL: BaseURL,
-        type: T.Type) {
-        guard isWeatherNeedUpdate(localName, index: index) else { return }
-        updateLocation(localName, index: index)
-        isNetworking = true
-        dataManager?.request(
-            localName,
-            baseURL: baseURL,
-            type: type
-        ) { [weak self] result -> Void in
-            switch result {
-            case let .success(weather):
-                self?.forecastStores[index].fetchData(object: weather)
-                OperationQueue.main.addOperation { [weak self] in
-                    self?.reloadWeatherViewCell?()
-                    self?.isNetworking = false
-                }
-            case let .failure(error): print(error)
-            }
-        }
-    }
-
-    func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel? {
-        guard let currentWeather = forecastStores[indexPath.row].current else {
-            return nil
-        }
+    func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
+        let currentWeather = forecastStores[indexPath.row].current
         return WeatherTableCellViewModel(
             timeString: Date().convertString(format: "HH:mm"),
             cityString: currentWeather.cityName,
@@ -123,8 +74,8 @@ final class History {
     }
 
     func weatherDetailViewModel(at index: Int) -> WeatherDetailHeaderViewModel? {
-        guard let currentWeather = forecastStores[index].current,
-            let weatherDetail = currentWeather.weatherDetail.last?.main else {
+        let currentWeather = forecastStores[index].current
+        guard let weatherDetail = currentWeather.weatherDetail.last?.main else {
             return nil
         }
         return WeatherDetailHeaderViewModel (

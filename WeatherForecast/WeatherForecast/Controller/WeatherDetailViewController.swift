@@ -38,12 +38,6 @@ class WeatherDetailViewController: UIViewController {
     func loadWeeklyForecast() {
         let index = pageNumber ?? 0
         let localName = History.shared.localName(at: index)
-        History.shared.updateCurrentWeather(
-            at: index,
-            localName: localName,
-            baseURL: .weekly,
-            type: WeeklyForecast.self
-        )
     }
 
     private func loadHeaderViewContents() {

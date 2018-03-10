@@ -21,16 +21,22 @@ final class DataManager {
         _ localName: String,
         baseURL: BaseURL,
         type: T.Type,
-        completion: @escaping (ResponseResult<T>) -> Void) {
+        completion: @escaping ((ResponseResult<T>) -> Void)) {
         let params = ["q": localName, "units": "metric"]
+        NetworkSpinner.on()
         guard let url = WeatherAPI.url(baseURL: baseURL, parameters: params) else { return }
-        session.dataTask(with: url) { (data, _, error) in
-            guard let result = self.processRequest(type, data: data, error: error) else { return }
+        session.dataTask(with: url) { [weak self] (data, _, error) in
+            guard let result = self?.processRequest(type, data: data, error: error) else { return }
+            NetworkSpinner.off()
             completion(result)
         }.resume()
     }
 
-    private func processRequest<T>(_ type: T.Type, data: Data?, error: Error?) -> ResponseResult<T>? {
+    private func processRequest<T: Decodable>(
+        _ type: T.Type,
+        data: Data?,
+        error: Error?
+        ) -> ResponseResult<T>? {
         if let error = error {
             return .failure(error)
         }
@@ -39,6 +45,7 @@ final class DataManager {
         }
         return nil
     }
+
 }
 
 protocol URLSessionProtocol {

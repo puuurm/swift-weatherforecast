@@ -8,11 +8,13 @@
 
 import UIKit
 import MapKit
+import Contacts
 
 class CitySearchController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    var dataManager: DataManager?
 
     var filterdCities: [MKLocalSearchCompletion] = [] {
         willSet {
@@ -32,6 +34,7 @@ class CitySearchController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.showsCancelButton = true
+        dataManager = DataManager(session: URLSession.shared)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +48,20 @@ class CitySearchController: UIViewController {
 
     private func dismissKeyboard() {
         searchBar.resignFirstResponder()
+    }
+
+    func requestWeather(_ localName: String, completion: @escaping () -> Void) {
+        dataManager?.request(
+            localName,
+            baseURL: .current,
+            type: CurrentWeather.self) { result -> Void in
+            switch result {
+            case let .success(weather):
+                History.shared.append(forecastStore: ForecastStore(localName: localName, current: weather))
+            case let .failure(error): print(error)
+            }
+            completion()
+        }
     }
 
     @IBAction func viewDidPanned(_ sender: AnyObject) {
@@ -86,25 +103,23 @@ extension CitySearchController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCityName = filterdCities[indexPath.row]
+        let selectedCompleter = filterdCities[indexPath.row]
+        var selectedCityName = selectedCompleter.title
         let request = MKLocalSearchRequest()
-        request.naturalLanguageQuery = selectedCityName.title
+        request.naturalLanguageQuery = selectedCityName
         MKLocalSearch(request: request).start { [weak self] (response, error) in
-            if let error = error { print(error.localizedDescription) }
-            guard let mapItem = response?.mapItems.first,
-                let location = mapItem.placemark.location else { return }
-            LocationService.locationToCity(location: location) { [weak self] (placeMark) in
-                guard let localName = placeMark?.locality else { return }
-                History.shared.updateCurrentWeather(
-                    at: History.shared.count,
-                    localName: localName,
-                    baseURL: .current,
-                    type: CurrentWeather.self
-                )
-                self?.dismissKeyboard()
-                self?.dismiss(animated: true, completion: nil)
+            if let mapItem = response?.mapItems.first,
+                let cityName = mapItem.name {
+                selectedCityName = cityName
+            }
+            self?.requestWeather(selectedCityName) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.dismissKeyboard()
+                    self?.dismiss(animated: true, completion: nil)
+                }
             }
         }
+
     }
 }
 
@@ -128,7 +143,7 @@ extension CitySearchController: MKLocalSearchCompleterDelegate {
         if searchBarIsEmpty() {
             filterdCities.removeAll()
         } else {
-            filterdCities = completer.results
+            filterdCities = completer.results.filter { $0.subtitle == "" }
         }
     }
 }

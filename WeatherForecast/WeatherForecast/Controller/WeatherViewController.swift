@@ -14,10 +14,11 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherTableView: UITableView!
 
     var locationService: LocationService?
+    var dataManager: DataManager?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initHistoryClosure()
+        dataManager = DataManager(session: URLSession.shared)
         locationService = LocationService()
         locationService?.delegate = self
         locationService?.searchCurrentLocation()
@@ -25,23 +26,23 @@ class WeatherViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        weatherTableView.reloadData()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 
-    private func initHistoryClosure() {
-        History.shared.reloadWeatherViewCell = { [weak self] in
-            self?.weatherTableView.reloadData()
-        }
-
-        History.shared.onNetworkStatus = {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        }
-
-        History.shared.offNetworkStatus = {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    private func requestCurrentWeather(_ localName: String) {
+        dataManager?.request(localName, baseURL: .current, type: CurrentWeather.self) {[weak self] result -> Void in
+            switch result {
+            case let .success(weather):
+                History.shared.userLocationForecast = ForecastStore(localName: localName, current: weather)
+                DispatchQueue.main.async {
+                    self?.weatherTableView.reloadData()
+                }
+            case let .failure(error): print(error)
+            }
         }
     }
 }
@@ -55,10 +56,10 @@ extension WeatherViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: cellId,
             for: indexPath
-            ) as? WeatherTableViewCell,
-            let cellViewModel = History.shared.currentWeatherCell(at: indexPath) else {
+            ) as? WeatherTableViewCell else {
                 return UITableViewCell()
         }
+        let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
         cell.cityLabel.text = cellViewModel.cityString
         cell.temperature.text = cellViewModel.temperatureString
         cell.timeLabel.text = cellViewModel.timeString
@@ -105,14 +106,13 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ location: CLLocation) {
+        locationService?.stopSearchingLocation()
         LocationService.locationToCity(location: location) { [weak self](placeMark) in
-            guard let localName = placeMark?.locality else { return }
-            History.shared.updateCurrentWeather(
-                at: 0,
-                localName: localName,
-                baseURL: .current,
-                type: CurrentWeather.self)
-            self?.locationService?.stopSearchingLocation()
+            guard let localName = placeMark?.locality,
+                History.shared.isWeatherNeedUpdate(localName) else {
+                    return
+            }
+            self?.requestCurrentWeather(localName)
         }
     }
 }
