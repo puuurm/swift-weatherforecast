@@ -9,7 +9,10 @@
 import Foundation
 
 struct Forecast {
-    private(set) var time: Date
+    private var time: TimeInterval
+    var date: Date {
+        return Date(timeIntervalSince1970: time)
+    }
     private(set) var mainWeather: Weather
     private(set) var moreWeather: [WeatherDetail]
     private(set) var timeString: String
@@ -25,7 +28,7 @@ extension Forecast: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        time = try container.decode(Date.self, forKey: .time)
+        time = try container.decode(TimeInterval.self, forKey: .time)
         mainWeather = try container.decode(Weather.self, forKey: .mainWeather)
         moreWeather = try container.decode([WeatherDetail].self, forKey: .moreWeather)
         timeString = try container.decode(String.self, forKey: .timeString)

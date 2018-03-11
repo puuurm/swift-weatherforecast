@@ -13,13 +13,20 @@ class WeatherDetailViewController: UIViewController {
     @IBOutlet weak var headerView: WeatherDetailHeaderView!
     @IBOutlet weak var forecastTableView: UITableView!
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
-    var weeklyForecast: WeeklyForecast? = nil {
-        didSet {
-            forecastTableView.reloadData()
+    var dataManager: DataManager?
+    var weeklyForecast: WeeklyForecast? {
+        get {
+            return History.shared.forecastStores[pageNumber].weekly
+        }
+        set {
+            History.shared.add(at: pageNumber ?? 0, weeklyForecast: newValue)
+            DispatchQueue.main.async { [weak self] in
+                self?.forecastTableView.reloadData()
+            }
         }
     }
 
-    var pageNumber: Int?
+    var pageNumber: Int!
 
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -30,14 +37,21 @@ class WeatherDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        dataManager = DataManager(session: URLSession.shared)
         loadWeeklyForecast()
         loadHeaderViewContents()
         forecastTableView.backgroundColor = UIColor.clear
     }
 
-    func loadWeeklyForecast() {
-        let index = pageNumber ?? 0
-        let localName = History.shared.localName(at: index)
+    private func loadWeeklyForecast() {
+        let localName = History.shared.localName(at: pageNumber)
+        dataManager?.request(localName, baseURL: .weekly, type: WeeklyForecast.self) { [weak self] result -> Void in
+            switch result {
+            case let .success(weeklyForecast):
+                self?.weeklyForecast = weeklyForecast
+            case let .failure(error): print(error.localizedDescription)
+            }
+        }
     }
 
     private func loadHeaderViewContents() {
@@ -117,8 +131,19 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
             let forecasts = weeklyForecast?.forecasts else { return UICollectionViewCell() }
         let row = indexPath.row
         let current = forecasts[row]
-        cell.hourLabel.text = dateFormatter.string(from: current.time)
+        cell.hourLabel.text = dateFormatter.string(from: current.date)
         cell.temperatureLabel.text = "\(current.mainWeather.temperature)º"
+        let iconName = forecasts[row].moreWeather.first!.icon
+        dataManager?.request(iconName, baseURL: .icon) { result in
+            switch result {
+            case let .success(icon):
+                DispatchQueue.main.async {
+                    cell.weatherIconImageView.image = icon
+                    cell.weatherIconImageView.contentMode = .scaleAspectFit
+                }
+            case let .failure(error): print(error.localizedDescription)
+            }
+        }
         return cell
     }
 }

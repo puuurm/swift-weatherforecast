@@ -48,8 +48,19 @@ final class History {
         return forecastStores[index].localName
     }
 
-    func append(forecastStore: ForecastStore) {
+    func iconNames(at index: Int) -> [String] {
+        var icons = [String]()
+        forecastStores[index].current.weatherDetail.forEach { icons.append($0.icon) }
+        return icons
+    }
+
+    func append(_ forecastStore: ForecastStore) {
         forecastStores.append(forecastStore)
+    }
+
+    func add(at index: Int, weeklyForecast: WeeklyForecast?) {
+        guard let weekly = weeklyForecast else { return }
+        forecastStores[index].weekly = weekly
     }
 
     func delete(at indexPath: IndexPath) {

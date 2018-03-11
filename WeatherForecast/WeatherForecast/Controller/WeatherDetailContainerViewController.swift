@@ -10,7 +10,7 @@ import UIKit
 
 class WeatherDetailContainerViewController: UIViewController {
 
-    var currentIndex: Int?
+    var currentIndex: Int!
 
     private lazy var pageViewController: UIPageViewController = {
         return makepageViewController()

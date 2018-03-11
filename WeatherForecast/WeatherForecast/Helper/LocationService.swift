@@ -29,10 +29,6 @@ final class LocationService: NSObject {
         locationManager?.requestLocation()
     }
 
-    func stopSearchingLocation() {
-        locationManager?.stopUpdatingLocation()
-    }
-
     static func locationToCity(location: CLLocation, completionHandler: @escaping (CLPlacemark?) -> Void) {
         let geocoder = CLGeocoder()
         // Look up the location and pass it to the completion handler
@@ -51,6 +47,7 @@ extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = manager.location {
+            locationManager?.stopUpdatingLocation()
             delegate?.updateLocation(location)
         }
     }

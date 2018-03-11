@@ -13,6 +13,7 @@ final class DataManager {
 
     private let session: URLSessionProtocol
 
+    typealias ImageHandler = ((ImageResult) -> Void)
     init(session: URLSessionProtocol) {
         self.session = session
     }
@@ -29,6 +30,22 @@ final class DataManager {
             guard let result = self?.processRequest(type, data: data, error: error) else { return }
             NetworkSpinner.off()
             completion(result)
+        }.resume()
+    }
+
+    func request(
+        _ imageName: String,
+        baseURL: BaseURL,
+        completion: @escaping ImageHandler) {
+        NetworkSpinner.on()
+        guard let url = WeatherAPI.url(baseURL: baseURL, key: imageName) else { return }
+        session.dataTask(with: url) { (data, _, error) in
+            if let data = data, let image = UIImage(data: data) {
+                completion(.success(image))
+            } else {
+                completion(.failure(error!))
+            }
+            NetworkSpinner.off()
         }.resume()
     }
 
@@ -70,3 +87,8 @@ extension URLSession: URLSessionProtocol {
     }
 }
 extension URLSessionDataTask: URLSessionDataTaskProtocol { }
+
+enum ImageResult {
+    case success(UIImage)
+    case failure(Error)
+}

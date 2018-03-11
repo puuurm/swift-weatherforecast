@@ -26,6 +26,11 @@ struct WeatherAPI {
         return components.url
     }
 
+    static func url(baseURL: BaseURL, key: String) -> URL? {
+        guard let components = URLComponents(string: baseURL.rawValue)?.url else { return nil }
+        return components.appendingPathComponent(key.appending(".png"))
+    }
+
     static func objectFromJSONData<T: Decodable>(
         _ type: T.Type,
         data: Data
@@ -51,4 +56,5 @@ enum ResponseResult<T: Decodable> {
 enum BaseURL: String {
     case current = "https://api.openweathermap.org/data/2.5/weather"
     case weekly = "https://api.openweathermap.org/data/2.5/forecast"
+    case icon = "https://openweathermap.org/img/w/"
 }

@@ -57,7 +57,7 @@ class CitySearchController: UIViewController {
             type: CurrentWeather.self) { result -> Void in
             switch result {
             case let .success(weather):
-                History.shared.append(forecastStore: ForecastStore(localName: localName, current: weather))
+                History.shared.append(ForecastStore(localName: localName, current: weather))
             case let .failure(error): print(error)
             }
             completion()

@@ -14,6 +14,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherTableView: UITableView!
 
     var locationService: LocationService?
+    var userLocation: CLLocation?
     var dataManager: DataManager?
 
     override func viewDidLoad() {
@@ -27,6 +28,7 @@ class WeatherViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         weatherTableView.reloadData()
+
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -106,7 +108,6 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ location: CLLocation) {
-        locationService?.stopSearchingLocation()
         LocationService.locationToCity(location: location) { [weak self](placeMark) in
             guard let localName = placeMark?.locality,
                 History.shared.isWeatherNeedUpdate(localName) else {

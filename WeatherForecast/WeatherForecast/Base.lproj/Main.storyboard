@@ -175,7 +175,6 @@
         <!--Navigation Controller-->
         <scene sceneID="QzH-BD-6kr">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4c5-sS-h0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="Zp0-6t-T0f" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>
@@ -193,6 +192,7 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="qhx-SM-TK7"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4c5-sS-h0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-434" y="91"/>
         </scene>
@@ -373,7 +373,7 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="142" height="147"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b5g-XG-1Rc">
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b5g-XG-1Rc">
                                                                         <rect key="frame" x="34" y="37" width="73.5" height="73.5"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" secondItem="b5g-XG-1Rc" secondAttribute="height" multiplier="1:1" id="7vW-8G-yLD"/>
