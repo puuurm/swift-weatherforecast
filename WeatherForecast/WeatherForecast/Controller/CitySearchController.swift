@@ -13,7 +13,7 @@ class CitySearchController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    var dataManager: DataManager?
+    var networkManager: NetworkManager?
 
     var filterdCities: [MKLocalSearchCompletion] = [] {
         willSet {
@@ -33,7 +33,7 @@ class CitySearchController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.showsCancelButton = true
-        dataManager = DataManager(session: URLSession.shared)
+        networkManager = NetworkManager(session: URLSession.shared)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +50,7 @@ class CitySearchController: UIViewController {
     }
 
     private func requestWeather(_ localName: String, completion: @escaping () -> Void) {
-        dataManager?.request(
+        networkManager?.request(
             localName,
             before: nil,
             baseURL: .current,

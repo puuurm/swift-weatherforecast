@@ -1,5 +1,5 @@
 //
-//  DataManager.swift
+//  NetworkManager.swift
 //  WeatherForecast
 //
 //  Created by yangpc on 2018. 2. 8..
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-final class DataManager {
+final class NetworkManager {
 
     private let session: URLSessionProtocol
     private var imageCache: ImageCache

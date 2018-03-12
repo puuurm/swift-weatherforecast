@@ -15,11 +15,11 @@ class WeatherViewController: UIViewController {
 
     var locationService: LocationService?
     var userLocation: CLLocation?
-    var dataManager: DataManager?
+    var networkManager: NetworkManager?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataManager = DataManager(session: URLSession.shared)
+        networkManager = NetworkManager(session: URLSession.shared)
         locationService = LocationService()
         locationService?.delegate = self
         locationService?.searchCurrentLocation()
@@ -40,7 +40,7 @@ class WeatherViewController: UIViewController {
     }
 
     private func requestCurrentWeather(_ localName: String) {
-        dataManager?.request(
+        networkManager?.request(
             localName,
             before: History.shared.userLocationForecast?.current,
             baseURL: .current,

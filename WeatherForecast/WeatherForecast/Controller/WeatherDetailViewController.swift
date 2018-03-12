@@ -13,7 +13,7 @@ class WeatherDetailViewController: UIViewController {
     @IBOutlet weak var headerView: WeatherDetailHeaderView!
     @IBOutlet weak var forecastTableView: UITableView!
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
-    var dataManager: DataManager?
+    var networkManager: NetworkManager?
     var weeklyForecast: WeeklyForecast? {
         get {
             return History.shared.forecastStores[pageNumber].weekly
@@ -37,15 +37,16 @@ class WeatherDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataManager = DataManager(session: URLSession.shared)
+        networkManager = NetworkManager(session: URLSession.shared)
         loadWeeklyForecast()
         loadHeaderViewContents()
         forecastTableView.backgroundColor = UIColor.clear
     }
 
-    private func loadWeeklyForecast() {        let localName = History.shared.localName(at: pageNumber)
+    private func loadWeeklyForecast() {
+        let localName = History.shared.localName(at: pageNumber)
         guard Checker.isNeedUpdate(before: weeklyForecast) else { return }
-        dataManager?.request(
+        networkManager?.request(
             localName,
             before: weeklyForecast,
             baseURL: .weekly,
@@ -138,7 +139,7 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         cell.hourLabel.text = dateFormatter.string(from: current.date)
         cell.temperatureLabel.text = "\(current.mainWeather.temperature)º"
         let weatherDetail = forecasts[row].moreWeather.first!
-        dataManager?.request(weatherDetail, baseURL: .icon) { result in
+        networkManager?.request(weatherDetail, baseURL: .icon) { result in
             switch result {
             case let .success(icon):
                 DispatchQueue.main.async {
