@@ -13,6 +13,7 @@ struct WeatherDetail {
     private(set) var main: String
     private(set) var description: String
     private(set) var icon: String
+    private(set) var iconKey: String
 }
 
 extension WeatherDetail: Codable {
@@ -23,6 +24,7 @@ extension WeatherDetail: Codable {
         case description
         case pressure
         case icon
+        case iconKey
     }
 
     init(from decoder: Decoder) throws {
@@ -31,6 +33,12 @@ extension WeatherDetail: Codable {
         main = try container.decode(String.self, forKey: .main)
         description = try container.decode(String.self, forKey: .description)
         icon = try container.decode(String.self, forKey: .icon)
+        if let iconKey = try? container.decode(String.self, forKey: .iconKey) {
+            self.iconKey = iconKey
+        } else {
+            self.iconKey = UUID().uuidString
+        }
+
     }
 
     func encode(to encoder: Encoder) throws {
@@ -39,5 +47,6 @@ extension WeatherDetail: Codable {
         try container.encode(main, forKey: .main)
         try container.encode(description, forKey: .description)
         try container.encode(icon, forKey: .icon)
+        try? container.encode(iconKey, forKey: .iconKey)
     }
 }

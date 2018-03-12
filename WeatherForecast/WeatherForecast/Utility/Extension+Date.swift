@@ -10,8 +10,9 @@ import Foundation
 
 extension Date {
 
-    var isMoreThanAnHourSinceNow: Bool {
-        return self.timeIntervalSinceNow <= -3600
+    func isMoreThanSinceNow(hour: Double) -> Bool {
+        print(self.convertString(format: "yyyy-MM-dd HH:mm:ssZZZZZ"))
+        return self.timeIntervalSinceNow < ((-1) * 3600 * hour)
     }
 
     func convertString(format: String) -> String {

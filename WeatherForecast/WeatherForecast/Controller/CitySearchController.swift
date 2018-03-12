@@ -8,7 +8,6 @@
 
 import UIKit
 import MapKit
-import Contacts
 
 class CitySearchController: UIViewController {
 
@@ -50,17 +49,19 @@ class CitySearchController: UIViewController {
         searchBar.resignFirstResponder()
     }
 
-    func requestWeather(_ localName: String, completion: @escaping () -> Void) {
+    private func requestWeather(_ localName: String, completion: @escaping () -> Void) {
         dataManager?.request(
             localName,
+            before: nil,
             baseURL: .current,
-            type: CurrentWeather.self) { result -> Void in
-            switch result {
-            case let .success(weather):
-                History.shared.append(ForecastStore(localName: localName, current: weather))
-            case let .failure(error): print(error)
-            }
-            completion()
+            type: CurrentWeather.self
+        ) { result -> Void in
+                switch result {
+                case let .success(weather):
+                    History.shared.append(ForecastStore(localName: localName, current: weather))
+                case let .failure(error): print(error)
+                }
+                completion()
         }
     }
 

@@ -43,14 +43,18 @@ class WeatherDetailViewController: UIViewController {
         forecastTableView.backgroundColor = UIColor.clear
     }
 
-    private func loadWeeklyForecast() {
-        let localName = History.shared.localName(at: pageNumber)
-        dataManager?.request(localName, baseURL: .weekly, type: WeeklyForecast.self) { [weak self] result -> Void in
-            switch result {
-            case let .success(weeklyForecast):
-                self?.weeklyForecast = weeklyForecast
-            case let .failure(error): print(error.localizedDescription)
-            }
+    private func loadWeeklyForecast() {        let localName = History.shared.localName(at: pageNumber)
+        guard Checker.isNeedUpdate(before: weeklyForecast) else { return }
+        dataManager?.request(
+            localName,
+            before: weeklyForecast,
+            baseURL: .weekly,
+            type: WeeklyForecast.self) { [weak self] result -> Void in
+                switch result {
+                case let .success(weeklyForecast):
+                    self?.weeklyForecast = weeklyForecast
+                case let .failure(error): print(error.localizedDescription)
+                }
         }
     }
 
@@ -104,12 +108,12 @@ extension WeatherDetailViewController: UITableViewDelegate {
         return cell
     }
 
-    func tableView(_ tableView: UITableView,
-                   willDisplay cell: UITableViewCell,
-                   forRowAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath) {
 
         guard let tableViewCell = cell as? TodayWeatherCell else { return }
-
         tableViewCell.setDataSource(dataSource: self, at: indexPath.row)
     }
 
@@ -133,8 +137,8 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         let current = forecasts[row]
         cell.hourLabel.text = dateFormatter.string(from: current.date)
         cell.temperatureLabel.text = "\(current.mainWeather.temperature)º"
-        let iconName = forecasts[row].moreWeather.first!.icon
-        dataManager?.request(iconName, baseURL: .icon) { result in
+        let weatherDetail = forecasts[row].moreWeather.first!
+        dataManager?.request(weatherDetail, baseURL: .icon) { result in
             switch result {
             case let .success(icon):
                 DispatchQueue.main.async {

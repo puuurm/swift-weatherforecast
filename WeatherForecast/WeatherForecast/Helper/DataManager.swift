@@ -12,33 +12,42 @@ import UIKit
 final class DataManager {
 
     private let session: URLSessionProtocol
-
+    private var imageCache: ImageCache
     typealias ImageHandler = ((ImageResult) -> Void)
+
     init(session: URLSessionProtocol) {
         self.session = session
+        imageCache = ImageCache()
     }
 
     func request<T>(
         _ localName: String,
+        before object: Storable?,
         baseURL: BaseURL,
         type: T.Type,
         completion: @escaping ((ResponseResult<T>) -> Void)) {
         let params = ["q": localName, "units": "metric"]
-        NetworkSpinner.on()
         guard let url = WeatherAPI.url(baseURL: baseURL, parameters: params) else { return }
+        NetworkSpinner.on()
         session.dataTask(with: url) { [weak self] (data, _, error) in
-            guard let result = self?.processRequest(type, data: data, error: error) else { return }
+            if let result = self?.processRequest(type, data: data, error: error) {
+                completion(result)
+                self?.imageCache.deleteImageForkeys(keys: object?.cacheKeys)
+            }
             NetworkSpinner.off()
-            completion(result)
         }.resume()
     }
 
     func request(
-        _ imageName: String,
+        _ weatherDetail: WeatherDetail,
         baseURL: BaseURL,
         completion: @escaping ImageHandler) {
+        if let image = imageCache.imageForKey(key: weatherDetail.iconKey) {
+            completion(.success(image))
+            return
+        }
+        guard let url = WeatherAPI.iconURL(baseURL: baseURL, key: weatherDetail.icon) else { return }
         NetworkSpinner.on()
-        guard let url = WeatherAPI.url(baseURL: baseURL, key: imageName) else { return }
         session.dataTask(with: url) { (data, _, error) in
             if let data = data, let image = UIImage(data: data) {
                 completion(.success(image))

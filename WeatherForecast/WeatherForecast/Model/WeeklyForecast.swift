@@ -16,6 +16,18 @@ struct WeeklyForecast {
     private(set) var city: City
 }
 
+extension WeeklyForecast: Storable {
+    var isOutOfDate: Bool {
+        return forecasts.first!.date.isMoreThanSinceNow(hour: 3)
+    }
+
+    var cacheKeys: [String] {
+        var keys = [String]()
+        forecasts.forEach { keys.append($0.moreWeather.first!.iconKey) }
+        return keys
+    }
+}
+
 extension WeeklyForecast: Codable {
 
     private enum CodingKeys: String, CodingKey {
@@ -43,5 +55,4 @@ extension WeeklyForecast: Codable {
         try container.encode(forecasts, forKey: .forecasts)
         try container.encode(city, forKey: .city)
     }
-
 }

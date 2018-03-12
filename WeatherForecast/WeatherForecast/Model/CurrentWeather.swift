@@ -17,9 +17,18 @@ struct CurrentWeather {
     private(set) var cityIdentifier: Int
     private var timeOfLastupdate: TimeInterval
     private(set) var system: System
+}
+
+extension CurrentWeather: Storable {
+    var cacheKeys: [String] {
+        guard let key = weatherDetail.first?.iconKey else {
+            return []
+        }
+        return [key]
+    }
     var isOutOfDate: Bool {
         let lastUpdate = Date(timeIntervalSince1970: timeOfLastupdate)
-        return lastUpdate.isMoreThanAnHourSinceNow
+        return lastUpdate.isMoreThanSinceNow(hour: 1)
     }
 }
 

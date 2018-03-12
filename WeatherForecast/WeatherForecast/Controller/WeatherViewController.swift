@@ -27,8 +27,12 @@ class WeatherViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        History.shared.forecastStores.forEach { [weak self] in
+            if Checker.isNeedUpdate(before: $0.current) {
+                self?.requestCurrentWeather($0.localName)
+            }
+        }
         weatherTableView.reloadData()
-
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -36,15 +40,19 @@ class WeatherViewController: UIViewController {
     }
 
     private func requestCurrentWeather(_ localName: String) {
-        dataManager?.request(localName, baseURL: .current, type: CurrentWeather.self) {[weak self] result -> Void in
-            switch result {
-            case let .success(weather):
-                History.shared.userLocationForecast = ForecastStore(localName: localName, current: weather)
-                DispatchQueue.main.async {
-                    self?.weatherTableView.reloadData()
+        dataManager?.request(
+            localName,
+            before: History.shared.userLocationForecast?.current,
+            baseURL: .current,
+            type: CurrentWeather.self) {[weak self] result -> Void in
+                switch result {
+                case let .success(weather):
+                    History.shared.userLocationForecast = ForecastStore(localName: localName, current: weather)
+                    DispatchQueue.main.async {
+                        self?.weatherTableView.reloadData()
+                    }
+                case let .failure(error): print(error)
                 }
-            case let .failure(error): print(error)
-            }
         }
     }
 }
@@ -110,7 +118,11 @@ extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ location: CLLocation) {
         LocationService.locationToCity(location: location) { [weak self](placeMark) in
             guard let localName = placeMark?.locality,
-                History.shared.isWeatherNeedUpdate(localName) else {
+                Checker.isNeedUpdate(
+                    before: History.shared.userLocationForecast?.localName,
+                    after: localName,
+                    object: History.shared.userLocationForecast?.current
+                ) else {
                     return
             }
             self?.requestCurrentWeather(localName)

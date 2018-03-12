@@ -26,7 +26,7 @@ struct WeatherAPI {
         return components.url
     }
 
-    static func url(baseURL: BaseURL, key: String) -> URL? {
+    static func iconURL(baseURL: BaseURL, key: String) -> URL? {
         guard let components = URLComponents(string: baseURL.rawValue)?.url else { return nil }
         return components.appendingPathComponent(key.appending(".png"))
     }

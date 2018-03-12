@@ -67,15 +67,6 @@ final class History {
         forecastStores.remove(at: indexPath.row)
     }
 
-    func isWeatherNeedUpdate(_ localName: String) -> Bool {
-        if let forecast = userLocationForecast,
-            forecast.localName == localName,
-            !forecast.current.isOutOfDate {
-            return false
-        }
-        return true
-    }
-
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
         let currentWeather = forecastStores[indexPath.row].current
         return WeatherTableCellViewModel(
