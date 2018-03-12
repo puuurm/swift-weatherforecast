@@ -38,6 +38,10 @@ class WeatherDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         networkManager = NetworkManager(session: URLSession.shared)
+        forecastTableView.register(
+            UINib(nibName: "SunInfoCell", bundle: nil),
+            forCellReuseIdentifier: "SunInfoCell"
+        )
         loadWeeklyForecast()
         loadHeaderViewContents()
         forecastTableView.backgroundColor = UIColor.clear
@@ -71,7 +75,7 @@ class WeatherDetailViewController: UIViewController {
 extension WeatherDetailViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return Section.numberOfSections
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,19 +83,28 @@ extension WeatherDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "TodayWeatherCell"
-            ) as? TodayWeatherCell else {
-            return UITableViewCell()
+        let defaultCell = UITableViewCell()
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TodayWeatherCell") as? TodayWeatherCell ?? defaultCell
+            return cell
+        default:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SunInfoCell") as? SunInfoCell else {
+                return defaultCell
+            }
+            let sunriseTimeInterval = History.shared.forecastStores[pageNumber].current.system.sunrise
+            let sunsetTimeInterval = History.shared.forecastStores[pageNumber].current.system.sunset
+            cell.sunriseLabel.text = Date(timeIntervalSince1970: sunriseTimeInterval).convertString(format: "HH:mm a")
+            cell.sunsetLabel.text = Date(timeIntervalSince1970: sunsetTimeInterval).convertString(format: "HH:mm a")
+            return cell
         }
-        return cell
     }
 }
 
 extension WeatherDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 142
+        return 190
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -103,9 +116,12 @@ extension WeatherDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Header") as? SectionHeaderCell else {
+        guard let cell = tableView
+            .dequeueReusableCell(withIdentifier: "Header") as? SectionHeaderCell else {
             return UIView()
         }
+        let section = Section(rawValue: section)
+        cell.dateLable.text = section?.date
         return cell
     }
 
@@ -121,6 +137,7 @@ extension WeatherDetailViewController: UITableViewDelegate {
 }
 
 extension WeatherDetailViewController: UICollectionViewDataSource {
+
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int) -> Int {

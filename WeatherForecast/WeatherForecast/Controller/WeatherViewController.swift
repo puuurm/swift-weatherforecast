@@ -14,7 +14,6 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherTableView: UITableView!
 
     var locationService: LocationService?
-    var userLocation: CLLocation?
     var networkManager: NetworkManager?
 
     override func viewDidLoad() {
@@ -27,11 +26,11 @@ class WeatherViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        History.shared.forecastStores.forEach { [weak self] in
-            if Checker.isNeedUpdate(before: $0.current) {
-                self?.requestCurrentWeather($0.localName)
-            }
-        }
+//        History.shared.forecastStores.forEach { [weak self] in
+//            if Checker.isNeedUpdate(before: $0.current) {
+//                self?.requestCurrentWeather($0.localName)
+//            }
+//        }
         weatherTableView.reloadData()
     }
 
@@ -44,7 +43,7 @@ class WeatherViewController: UIViewController {
             localName,
             before: History.shared.userLocationForecast?.current,
             baseURL: .current,
-            type: CurrentWeather.self) {[weak self] result -> Void in
+            type: CurrentWeather.self) { [weak self] result -> Void in
                 switch result {
                 case let .success(weather):
                     History.shared.userLocationForecast = ForecastStore(localName: localName, current: weather)

@@ -19,6 +19,8 @@ extension Date {
         let formatter = DateFormatter()
         formatter.dateFormat = format
         formatter.timeZone = TimeZone.current
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
         return formatter.string(from: self)
     }
 }

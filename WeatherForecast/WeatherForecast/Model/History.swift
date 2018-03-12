@@ -70,7 +70,7 @@ final class History {
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
         let currentWeather = forecastStores[indexPath.row].current
         return WeatherTableCellViewModel(
-            timeString: Date().convertString(format: "HH:mm"),
+            timeString: Date().convertString(format: "HH:mm a"),
             cityString: currentWeather.cityName,
             temperatureString: "\(currentWeather.weather.temperature)º")
     }
