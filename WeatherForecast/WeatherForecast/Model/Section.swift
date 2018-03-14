@@ -9,12 +9,13 @@
 import Foundation
 
 enum Section: Int {
-    case today, sunInfo
+    case main, today, sunInfo
     var date: String {
         switch self {
+        case .main: return ""
         case .today: return "Today"
         case .sunInfo: return "Sun Info"
         }
     }
-    static var numberOfSections: Int { return 2 }
+    static var numberOfSections: Int { return 3 }
 }

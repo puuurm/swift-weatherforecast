@@ -12,4 +12,9 @@ class HourWeatherCell: UICollectionViewCell {
     @IBOutlet weak var hourLabel: UILabel!
     @IBOutlet weak var weatherIconImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        backgroundColor = UIColor.clear
+    }
 }

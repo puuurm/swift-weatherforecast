@@ -10,7 +10,6 @@ import UIKit
 
 class WeatherDetailViewController: UIViewController {
 
-    @IBOutlet weak var headerView: WeatherDetailHeaderView!
     @IBOutlet weak var forecastTableView: UITableView!
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
     var networkManager: NetworkManager?
@@ -37,14 +36,17 @@ class WeatherDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        forecastTableView.backgroundColor = UIColor.clear
         networkManager = NetworkManager(session: URLSession.shared)
         forecastTableView.register(
             UINib(nibName: "SunInfoCell", bundle: nil),
             forCellReuseIdentifier: "SunInfoCell"
         )
+        forecastTableView.register(
+            UINib(nibName: "WeatherDetailCell", bundle: nil),
+            forCellReuseIdentifier: "WeatherDetailCell"
+        )
         loadWeeklyForecast()
-        loadHeaderViewContents()
-        forecastTableView.backgroundColor = UIColor.clear
     }
 
     private func loadWeeklyForecast() {
@@ -54,17 +56,14 @@ class WeatherDetailViewController: UIViewController {
             localName,
             before: weeklyForecast,
             baseURL: .weekly,
-            type: WeeklyForecast.self) { [weak self] result -> Void in
+            type: WeeklyForecast.self
+        ) { [weak self] result -> Void in
                 switch result {
                 case let .success(weeklyForecast):
                     self?.weeklyForecast = weeklyForecast
                 case let .failure(error): print(error.localizedDescription)
                 }
         }
-    }
-
-    private func loadHeaderViewContents() {
-        headerView.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
     }
 
     @IBAction func closeButtonDidTap(_ sender: UIButton) {
@@ -86,7 +85,19 @@ extension WeatherDetailViewController: UITableViewDataSource {
         let defaultCell = UITableViewCell()
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TodayWeatherCell") as? TodayWeatherCell ?? defaultCell
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "WeatherDetailCell"
+                ) as? WeatherDetailCell else {
+                return defaultCell
+            }
+            cell.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
+            return cell
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "TodayWeatherCell"
+                ) as? TodayWeatherCell else {
+                return defaultCell
+            }
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SunInfoCell") as? SunInfoCell else {
@@ -104,11 +115,17 @@ extension WeatherDetailViewController: UITableViewDataSource {
 extension WeatherDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 190
+        switch indexPath.section {
+        case 0: return 400
+        default: return 190
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        switch section {
+        case 0: return 0
+        default: return 25
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -117,7 +134,7 @@ extension WeatherDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let cell = tableView
-            .dequeueReusableCell(withIdentifier: "Header") as? SectionHeaderCell else {
+            .dequeueReusableCell(withIdentifier: "SectionHeaderCell") as? SectionHeaderCell else {
             return UIView()
         }
         let section = Section(rawValue: section)
@@ -129,9 +146,13 @@ extension WeatherDetailViewController: UITableViewDelegate {
         _ tableView: UITableView,
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 1:
+            guard let tableViewCell = cell as? TodayWeatherCell else { return }
+            tableViewCell.setDataSource(dataSource: self, at: indexPath.row)
+        default: break
+        }
 
-        guard let tableViewCell = cell as? TodayWeatherCell else { return }
-        tableViewCell.setDataSource(dataSource: self, at: indexPath.row)
     }
 
 }
@@ -148,9 +169,11 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "HourWeatherCell",
-            for: indexPath) as? HourWeatherCell,
-            let forecasts = weeklyForecast?.forecasts else { return UICollectionViewCell() }
+            withReuseIdentifier: "HourWeatherCell", for: indexPath
+            ) as? HourWeatherCell,
+            let forecasts = weeklyForecast?.forecasts else {
+                return UICollectionViewCell()
+        }
         let row = indexPath.row
         let current = forecasts[row]
         cell.hourLabel.text = dateFormatter.string(from: current.date)

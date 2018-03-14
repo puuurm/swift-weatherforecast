@@ -1,14 +1,14 @@
 //
-//  WeatherDetailHeaderCell.swift
+//  WeatherDetailCell.swift
 //  WeatherForecast
 //
-//  Created by yangpc on 2018. 2. 22..
+//  Created by yangpc on 2018. 3. 14..
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
 import UIKit
 
-class WeatherDetailHeaderView: UIView {
+class WeatherDetailCell: UITableViewCell {
 
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var weatherLabel: UILabel!
@@ -18,6 +18,7 @@ class WeatherDetailHeaderView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        backgroundColor = UIColor.clear
     }
 
     func load(_ weatherDetailHeaderViewModel: WeatherDetailHeaderViewModel?) {
@@ -27,6 +28,17 @@ class WeatherDetailHeaderView: UIView {
         temperatureLabel.text = vm.temperature
         minTemperatureLabel.text = vm.minTemperature
         maxTemperatureLabel.text = vm.maxTemperature
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
     }
 }
 

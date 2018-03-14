@@ -10,6 +10,9 @@ import UIKit
 
 class SectionHeaderCell: UITableViewCell {
     @IBOutlet weak var dateLable: UILabel!
-    @IBOutlet weak var dayOfWeek: UILabel!
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        backgroundColor = UIColor.clear
+    }
 }
