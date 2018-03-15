@@ -72,7 +72,8 @@ final class History {
         return WeatherTableCellViewModel(
             timeString: Date().convertString(format: "HH:mm a"),
             cityString: currentWeather.cityName,
-            temperatureString: "\(currentWeather.weather.temperature)º")
+            temperatureString: "\(currentWeather.weather.temperature)"
+        )
     }
 
     func weatherDetailViewModel(at index: Int) -> WeatherDetailHeaderViewModel? {
@@ -83,9 +84,10 @@ final class History {
         return WeatherDetailHeaderViewModel (
             city: currentWeather.cityName,
             weather: weatherDetail,
-            temperature: "\(currentWeather.weather.temperature)º",
-            minTemperature: "\(currentWeather.weather.minTemperature)º",
-            maxTemperature: "\(currentWeather.weather.maxTemperature)º" )
+            temperature: currentWeather.weather.temperature.convertCelsius,
+            minTemperature: currentWeather.weather.minTemperature.convertCelsius,
+            maxTemperature: currentWeather.weather.maxTemperature.convertCelsius
+        )
     }
 
 }

@@ -170,7 +170,7 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         let row = indexPath.row
         let current = forecasts[row]
         cell.hourLabel.text = current.date.convertString(format: "H시")
-        cell.temperatureLabel.text = "\(current.mainWeather.temperature)º"
+        cell.temperatureLabel.text = current.mainWeather.temperature.convertCelsius
         let weatherDetail = forecasts[row].moreWeather.first!
         networkManager?.request(weatherDetail, baseURL: .icon) { result in
             switch result {
