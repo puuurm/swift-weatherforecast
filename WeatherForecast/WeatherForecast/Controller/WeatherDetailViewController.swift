@@ -118,14 +118,14 @@ extension WeatherDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0: return 350
-        default: return 190
+        default: return 140
         }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 0: return 0
-        default: return 25
+        default: return 60
         }
     }
 
