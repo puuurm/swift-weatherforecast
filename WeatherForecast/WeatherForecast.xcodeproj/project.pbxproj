@@ -205,10 +205,6 @@
 				C90A7C3E202DC29200B8DD95 /* Helper */,
 				C90A7C20202B44BC00B8DD95 /* Model */,
 				C90A7BFE202AF91600B8DD95 /* AppDelegate.swift */,
-				C933197220585C4100F9447F /* WeatherDetailCell.swift */,
-				C933197320585C4100F9447F /* WeatherDetailCell.xib */,
-				C9E3E82120570F3F004798D9 /* SunInfoCell.swift */,
-				C9E3E82220570F3F004798D9 /* SunInfoCell.xib */,
 				C90A7C02202AF91600B8DD95 /* Main.storyboard */,
 				C90A7C05202AF91600B8DD95 /* Assets.xcassets */,
 				C90A7C07202AF91600B8DD95 /* LaunchScreen.storyboard */,
@@ -274,6 +270,7 @@
 		C90A7C482032BEA900B8DD95 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C9DEE190205A3F6100EEA92E /* XIB */,
 				C90A7C492032BEEC00B8DD95 /* WeatherTableViewCell.swift */,
 				C90A7C51203727D600B8DD95 /* SearchTableViewCell.swift */,
 				C9C0FC0E20431D7D002D636F /* SectionHeaderCell.swift */,
@@ -292,6 +289,17 @@
 				C90A7C4F2037111600B8DD95 /* CitySearchController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		C9DEE190205A3F6100EEA92E /* XIB */ = {
+			isa = PBXGroup;
+			children = (
+				C933197220585C4100F9447F /* WeatherDetailCell.swift */,
+				C933197320585C4100F9447F /* WeatherDetailCell.xib */,
+				C9E3E82120570F3F004798D9 /* SunInfoCell.swift */,
+				C9E3E82220570F3F004798D9 /* SunInfoCell.xib */,
+			);
+			path = XIB;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
