@@ -13,13 +13,9 @@ class HourWeatherCell: UICollectionViewCell {
     @IBOutlet weak var weatherIconImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        backgroundColor = UIColor.clear
-    }
-
     override func awakeFromNib() {
         super.awakeFromNib()
+        backgroundColor = UIColor.clear
     }
 
     override func prepareForReuse() {

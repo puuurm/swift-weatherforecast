@@ -16,11 +16,6 @@ class WeatherDetailCell: UITableViewCell {
     @IBOutlet weak var minTemperatureLabel: UILabel!
     @IBOutlet weak var maxTemperatureLabel: UILabel!
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        backgroundColor = UIColor.clear
-    }
-
     func load(_ weatherDetailHeaderViewModel: WeatherDetailHeaderViewModel?) {
         guard let vm = weatherDetailHeaderViewModel else { return }
         cityLabel.text = vm.city
@@ -32,7 +27,7 @@ class WeatherDetailCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        backgroundColor = UIColor.clear
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

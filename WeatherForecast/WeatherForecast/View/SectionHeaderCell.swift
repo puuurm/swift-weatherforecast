@@ -11,7 +11,17 @@ import UIKit
 class SectionHeaderCell: UITableViewCell {
     @IBOutlet weak var dateLable: UILabel!
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+        self.layer.cornerRadius = 8
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
 }
