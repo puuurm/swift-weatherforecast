@@ -16,6 +16,8 @@ class HourWeatherCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         backgroundColor = UIColor.clear
+        hourLabel.textColor = UIColor.white
+        temperatureLabel.textColor = UIColor.white
     }
 
     override func prepareForReuse() {

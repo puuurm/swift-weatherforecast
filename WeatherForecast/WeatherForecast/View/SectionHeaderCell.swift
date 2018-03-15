@@ -9,11 +9,12 @@
 import UIKit
 
 class SectionHeaderCell: UITableViewCell {
-    @IBOutlet weak var dateLable: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         makeTopCornerRound()
+        dateLabel.textColor = UIColor.white
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

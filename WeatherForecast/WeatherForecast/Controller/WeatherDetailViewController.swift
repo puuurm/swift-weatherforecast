@@ -27,13 +27,6 @@ class WeatherDetailViewController: UIViewController {
 
     var pageNumber: Int!
 
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.timeZone = TimeZone.current
-        return formatter
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         forecastTableView.backgroundColor = UIColor.clear
@@ -138,7 +131,7 @@ extension WeatherDetailViewController: UITableViewDelegate {
             return UIView()
         }
         let section = Section(rawValue: section)
-        cell.dateLable.text = section?.date
+        cell.dateLabel.text = section?.date
         return cell
     }
 
@@ -176,7 +169,7 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         }
         let row = indexPath.row
         let current = forecasts[row]
-        cell.hourLabel.text = dateFormatter.string(from: current.date)
+        cell.hourLabel.text = current.date.convertString(format: "H시")
         cell.temperatureLabel.text = "\(current.mainWeather.temperature)º"
         let weatherDetail = forecasts[row].moreWeather.first!
         networkManager?.request(weatherDetail, baseURL: .icon) { result in

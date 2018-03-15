@@ -15,6 +15,8 @@ class SunInfoCell: ContentsCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        sunriseLabel.textColor = UIColor.white
+        sunsetLabel.textColor = UIColor.white
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
