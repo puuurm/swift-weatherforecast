@@ -18,6 +18,7 @@ class WeatherDetailContainerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.skyBlue
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
     }
@@ -82,13 +83,5 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
             return nil
         }
         return self.viewController(at: index)
-    }
-
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return History.shared.count
-    }
-
-    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return currentIndex ?? 0
     }
 }

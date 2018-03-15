@@ -36,7 +36,6 @@ class WeatherDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.skyBlue
         forecastTableView.backgroundColor = UIColor.clear
         networkManager = NetworkManager(session: URLSession.shared)
         forecastTableView.register(
