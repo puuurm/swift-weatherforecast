@@ -17,4 +17,12 @@ class HourWeatherCell: UICollectionViewCell {
         super.init(coder: aDecoder)
         backgroundColor = UIColor.clear
     }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
 }
