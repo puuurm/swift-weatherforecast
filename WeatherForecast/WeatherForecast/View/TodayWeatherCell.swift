@@ -8,13 +8,11 @@
 
 import UIKit
 
-class TodayWeatherCell: UITableViewCell {
+class TodayWeatherCell: ContentsCell {
     @IBOutlet weak var hourWeatherCollectionView: UICollectionView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.layer.cornerRadius = 8
-        self.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
