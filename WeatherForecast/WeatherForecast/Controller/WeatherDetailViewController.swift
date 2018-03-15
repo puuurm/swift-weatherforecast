@@ -36,6 +36,7 @@ class WeatherDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.skyBlue
         forecastTableView.backgroundColor = UIColor.clear
         networkManager = NetworkManager(session: URLSession.shared)
         forecastTableView.register(
@@ -116,7 +117,7 @@ extension WeatherDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 0: return 400
+        case 0: return 350
         default: return 190
         }
     }
