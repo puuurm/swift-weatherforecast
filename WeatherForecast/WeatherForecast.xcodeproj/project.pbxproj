@@ -69,6 +69,7 @@
 		C9E3E82320570F3F004798D9 /* SunInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E3E82120570F3F004798D9 /* SunInfoCell.swift */; };
 		C9E3E82420570F3F004798D9 /* SunInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9E3E82220570F3F004798D9 /* SunInfoCell.xib */; };
 		C9E3E82620571547004798D9 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E3E82520571547004798D9 /* Section.swift */; };
+		C9E6FF9520603FFA0085378C /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6FF9420603FFA0085378C /* LineChartView.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
 
@@ -135,6 +136,7 @@
 		C9E3E82120570F3F004798D9 /* SunInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunInfoCell.swift; sourceTree = "<group>"; };
 		C9E3E82220570F3F004798D9 /* SunInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SunInfoCell.xib; sourceTree = "<group>"; };
 		C9E3E82520571547004798D9 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		C9E6FF9420603FFA0085378C /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -279,6 +281,7 @@
 				C9C0FC16204334C9002D636F /* TodayWeatherCell.swift */,
 				C9C0FC14204333FC002D636F /* HourWeatherCell.swift */,
 				C93FC068205AA9A800FDD145 /* ContentsCell.swift */,
+				C9E6FF9420603FFA0085378C /* LineChartView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -540,6 +543,7 @@
 				C90A7C2F202C11B700B8DD95 /* WeatherDetail.swift in Sources */,
 				C9E3E82320570F3F004798D9 /* SunInfoCell.swift in Sources */,
 				C90A7C25202B603900B8DD95 /* NetworkManager.swift in Sources */,
+				C9E6FF9520603FFA0085378C /* LineChartView.swift in Sources */,
 				C93FC069205AA9A800FDD145 /* ContentsCell.swift in Sources */,
 				C9E3E82620571547004798D9 /* Section.swift in Sources */,
 				C90A7C502037111700B8DD95 /* CitySearchController.swift in Sources */,

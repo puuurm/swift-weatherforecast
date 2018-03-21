@@ -67,6 +67,12 @@ final class History {
         forecastStores.remove(at: indexPath.row)
     }
 
+    func temperatures(at index: Int) -> [Float] {
+        var temps = [Float]()
+        forecastStores[index].weekly?.forecasts.forEach { temps.append($0.mainWeather.temperature.rounded()) }
+        return temps
+    }
+
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
         let currentWeather = forecastStores[indexPath.row].current
         return WeatherTableCellViewModel(

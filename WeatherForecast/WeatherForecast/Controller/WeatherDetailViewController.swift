@@ -109,8 +109,8 @@ extension WeatherDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 0: return 350
-        default: return 140
+        case 0: return 310
+        default: return 200
         }
     }
 
@@ -169,6 +169,8 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         }
         let row = indexPath.row
         let current = forecasts[row]
+        cell.lineChartView.dataSource = self
+        cell.lineChartView.cellIndex = row
         cell.hourLabel.text = current.date.convertString(format: "H시")
         cell.temperatureLabel.text = current.mainWeather.temperature.convertCelsius
         let weatherDetail = forecasts[row].moreWeather.first!
@@ -183,5 +185,11 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
             }
         }
         return cell
+    }
+}
+
+extension WeatherDetailViewController: LineChartDataSource {
+    func baseData(lineChartView: LineChartView) -> [Float] {
+        return History.shared.temperatures(at: pageNumber)
     }
 }

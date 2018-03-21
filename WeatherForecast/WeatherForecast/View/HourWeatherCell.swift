@@ -9,6 +9,8 @@
 import UIKit
 
 class HourWeatherCell: UICollectionViewCell {
+
+    @IBOutlet weak var lineChartView: LineChartView!
     @IBOutlet weak var hourLabel: UILabel!
     @IBOutlet weak var weatherIconImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -23,4 +25,5 @@ class HourWeatherCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
     }
+
 }
