@@ -1,12 +1,15 @@
 PODS:
   - SwiftLint (0.24.2)
+  - SwiftMessages (4.1.0)
 
 DEPENDENCIES:
   - SwiftLint
+  - SwiftMessages
 
 SPEC CHECKSUMS:
   SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
+  SwiftMessages: 1bacc783c8f10bdfdc57c14860cae8a1f1fa6591
 
-PODFILE CHECKSUM: 4194901af8f423da96fb28a545e62cec6111ce32
+PODFILE CHECKSUM: a5b5d64b1d41b64a9cb5720d96bad3e6ec675fce
 
 COCOAPODS: 1.4.0
