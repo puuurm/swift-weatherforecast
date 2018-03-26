@@ -21,7 +21,7 @@ class WeatherViewController: UIViewController {
         networkManager = NetworkManager(session: URLSession.shared)
         locationService = LocationService()
         locationService?.delegate = self
-        locationService?.searchCurrentLocation()
+        locationService?.startReceivingLocationChanges()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -114,8 +114,8 @@ extension WeatherViewController: UITableViewDelegate {
 }
 
 extension WeatherViewController: LocationServiceDelegate {
-    func updateLocation(_ location: CLLocation) {
-        LocationService.locationToCity(location: location) { [weak self](placeMark) in
+    func updateLocation(_ placeMark: CLPlacemark?, error: Error?) {
+        if error == nil {
             guard let localName = placeMark?.locality,
                 Checker.isNeedUpdate(
                     before: History.shared.userLocationForecast?.localName,
@@ -124,7 +124,9 @@ extension WeatherViewController: LocationServiceDelegate {
                 ) else {
                     return
             }
-            self?.requestCurrentWeather(localName)
+            requestCurrentWeather(localName)
+        } else {
+            print(error!.localizedDescription)
         }
     }
 }
