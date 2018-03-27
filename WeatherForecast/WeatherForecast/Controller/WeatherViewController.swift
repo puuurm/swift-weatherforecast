@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class WeatherViewController: UIViewController {
+class WeatherViewController: UIViewController, Presentable {
 
     @IBOutlet weak var weatherTableView: UITableView!
 
@@ -54,6 +54,7 @@ class WeatherViewController: UIViewController {
                 }
         }
     }
+
 }
 
 extension WeatherViewController: UITableViewDataSource {
@@ -114,19 +115,15 @@ extension WeatherViewController: UITableViewDelegate {
 }
 
 extension WeatherViewController: LocationServiceDelegate {
-    func updateLocation(_ placeMark: CLPlacemark?, error: Error?) {
-        if error == nil {
-            guard let localName = placeMark?.locality,
-                Checker.isNeedUpdate(
-                    before: History.shared.userLocationForecast?.localName,
-                    after: localName,
-                    object: History.shared.userLocationForecast?.current
-                ) else {
-                    return
-            }
-            requestCurrentWeather(localName)
-        } else {
-            print(error!.localizedDescription)
+    func updateLocation(_ placeMark: CLPlacemark?) {
+        guard let localName = placeMark?.locality,
+            Checker.isNeedUpdate(
+                before: History.shared.userLocationForecast?.localName,
+                after: localName,
+                object: History.shared.userLocationForecast?.current
+            ) else {
+                return
         }
+        requestCurrentWeather(localName)
     }
 }

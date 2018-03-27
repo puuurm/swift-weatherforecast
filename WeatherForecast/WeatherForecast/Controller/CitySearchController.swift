@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class CitySearchController: UIViewController {
+class CitySearchController: UIViewController, Presentable {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -109,10 +109,15 @@ extension CitySearchController: UITableViewDelegate {
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = selectedCityName
         MKLocalSearch(request: request).start { [weak self] (response, error) in
-            if let mapItem = response?.mapItems.first,
-                let cityName = mapItem.name {
-                selectedCityName = cityName
+            if let error = error as? MKError {
+                self?.presentErrorMessage(message: error.localizedDescription)
+                return
             }
+            guard let mapItem = response?.mapItems.first,
+                let cityName = mapItem.name else {
+                    return
+            }
+            selectedCityName = cityName
             self?.requestWeather(selectedCityName) {
                 DispatchQueue.main.async { [weak self] in
                     self?.dismissKeyboard()

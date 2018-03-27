@@ -9,12 +9,12 @@
 import CoreLocation
 
 protocol LocationServiceDelegate: class {
-    func updateLocation(_ placeMark: CLPlacemark?, error: Error?)
+    func updateLocation(_ placeMark: CLPlacemark?)
 }
 
-final class LocationService: NSObject {
+final class LocationService: NSObject, Presentable {
 
-    typealias AfterTask = ((CLPlacemark?, Error?) -> Void)
+    typealias AfterTask = ((CLPlacemark?) -> Void)
 
     private var locationManager: CLLocationManager?
     weak var delegate: LocationServiceDelegate?
@@ -40,16 +40,14 @@ final class LocationService: NSObject {
         locationManager?.startUpdatingLocation()
     }
 
-    func coordinateToCityName(location: CLLocation, completionHandler: @escaping AfterTask) {
+    private func coordinateToCityName(location: CLLocation, completionHandler: @escaping AfterTask) {
         let geocoder = CLGeocoder()
-        // Look up the location and pass it to the completion handler
-        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-            if error == nil {
-                let firstLocation = placemarks?.last
-                completionHandler(firstLocation, nil)
-            } else {
-                completionHandler(nil, error!)
+        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
+            if let error = error as? CLError {
+                self?.presentErrorMessage(message: error.localizedDescription)
+                return
             }
+            completionHandler(placemarks?.last)
         }
     }
 }
@@ -58,8 +56,8 @@ extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = manager.location {
-            coordinateToCityName(location: location) { [weak self] (placeMark, error) in
-                self?.delegate?.updateLocation(placeMark, error: error)
+            coordinateToCityName(location: location) { [weak self] (placeMark) in
+                self?.delegate?.updateLocation(placeMark)
             }
             manager.stopUpdatingLocation()
         }
@@ -67,11 +65,10 @@ extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         if let error = error as? CLError {
-            // Location updates are not authorized.
             if error.code == .denied {
                 manager.stopUpdatingLocation()
             }
-            delegate?.updateLocation(nil, error: error)
+            presentErrorMessage(message: error.localizedDescription)
         }
     }
 }
