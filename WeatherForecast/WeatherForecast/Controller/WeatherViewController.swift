@@ -15,9 +15,12 @@ class WeatherViewController: UIViewController, Presentable {
 
     var locationService: LocationService?
     var networkManager: NetworkManager?
+    lazy var clock = Clock()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initNotification()
+        clock.start()
         networkManager = NetworkManager(session: URLSession.shared)
         locationService = LocationService()
         locationService?.delegate = self
@@ -26,12 +29,27 @@ class WeatherViewController: UIViewController, Presentable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        History.shared.forecastStores.forEach { [weak self] in
-//            if Checker.isNeedUpdate(before: $0.current) {
-//                self?.requestCurrentWeather($0.localName)
-//            }
-//        }
-        weatherTableView.reloadData()
+    }
+
+    private func initNotification() {
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.updateTableView),
+            name: Notification.Name.DidUpdateTime,
+            object: nil
+        )
+
+    }
+
+    @objc func updateTableView() {
+        DispatchQueue.main.async { [weak self] in
+            self?.weatherTableView.reloadData()
+        }
+    }
+
+    deinit {
+        clock.stop()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -54,7 +72,6 @@ class WeatherViewController: UIViewController, Presentable {
                 }
         }
     }
-
 }
 
 extension WeatherViewController: UITableViewDataSource {
