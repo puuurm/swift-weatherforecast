@@ -31,6 +31,7 @@ final class NetworkManager {
         NetworkSpinner.on()
         session.dataTask(with: url) { [weak self] (data, _, error) in
             if let result = self?.processRequest(type, data: data, error: error) {
+                print("update")
                 completion(result)
                 self?.imageCache.deleteImageForkeys(keys: object?.cacheKeys)
             }

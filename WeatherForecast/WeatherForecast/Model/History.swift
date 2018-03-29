@@ -27,6 +27,7 @@ final class History {
     var count: Int {
         return forecastStores.count
     }
+
     private init() {
         forecastStores = [ForecastStore]()
     }
@@ -37,10 +38,16 @@ final class History {
 
     private func updateUserLocationWeather(_ forecastStore: ForecastStore?) {
         guard let forecast = forecastStore else { return }
+        let userInfo: [String: Int] = ["index": 0]
         if forecastStores.isEmpty {
             forecastStores.append(forecast)
         } else {
             forecastStores[0] = forecast
+            NotificationCenter.default.post(
+                name: .DidUpdateCurrentWeather,
+                object: self,
+                userInfo: userInfo
+            )
         }
     }
 
@@ -55,7 +62,13 @@ final class History {
     }
 
     func append(_ forecastStore: ForecastStore) {
+         let userInfo: [String: Int] = ["index": forecastStores.count]
         forecastStores.append(forecastStore)
+        NotificationCenter.default.post(
+            name: .DidInsertWeather,
+            object: self,
+            userInfo: userInfo
+        )
     }
 
     func add(at index: Int, weeklyForecast: WeeklyForecast?) {
@@ -64,7 +77,13 @@ final class History {
     }
 
     func delete(at indexPath: IndexPath) {
+        let userInfo: [String: Int] = ["index": indexPath.row]
         forecastStores.remove(at: indexPath.row)
+        NotificationCenter.default.post(
+            name: .DidDeleteWeather,
+            object: self,
+            userInfo: userInfo
+        )
     }
 
     func temperatures(at index: Int) -> [Float] {
@@ -76,7 +95,7 @@ final class History {
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
         let currentWeather = forecastStores[indexPath.row].current
         return WeatherTableCellViewModel(
-            timeString: Date().convertString(format: "HH:mm a"),
+            timeString: Date().convertString(format: "h:mm a"),
             cityString: currentWeather.cityName,
             temperatureString: "\(currentWeather.weather.temperature)"
         )

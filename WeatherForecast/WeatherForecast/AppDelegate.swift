@@ -36,6 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        NotificationCenter.default.post(name: Notification.Name.DidUpdateTime, object: self)
+        NotificationCenter.default.post(name: Notification.Name.DidUpdateUserLocation, object: self)
+        //NotificationCenter.default.post(name: Notification.Name.DidUpdateCurrentWeather, object: self)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

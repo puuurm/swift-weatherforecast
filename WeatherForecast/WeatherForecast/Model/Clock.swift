@@ -9,12 +9,10 @@
 import Foundation
 
 class Clock {
-    private var time: Date
     private var timer: Timer
     private let calendar = Calendar.current
 
     init() {
-        time = Date()
         timer = Timer()
     }
 
@@ -33,8 +31,8 @@ class Clock {
     }
 
     @objc private func updateTime() {
-        let minute = calendar.component(.second, from: timer.fireDate)
         print(timer.fireDate)
+        let minute = calendar.component(.second, from: timer.fireDate)
         if minute == 0 {
             NotificationCenter.default.post(name: Notification.Name.DidUpdateTime, object: nil)
         }

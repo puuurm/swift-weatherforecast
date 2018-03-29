@@ -24,7 +24,6 @@ class WeatherViewController: UIViewController, Presentable {
         networkManager = NetworkManager(session: URLSession.shared)
         locationService = LocationService()
         locationService?.delegate = self
-        locationService?.startReceivingLocationChanges()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -35,21 +34,38 @@ class WeatherViewController: UIViewController, Presentable {
 
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(self.updateTableView),
-            name: Notification.Name.DidUpdateTime,
+            selector: #selector(self.updateTime),
+            name: .DidUpdateTime,
             object: nil
         )
 
-    }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.updateUserLocation),
+            name: .DidUpdateUserLocation,
+            object: nil
+        )
 
-    @objc func updateTableView() {
-        DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.reloadData()
-        }
-    }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.insertWeather(notification:)),
+            name: .DidInsertWeather,
+            object: nil
+        )
 
-    deinit {
-        clock.stop()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.updateCurrent(notification:)),
+            name: .DidUpdateCurrentWeather,
+            object: nil
+        )
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.deleteWeather(notification:)),
+            name: .DidDeleteWeather,
+            object: nil
+        )
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -61,13 +77,10 @@ class WeatherViewController: UIViewController, Presentable {
             localName,
             before: History.shared.userLocationForecast?.current,
             baseURL: .current,
-            type: CurrentWeather.self) { [weak self] result -> Void in
+            type: CurrentWeather.self) { result -> Void in
                 switch result {
                 case let .success(weather):
                     History.shared.userLocationForecast = ForecastStore(localName: localName, current: weather)
-                    DispatchQueue.main.async {
-                        self?.weatherTableView.reloadData()
-                    }
                 case let .failure(error): print(error)
                 }
         }
@@ -142,5 +155,52 @@ extension WeatherViewController: LocationServiceDelegate {
                 return
         }
         requestCurrentWeather(localName)
+    }
+}
+
+// MARK: - Events
+extension WeatherViewController {
+
+    @objc func updateTime() {
+        DispatchQueue.main.async { [weak self] in
+            self?.weatherTableView.reloadData()
+        }
+    }
+
+    @objc func updateUserLocation() {
+        locationService?.startReceivingLocationChanges()
+    }
+
+    @objc func insertWeather(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+            let index = userInfo["index"] as? Int else {
+                return
+        }
+        let indexPath = IndexPath.init(row: index, section: 0)
+        DispatchQueue.main.async { [weak self] in
+            self?.weatherTableView.insertRows(at: [indexPath], with: .automatic)
+        }
+    }
+
+    @objc func updateCurrent(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+            let index = userInfo["index"] as? Int else {
+                return
+        }
+        let indexPath = IndexPath.init(row: index, section: 0)
+        DispatchQueue.main.async { [weak self] in
+            self?.weatherTableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+
+    @objc func deleteWeather(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+            let index = userInfo["index"] as? Int else {
+                return
+        }
+        let indexPath = IndexPath.init(row: index, section: 0)
+        DispatchQueue.main.async { [weak self] in
+            self?.weatherTableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 }
