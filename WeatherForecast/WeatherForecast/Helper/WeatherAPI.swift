@@ -14,14 +14,8 @@ struct WeatherAPI {
 
     static func url(baseURL: BaseURL, parameters: Query?) -> URL? {
         guard var components = URLComponents(string: baseURL.rawValue) else { return nil }
-        var queryItems = [URLQueryItem]()
-        if let params = parameters {
-            for (key, value) in params {
-                let item = URLQueryItem(name: key, value: value)
-                queryItems.append(item)
-            }
-        }
-        queryItems.append(URLQueryItem(name: "APPID", value: APIConstant.apiKey))
+        var queryItems = parameters?.map { return URLQueryItem(name: $0.key, value: $0.value) }
+        queryItems?.append(URLQueryItem(name: "APPID", value: APIConstant.apiKey))
         components.queryItems = queryItems
         return components.url
     }

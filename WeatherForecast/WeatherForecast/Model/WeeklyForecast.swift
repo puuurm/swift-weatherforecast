@@ -18,13 +18,11 @@ struct WeeklyForecast {
 
 extension WeeklyForecast: Storable {
     var isOutOfDate: Bool {
-        return forecasts.first!.date.isMoreThanSinceNow(hour: 3)
+        return forecasts.first?.date.isMoreThanSinceNow(hour: 3) ?? true
     }
 
     var cacheKeys: [String] {
-        var keys = [String]()
-        forecasts.forEach { keys.append($0.moreWeather.first!.iconKey) }
-        return keys
+        return forecasts.flatMap { $0.moreWeather.first?.iconKey }
     }
 }
 

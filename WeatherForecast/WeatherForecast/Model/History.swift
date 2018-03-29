@@ -56,9 +56,7 @@ final class History {
     }
 
     func iconNames(at index: Int) -> [String] {
-        var icons = [String]()
-        forecastStores[index].current.weatherDetail.forEach { icons.append($0.icon) }
-        return icons
+        return forecastStores[index].current.weatherDetail.map { $0.icon }
     }
 
     func append(_ forecastStore: ForecastStore) {
@@ -87,9 +85,7 @@ final class History {
     }
 
     func temperatures(at index: Int) -> [Float] {
-        var temps = [Float]()
-        forecastStores[index].weekly?.forecasts.forEach { temps.append($0.mainWeather.temperature.rounded()) }
-        return temps
+        return forecastStores[index].weekly?.forecasts.map { $0.mainWeather.temperature.rounded() } ?? []
     }
 
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
@@ -97,7 +93,7 @@ final class History {
         return WeatherTableCellViewModel(
             timeString: Date().convertString(format: "h:mm a"),
             cityString: currentWeather.cityName,
-            temperatureString: "\(currentWeather.weather.temperature)"
+            temperatureString: currentWeather.weather.temperature.convertCelsius
         )
     }
 
