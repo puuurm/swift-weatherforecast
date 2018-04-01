@@ -75,8 +75,8 @@ final class History {
     }
 
     func delete(at indexPath: IndexPath) {
-        let userInfo: [String: Int] = ["index": indexPath.row]
-        forecastStores.remove(at: indexPath.row)
+        let userInfo: [String: Int] = ["index": indexPath.section]
+        forecastStores.remove(at: indexPath.section)
         NotificationCenter.default.post(
             name: .DidDeleteWeather,
             object: self,
@@ -89,11 +89,12 @@ final class History {
     }
 
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
-        let currentWeather = forecastStores[indexPath.row].current
+        let currentWeather = forecastStores[indexPath.section].current
         return WeatherTableCellViewModel(
             timeString: Date().convertString(format: "h:mm a"),
             cityString: currentWeather.cityName,
-            temperatureString: currentWeather.weather.temperature.convertCelsius
+            temperatureString: currentWeather.weather.temperature.convertCelsius,
+            weatherDetail: currentWeather.weatherDetail.first!
         )
     }
 

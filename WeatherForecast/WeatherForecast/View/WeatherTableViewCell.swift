@@ -13,10 +13,11 @@ class WeatherTableViewCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperature: UILabel!
+    @IBOutlet weak var weatherIconImageView: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        makeCornerRound()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -24,10 +25,21 @@ class WeatherTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+
+    private func makeCornerRound() {
+        self.layer.cornerRadius = 10
+        self.layer.maskedCorners = [
+            .layerMaxXMaxYCorner,
+            .layerMinXMinYCorner,
+            .layerMaxXMinYCorner,
+            .layerMinXMaxYCorner
+        ]
+    }
 }
 
 struct WeatherTableCellViewModel {
     var timeString: String
     var cityString: String
     var temperatureString: String
+    var weatherDetail: WeatherDetail
 }

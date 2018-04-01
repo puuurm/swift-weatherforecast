@@ -103,15 +103,28 @@ extension WeatherViewController: UITableViewDataSource {
         cell.cityLabel.text = cellViewModel.cityString
         cell.temperature.text = cellViewModel.temperatureString
         cell.timeLabel.text = cellViewModel.timeString
+        networkManager?.request(cellViewModel.weatherDetail, baseURL: .icon) { result in
+            switch result {
+            case let .success(icon):
+                DispatchQueue.main.async {
+                    cell.weatherIconImageView.image = icon
+                }
+            case let .failure(error): print(error.localizedDescription)
+            }
+        }
         return cell
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return History.shared.count
     }
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.row == 0 {
+        if indexPath.section == 0 {
             return false
         }
         return true
@@ -121,7 +134,15 @@ extension WeatherViewController: UITableViewDataSource {
 
 extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 140
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
     }
 
     func tableView(
@@ -139,7 +160,7 @@ extension WeatherViewController: UITableViewDelegate {
             ) as? WeatherDetailContainerViewController else {
             return
         }
-        weatherDetailVC.currentIndex = indexPath.row
+        weatherDetailVC.currentIndex = indexPath.section
         present(weatherDetailVC, animated: true, completion: nil)
     }
 }
@@ -176,9 +197,9 @@ extension WeatherViewController {
             let index = userInfo["index"] as? Int else {
                 return
         }
-        let indexPath = IndexPath.init(row: index, section: 0)
+        let indexSet = IndexSet.init(integer: index)
         DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.insertRows(at: [indexPath], with: .automatic)
+            self?.weatherTableView.insertSections(indexSet, with: .automatic)
         }
     }
 
@@ -187,9 +208,9 @@ extension WeatherViewController {
             let index = userInfo["index"] as? Int else {
                 return
         }
-        let indexPath = IndexPath.init(row: index, section: 0)
+        let indexSet = IndexSet.init(integer: index)
         DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.reloadRows(at: [indexPath], with: .automatic)
+            self?.weatherTableView.reloadSections(indexSet, with: .automatic)
         }
     }
 
@@ -198,9 +219,9 @@ extension WeatherViewController {
             let index = userInfo["index"] as? Int else {
                 return
         }
-        let indexPath = IndexPath.init(row: index, section: 0)
+        let indexSet = IndexSet.init(integer: index)
         DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.deleteRows(at: [indexPath], with: .automatic)
+            self?.weatherTableView.deleteSections(indexSet, with: .automatic)
         }
     }
 }
