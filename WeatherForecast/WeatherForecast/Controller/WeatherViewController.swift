@@ -12,10 +12,12 @@ import CoreLocation
 class WeatherViewController: UIViewController, Presentable {
 
     @IBOutlet weak var weatherTableView: UITableView!
-
-    var locationService: LocationService?
-    var networkManager: NetworkManager?
+    private var locationService: LocationService?
+    private var networkManager: NetworkManager?
     lazy var clock = Clock()
+
+    private var currentCell: WeatherTableViewCell?
+    private var duration: Double = 0.8
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,10 @@ class WeatherViewController: UIViewController, Presentable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        moveCellsBackIfNeed(duration) {
+            self.weatherTableView.reloadData()
+        }
+        closeCurrentCellIfNeed(duration)
     }
 
     private func initNotification() {
@@ -148,10 +154,12 @@ extension WeatherViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         commit editingStyle: UITableViewCellEditingStyle,
-        forRowAt indexPath: IndexPath ) {
+        forRowAt indexPath: IndexPath) {
+
         if editingStyle == .delete {
             History.shared.delete(at: indexPath)
         }
+
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -161,8 +169,19 @@ extension WeatherViewController: UITableViewDelegate {
             return
         }
         weatherDetailVC.currentIndex = indexPath.section
-        present(weatherDetailVC, animated: true, completion: nil)
+        pushViewController(tableView, viewController: weatherDetailVC)
     }
+
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+
+        guard let currentCell = tableView.cellForRow(at: indexPath) as? WeatherTableViewCell else {
+            return indexPath
+        }
+
+        self.currentCell = currentCell
+        return indexPath
+    }
+
 }
 
 extension WeatherViewController: LocationServiceDelegate {
@@ -176,6 +195,66 @@ extension WeatherViewController: LocationServiceDelegate {
                 return
         }
         requestCurrentWeather(localName)
+    }
+}
+
+// 출처 : https://github.com/Ramotion/preview-transition
+
+extension WeatherViewController {
+
+    func pushViewController(_ tableView: UITableView, viewController: WeatherDetailContainerViewController) {
+
+        guard let currentCell = self.currentCell else { return }
+        currentCell.openCell(self.view, duration: duration)
+        moveCells(tableView, currentCell: currentCell, duration: duration)
+        delay(duration) { [weak self] in
+            self?.navigationController?.pushViewController(viewController, animated: false)
+        }
+    }
+
+    func moveCells(_ tableView: UITableView, currentCell: WeatherTableViewCell, duration: Double) {
+        guard let currentIndex = tableView.indexPath(for: currentCell) else {
+            return
+        }
+        for case let cell as WeatherTableViewCell in tableView.visibleCells where cell != currentCell {
+            cell.isMovedHidden = true
+            let section = tableView.indexPath(for: cell)?.section ?? 0
+            let direction = section < currentIndex.section ? WeatherTableViewCell.Direction.down : WeatherTableViewCell.Direction.up
+            cell.animationMoveCell(direction, duration: duration, tableView: tableView, selectedIndexPath: currentIndex, close: false)
+        }
+    }
+
+    func moveCellsBackIfNeed(_ duration: Double, completion: @escaping () -> Void) {
+
+        guard let currentCell = self.currentCell,
+            let currentIndex = weatherTableView.indexPath(for: currentCell) else {
+                return
+        }
+
+        for case let cell as WeatherTableViewCell in weatherTableView.visibleCells where cell != currentCell {
+
+            if cell.isMovedHidden == false { continue }
+
+            if let indexPath = weatherTableView.indexPath(for: cell) {
+                let direction = indexPath.section < currentIndex.section ? WeatherTableViewCell.Direction.up : WeatherTableViewCell.Direction.down
+                cell.animationMoveCell(direction, duration: duration, tableView: weatherTableView, selectedIndexPath: currentIndex, close: true)
+                cell.isMovedHidden = false
+            }
+        }
+        delay(duration, closure: completion)
+    }
+
+    func closeCurrentCellIfNeed(_ duration: Double) {
+        currentCell?.closeCell(duration, tableView: weatherTableView) { [weak self] in
+            self?.currentCell = nil
+        }
+    }
+
+    func delay(_ delay: Double, closure: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
+            execute: closure
+        )
     }
 }
 

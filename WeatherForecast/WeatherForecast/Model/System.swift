@@ -9,8 +9,8 @@
 import Foundation
 
 struct System {
-    private(set) var type: Int
-    private(set) var identifier: Int
+    private(set) var type: Int?
+    private(set) var identifier: Int?
     private(set) var message: Double
     private(set) var country: String
     private(set) var sunrise: TimeInterval
@@ -29,8 +29,8 @@ extension System: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(Int.self, forKey: .type)
-        identifier = try container.decode(Int.self, forKey: .identifier)
+        type = try? container.decode(Int.self, forKey: .type)
+        identifier = try? container.decode(Int.self, forKey: .identifier)
         message = try container.decode(Double.self, forKey: .message)
         country = try container.decode(String.self, forKey: .country)
         sunrise = try container.decode(TimeInterval.self, forKey: .sunrise)
@@ -39,8 +39,8 @@ extension System: Codable {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        try container.encode(identifier, forKey: .identifier)
+        try? container.encode(type, forKey: .type)
+        try? container.encode(identifier, forKey: .identifier)
         try container.encode(message, forKey: .message)
         try container.encode(country, forKey: .country)
         try container.encode(sunrise, forKey: .sunrise)

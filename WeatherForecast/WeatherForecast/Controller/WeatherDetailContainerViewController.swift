@@ -16,11 +16,17 @@ class WeatherDetailContainerViewController: UIViewController {
         return makepageViewController()
     }()
 
+    var backButton: UIButton?
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = UIColor.skyBlue
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
+        backButton = createBackButton()
+        createNavigationBarBackItem(button: backButton)
+
     }
 
     private func makepageViewController() -> UIPageViewController {
@@ -83,5 +89,32 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
             return nil
         }
         return self.viewController(at: index)
+    }
+}
+
+// 출처: https://github.com/Ramotion/preview-transition
+extension WeatherDetailContainerViewController {
+
+    private func createBackButton() -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 44))
+        button.setImage(UIImage(named: "back"), for: .normal)
+        button.addTarget(self, action: #selector(self.backButtonDidTap), for: .touchUpInside)
+        return button
+    }
+
+    @discardableResult private func createNavigationBarBackItem(button: UIButton?) -> UIBarButtonItem? {
+        guard let button = button else {
+            return nil
+        }
+        let buttonItem = UIBarButtonItem(customView: button)
+        navigationItem.leftBarButtonItem = buttonItem
+        return buttonItem
+    }
+}
+
+extension WeatherDetailContainerViewController {
+
+    @objc func backButtonDidTap() {
+        navigationController?.popViewController(animated: false)
     }
 }
