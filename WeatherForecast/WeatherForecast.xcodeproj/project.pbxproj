@@ -76,6 +76,7 @@
 		C9E6017E207481A20085378C /* Wind.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6017D207481A00085378C /* Wind.swift */; };
 		C9E601802074835A0085378C /* Clouds.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6017F207483590085378C /* Clouds.swift */; };
 		C9E60182207483F50085378C /* Rain.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E60181207483F50085378C /* Rain.swift */; };
+		C9E60184207485420085378C /* Snow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E60183207485420085378C /* Snow.swift */; };
 		C9E6FF9520603FFA0085378C /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6FF9420603FFA0085378C /* LineChartView.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
@@ -150,6 +151,7 @@
 		C9E6017D207481A00085378C /* Wind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wind.swift; sourceTree = "<group>"; };
 		C9E6017F207483590085378C /* Clouds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clouds.swift; sourceTree = "<group>"; };
 		C9E60181207483F50085378C /* Rain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rain.swift; sourceTree = "<group>"; };
+		C9E60183207485420085378C /* Snow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snow.swift; sourceTree = "<group>"; };
 		C9E6FF9420603FFA0085378C /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -256,6 +258,7 @@
 				C9E6017D207481A00085378C /* Wind.swift */,
 				C9E6017F207483590085378C /* Clouds.swift */,
 				C9E60181207483F50085378C /* Rain.swift */,
+				C9E60183207485420085378C /* Snow.swift */,
 				C9C0FC4C204D295E002D636F /* Coordinate.swift */,
 				C9C0FC76205029B9002D636F /* ForecastStore.swift */,
 				C90A7C61203DC8CC00B8DD95 /* History.swift */,
@@ -604,6 +607,7 @@
 				C9E60132206A46EA0085378C /* Extension+Error.swift in Sources */,
 				C90A7C5C203C088D00B8DD95 /* LocationService.swift in Sources */,
 				C9E60182207483F50085378C /* Rain.swift in Sources */,
+				C9E60184207485420085378C /* Snow.swift in Sources */,
 				C90A7C52203727D600B8DD95 /* SearchTableViewCell.swift in Sources */,
 				C9C0FC44204858E7002D636F /* Extension+Date.swift in Sources */,
 				C9E60134206BE2070085378C /* Extension+Notification.swift in Sources */,

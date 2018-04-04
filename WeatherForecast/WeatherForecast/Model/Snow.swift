@@ -1,5 +1,5 @@
 //
-//  Rain.swift
+//  Snow.swift
 //  WeatherForecast
 //
 //  Created by yangpc on 2018. 4. 4..
@@ -8,11 +8,11 @@
 
 import Foundation
 
-struct Rain {
-    private(set) var volume3Hours: Float // Rain volume for the last 3 hours
+struct Snow {
+    private(set) var volume3Hours: Float // Snow volume for the last 3 hours
 }
 
-extension Rain: Codable {
+extension Snow: Codable {
     private enum CodingKeys: String, CodingKey {
         case volume3Hours = "3h"
     }
