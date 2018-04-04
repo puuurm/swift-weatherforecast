@@ -9,7 +9,7 @@
 import Foundation
 
 struct Clouds {
-    private(set) var all: Int
+    private(set) var all: Int // Cloudiness, %
 }
 
 extension Clouds: Codable {

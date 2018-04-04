@@ -1,5 +1,5 @@
 //
-//  Wind.swift
+//  Rain.swift
 //  WeatherForecast
 //
 //  Created by yangpc on 2018. 4. 4..
@@ -8,26 +8,23 @@
 
 import Foundation
 
-struct Wind {
-    private(set) var speed: Float
-    private(set) var degrees: Float
+struct Rain {
+    private(set) var volume3Hours: Float // Rain volume for the last 3 hours
 }
 
-extension Wind: Codable {
+extension Rain: Codable {
     private enum CodingKeys: String, CodingKey {
-        case speed
-        case degrees = "deg"
+        case volume3Hours = "3h"
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        speed = try container.decode(Float.self, forKey: .speed)
-        degrees = try container.decode(Float.self, forKey: .degrees)
+        volume3Hours = try container.decode(Float.self, forKey: .volume3Hours)
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(speed, forKey: .speed)
-        try container.encode(degrees, forKey: .degrees)
+        try container.encode(volume3Hours, forKey: .volume3Hours)
     }
 }
+
