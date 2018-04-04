@@ -21,6 +21,24 @@ final class NetworkManager {
     }
 
     func request<T>(
+        _ coordinate: Coordinate,
+        before object: Storable?,
+        baseURL: BaseURL,
+        type: T.Type,
+        completion: @escaping ((ResponseResult<T>) -> Void)) {
+        let params = ["lat": "\(coordinate.latitude)", "lon": "\(coordinate.longitude)", "units": "metric"]
+        guard let url = WeatherAPI.url(baseURL: baseURL, parameters: params) else { return }
+        NetworkSpinner.on()
+        session.dataTask(with: url) { [weak self] (data, _, error) in
+            if let result = self?.processRequest(type, data: data, error: error) {
+                completion(result)
+                self?.imageCache.deleteImageForkeys(keys: object?.cacheKeys)
+            }
+            NetworkSpinner.off()
+        }.resume()
+    }
+
+    func request<T>(
         _ localName: String,
         before object: Storable?,
         baseURL: BaseURL,
@@ -35,7 +53,7 @@ final class NetworkManager {
                 self?.imageCache.deleteImageForkeys(keys: object?.cacheKeys)
             }
             NetworkSpinner.off()
-        }.resume()
+            }.resume()
     }
 
     func request(

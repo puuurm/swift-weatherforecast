@@ -14,6 +14,7 @@ final class History {
     static var shared: History {
         return sharedInstance
     }
+    lazy var clock = Clock()
     var userLocationForecast: ForecastStore? {
         get {
             return forecastStores.first
@@ -40,7 +41,8 @@ final class History {
         guard let forecast = forecastStore else { return }
         let userInfo: [String: Int] = ["index": 0]
         if forecastStores.isEmpty {
-            forecastStores.append(forecast)
+            append(forecast)
+            clock.start()
         } else {
             forecastStores[0] = forecast
             NotificationCenter.default.post(
@@ -52,7 +54,7 @@ final class History {
     }
 
     func localName(at index: Int) -> String {
-        return forecastStores[index].localName
+        return forecastStores[index].address.queryItem
     }
 
     func iconNames(at index: Int) -> [String] {
@@ -89,11 +91,12 @@ final class History {
     }
 
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
+        let cityName = forecastStores[indexPath.section].address.subLocality
         let currentWeather = forecastStores[indexPath.section].current
         let isUserLocation = indexPath.section == 0 ? true : false
         return WeatherTableCellViewModel(
             timeString: Date().convertString(format: "h:mm a"),
-            cityString: currentWeather.cityName,
+            cityString: cityName,
             temperatureString: currentWeather.weather.temperature.convertCelsius,
             weatherDetail: currentWeather.weatherDetail.first!,
             isUserLocation: isUserLocation

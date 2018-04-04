@@ -11,11 +11,11 @@ import Foundation
 struct Checker {
 
     static func isNeedUpdate(
-        before localName: String?,
-        after newLocalName: String,
+        before localAddress: Address?,
+        after newLocalAddress: Address,
         object: Storable?) -> Bool {
-        if let beforeLocalName = localName,
-            beforeLocalName == newLocalName,
+        if let beforeLocalAddress = localAddress,
+            beforeLocalAddress.subLocality == newLocalAddress.subLocality,
             let beforeObejct = object, !beforeObejct.isOutOfDate {
             return false
         }

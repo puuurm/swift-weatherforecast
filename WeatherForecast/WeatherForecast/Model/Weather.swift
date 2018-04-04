@@ -9,13 +9,15 @@
 import Foundation
 
 struct Weather {
+
     private(set) var temperature: Float
     private(set) var minTemperature: Float
     private(set) var maxTemperature: Float
-    private(set) var pressure: Float
+    private(set) var pressure: Float?
     private(set) var seaLevel: Float?
     private(set) var groundLevel: Float?
-    private(set) var humidity: Int
+    private(set) var humidity: Int?
+
 }
 
 extension Weather: Codable {
@@ -35,10 +37,10 @@ extension Weather: Codable {
         temperature = try container.decode(Float.self, forKey: .temperature)
         minTemperature = try container.decode(Float.self, forKey: .minTemperature)
         maxTemperature = try container.decode(Float.self, forKey: .maxTemperature)
-        pressure = try container.decode(Float.self, forKey: .pressure)
+        pressure = try? container.decode(Float.self, forKey: .pressure)
         seaLevel = try? container.decode(Float.self, forKey: .seaLevel)
         groundLevel = try? container.decode(Float.self, forKey: .groundLevel)
-        humidity = try container.decode(Int.self, forKey: .humidity)
+        humidity = try? container.decode(Int.self, forKey: .humidity)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -46,9 +48,9 @@ extension Weather: Codable {
         try container.encode(temperature, forKey: .temperature)
         try container.encode(minTemperature, forKey: .minTemperature)
         try container.encode(maxTemperature, forKey: .maxTemperature)
-        try container.encode(pressure, forKey: .pressure)
+        try? container.encode(pressure, forKey: .pressure)
         try? container.encode(seaLevel, forKey: .seaLevel)
         try? container.encode(groundLevel, forKey: .groundLevel)
-        try container.encode(humidity, forKey: .humidity)
+        try? container.encode(humidity, forKey: .humidity)
     }
 }

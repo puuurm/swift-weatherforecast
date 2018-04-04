@@ -49,21 +49,21 @@ class CitySearchController: UIViewController, Presentable {
         searchBar.resignFirstResponder()
     }
 
-    private func requestWeather(_ localName: String, completion: @escaping () -> Void) {
-        networkManager?.request(
-            localName,
-            before: nil,
-            baseURL: .current,
-            type: CurrentWeather.self
-        ) { result -> Void in
-                switch result {
-                case let .success(weather):
-                    History.shared.append(ForecastStore(localName: localName, current: weather))
-                case let .failure(error): print(error)
-                }
-                completion()
-        }
-    }
+//    private func requestWeather(_ localName: String, completion: @escaping () -> Void) {
+//        networkManager?.request(
+//            localName,
+//            before: nil,
+//            baseURL: .current,
+//            type: CurrentWeather.self
+//        ) { result -> Void in
+//                switch result {
+//                case let .success(weather):
+//                    History.shared.append(ForecastStore(localName: localName, current: weather))
+//                case let .failure(error): print(error)
+//                }
+//                completion()
+//        }
+//    }
 
     @IBAction func viewDidPanned(_ sender: AnyObject) {
         dismissKeyboard()
@@ -113,17 +113,17 @@ extension CitySearchController: UITableViewDelegate {
                 self?.presentErrorMessage(message: error.localizedDescription)
                 return
             }
-            guard let mapItem = response?.mapItems.first,
-                let cityName = mapItem.name else {
-                    return
-            }
-            selectedCityName = cityName
-            self?.requestWeather(selectedCityName) {
-                DispatchQueue.main.async { [weak self] in
-                    self?.dismissKeyboard()
-                    self?.dismiss(animated: true, completion: nil)
-                }
-            }
+//            guard let mapItem = respon response?.mapItems.first,
+//                let cityName = mapItem.name else {
+//                    return
+//            }
+//            selectedCityName = cityName
+//            self?.requestWeather(selectedCityName) {
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.dismissKeyboard()
+//                    self?.dismiss(animated: true, completion: nil)
+//                }
+//            }
         }
 
     }

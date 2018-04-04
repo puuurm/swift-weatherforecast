@@ -8,24 +8,26 @@
 
 import UIKit
 import CoreLocation
+import Contacts
 
 class WeatherViewController: UIViewController, Presentable {
 
     @IBOutlet weak var weatherTableView: UITableView!
     private var locationService: LocationService?
     private var networkManager: NetworkManager?
-    lazy var clock = Clock()
 
     private var currentCell: WeatherTableViewCell?
     private var duration: Double = 0.8
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initNotification()
-        clock.start()
         networkManager = NetworkManager(session: URLSession.shared)
         locationService = LocationService()
         locationService?.delegate = self
+
+        initNotification()
+
+        updateUserLocation()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -78,15 +80,15 @@ class WeatherViewController: UIViewController, Presentable {
         return .lightContent
     }
 
-    private func requestCurrentWeather(_ localName: String) {
+    private func requestCurrentWeather(_ address: Address) {
         networkManager?.request(
-            localName,
+            address.queryItem,
             before: History.shared.userLocationForecast?.current,
             baseURL: .current,
             type: CurrentWeather.self) { result -> Void in
                 switch result {
                 case let .success(weather):
-                    History.shared.userLocationForecast = ForecastStore(localName: localName, current: weather)
+                    History.shared.userLocationForecast = ForecastStore(address: address, current: weather)
                 case let .failure(error): print(error)
                 }
         }
@@ -184,15 +186,16 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ placeMark: CLPlacemark?) {
-        guard let localName = placeMark?.locality,
-            Checker.isNeedUpdate(
-                before: History.shared.userLocationForecast?.localName,
-                after: localName,
-                object: History.shared.userLocationForecast?.current
-            ) else {
-                return
+        guard let postalAddress = placeMark?.postalAddress else { return }
+        let address = Address(postalAddress: postalAddress)
+        guard Checker.isNeedUpdate(
+            before: History.shared.userLocationForecast?.address,
+            after: address,
+            object: History.shared.userLocationForecast?.current
+        ) else {
+            return
         }
-        requestCurrentWeather(localName)
+        requestCurrentWeather(address)
     }
 }
 

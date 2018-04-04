@@ -36,20 +36,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        NotificationCenter.default.post(name: Notification.Name.DidUpdateTime, object: self)
-        NotificationCenter.default.post(name: Notification.Name.DidUpdateUserLocation, object: self)
-        //NotificationCenter.default.post(name: Notification.Name.DidUpdateCurrentWeather, object: self)
+        if History.shared.count != 0 {
+            NotificationCenter.default.post(name: Notification.Name.DidUpdateTime, object: self)
+            NotificationCenter.default.post(name: Notification.Name.DidUpdateUserLocation, object: self)
+            //NotificationCenter.default.post(name: Notification.Name.DidUpdateCurrentWeather, object: self)
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
     }
 
     private func initData() {
-        do {
-            let object = try storageManager.object(ofType: History.self, forKey: "history")
+        if let object = try? storageManager.object(ofType: History.self, forKey: "history") {
             History.load(object)
-        } catch {
-            print(error.localizedDescription)
         }
     }
 

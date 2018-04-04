@@ -9,12 +9,14 @@
 import Foundation
 
 struct System {
-    private(set) var type: Int?
-    private(set) var identifier: Int?
-    private(set) var message: Double
-    private(set) var country: String
-    private(set) var sunrise: TimeInterval
-    private(set) var sunset: TimeInterval
+
+    private(set) var type: Int = 0
+    private(set) var identifier: Int = 0
+    private(set) var message: Double = 0
+    private(set) var country: String = ""
+    private(set) var sunrise: TimeInterval = 0
+    private(set) var sunset: TimeInterval = 0
+
 }
 
 extension System: Codable {
@@ -29,20 +31,26 @@ extension System: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try? container.decode(Int.self, forKey: .type)
-        identifier = try? container.decode(Int.self, forKey: .identifier)
-        message = try container.decode(Double.self, forKey: .message)
-        country = try container.decode(String.self, forKey: .country)
-        sunrise = try container.decode(TimeInterval.self, forKey: .sunrise)
-        sunset = try container.decode(TimeInterval.self, forKey: .sunset)
+        let type = try? container.decode(Int.self, forKey: .type)
+        let identifier = try? container.decode(Int.self, forKey: .identifier)
+        let message = try? container.decode(Double.self, forKey: .message)
+        let country = try? container.decode(String.self, forKey: .country)
+        let sunrise = try? container.decode(TimeInterval.self, forKey: .sunrise)
+        let sunset = try? container.decode(TimeInterval.self, forKey: .sunset)
+        self.type = type ?? 0
+        self.identifier = identifier ?? 0
+        self.message = message ?? 0
+        self.country = country ?? ""
+        self.sunrise = sunrise ?? 0
+        self.sunset = sunset ?? 0
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(type, forKey: .type)
         try? container.encode(identifier, forKey: .identifier)
-        try container.encode(message, forKey: .message)
-        try container.encode(country, forKey: .country)
+        try? container.encode(message, forKey: .message)
+        try? container.encode(country, forKey: .country)
         try container.encode(sunrise, forKey: .sunrise)
         try container.encode(sunset, forKey: .sunset)
     }

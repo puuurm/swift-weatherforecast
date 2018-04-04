@@ -10,12 +10,12 @@ import Foundation
 import CoreLocation
 
 struct ForecastStore {
-    var localName: String
+    var address: Address
     var current: CurrentWeather
     var weekly: WeeklyForecast?
 
-    init(localName: String, current: CurrentWeather) {
-        self.localName = localName
+    init(address: Address, current: CurrentWeather) {
+        self.address = address
         self.current = current
     }
 }
@@ -23,21 +23,21 @@ struct ForecastStore {
 extension ForecastStore: Codable {
 
     private enum CodingKeys: String, CodingKey {
-        case localName
+        case address
         case current
         case weekly
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        localName = try container.decode(String.self, forKey: .localName)
+        address = try container.decode(Address.self, forKey: .address)
         current = try container.decode(CurrentWeather.self, forKey: .current)
         weekly = try? container.decode(WeeklyForecast.self, forKey: .weekly)
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(localName, forKey: .localName)
+        try container.encode(address, forKey: .address)
         try container.encode(current, forKey: .current)
         try? container.encode(weekly, forKey: .weekly)
     }
