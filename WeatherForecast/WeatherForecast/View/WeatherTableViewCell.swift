@@ -16,13 +16,14 @@ class WeatherTableViewCell: UITableViewCell {
     @IBOutlet weak var weatherIconImageView: UIImageView!
 
     var isMovedHidden: Bool = false
+    private var hasMarkerLabel: Bool = false
 
-    var closedXPosition: CGFloat = 0
-    var closedYPosition: CGFloat = 0
-    var closedHeight: CGFloat = 0
-    var closedWidth: CGFloat = 0
+    private var closedXPosition: CGFloat = 0
+    private var closedYPosition: CGFloat = 0
+    private var closedHeight: CGFloat = 0
+    private var closedWidth: CGFloat = 0
 
-    var damping: CGFloat = 0.78
+    private var damping: CGFloat = 0.78
 
     enum Direction {
         case up
@@ -38,6 +39,26 @@ class WeatherTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
+    }
+
+    func setContents(viewModel: WeatherTableCellViewModel) {
+        cityLabel.text = viewModel.cityString
+        temperature.text = viewModel.temperatureString
+        timeLabel.text = viewModel.timeString
+        if viewModel.isUserLocation && !hasMarkerLabel {
+            createMarker()
+        }
+    }
+
+    private func createMarker() {
+        let markerImageView = UIImageView(image: UIImage(named: "marker"))
+        addSubview(markerImageView)
+        markerImageView.contentMode = .scaleAspectFit
+        markerImageView.translatesAutoresizingMaskIntoConstraints = false
+        markerImageView.heightAnchor.constraint(equalTo: cityLabel.heightAnchor).isActive = true
+        markerImageView.trailingAnchor.constraint(equalTo: cityLabel.leadingAnchor, constant: -5).isActive = true
+        markerImageView.topAnchor.constraint(equalTo: cityLabel.topAnchor).isActive = true
+        hasMarkerLabel = true
     }
 
     private func makeCornerRound() {
@@ -145,4 +166,5 @@ struct WeatherTableCellViewModel {
     var cityString: String
     var temperatureString: String
     var weatherDetail: WeatherDetail
+    var isUserLocation: Bool
 }

@@ -106,9 +106,7 @@ extension WeatherViewController: UITableViewDataSource {
                 return UITableViewCell()
         }
         let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
-        cell.cityLabel.text = cellViewModel.cityString
-        cell.temperature.text = cellViewModel.temperatureString
-        cell.timeLabel.text = cellViewModel.timeString
+        cell.setContents(viewModel: cellViewModel)
         networkManager?.request(cellViewModel.weatherDetail, baseURL: .icon) { result in
             switch result {
             case let .success(icon):

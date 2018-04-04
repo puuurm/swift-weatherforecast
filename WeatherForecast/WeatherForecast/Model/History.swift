@@ -90,11 +90,13 @@ final class History {
 
     func currentWeatherCell(at indexPath: IndexPath) -> WeatherTableCellViewModel {
         let currentWeather = forecastStores[indexPath.section].current
+        let isUserLocation = indexPath.section == 0 ? true : false
         return WeatherTableCellViewModel(
             timeString: Date().convertString(format: "h:mm a"),
             cityString: currentWeather.cityName,
             temperatureString: currentWeather.weather.temperature.convertCelsius,
-            weatherDetail: currentWeather.weatherDetail.first!
+            weatherDetail: currentWeather.weatherDetail.first!,
+            isUserLocation: isUserLocation
         )
     }
 
