@@ -22,6 +22,7 @@ struct CurrentWeather {
     private var timeOfLastupdate: TimeInterval
     private(set) var system: System
     private var cod: Int
+
 }
 
 extension CurrentWeather: Storable {
@@ -59,22 +60,18 @@ extension CurrentWeather: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        cod = try container.decode(Int.self, forKey: .cod)
         coordinate = try container.decode(Coordinate.self, forKey: .coordinate)
         weatherDetail = try container.decode([WeatherDetail].self, forKey: .weatherDetail)
         weather = try container.decode(Weather.self, forKey: .weather)
-
         wind = try? container.decode(Wind.self, forKey: .wind)
         clouds = try? container.decode(Clouds.self, forKey: .clouds)
         rain = try? container.decode(Rain.self, forKey: .rain)
         snow = try? container.decode(Snow.self, forKey: .snow)
-
         cityName = try container.decode(String.self, forKey: .cityName)
-
         cityIdentifier = try? container.decode(Int.self, forKey: .cityIdentifier)
-
         timeOfLastupdate = try container.decode(TimeInterval.self, forKey: .timeOfLastupdate)
         system = try container.decode(System.self, forKey: .system)
-        cod = try container.decode(Int.self, forKey: .cod)
     }
 
     func encode(to encoder: Encoder) throws {

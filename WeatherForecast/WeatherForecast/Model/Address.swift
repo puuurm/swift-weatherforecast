@@ -31,4 +31,5 @@ struct Address: Codable {
         subLocality = postalAddress.subLocality
         subAdministrativeArea = postalAddress.subAdministrativeArea
     }
+
 }

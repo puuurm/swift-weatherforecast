@@ -15,6 +15,10 @@ final class NetworkManager {
     private var imageCache: ImageCache
     typealias ImageHandler = ((ImageResult) -> Void)
 
+    struct Http {
+        static let Success = 200
+    }
+
     init(session: URLSessionProtocol) {
         self.session = session
         imageCache = ImageCache()
@@ -26,16 +30,9 @@ final class NetworkManager {
         baseURL: BaseURL,
         type: T.Type,
         completion: @escaping ((ResponseResult<T>) -> Void)) {
+
         let params = ["lat": "\(coordinate.latitude)", "lon": "\(coordinate.longitude)", "units": "metric"]
-        guard let url = WeatherAPI.url(baseURL: baseURL, parameters: params) else { return }
-        NetworkSpinner.on()
-        session.dataTask(with: url) { [weak self] (data, _, error) in
-            if let result = self?.processRequest(type, data: data, error: error) {
-                completion(result)
-                self?.imageCache.deleteImageForkeys(keys: object?.cacheKeys)
-            }
-            NetworkSpinner.off()
-        }.resume()
+        request(params, before: object, baseURL: baseURL, type: type, completion: completion)
     }
 
     func request<T>(
@@ -44,16 +41,28 @@ final class NetworkManager {
         baseURL: BaseURL,
         type: T.Type,
         completion: @escaping ((ResponseResult<T>) -> Void)) {
+
         let params = ["q": localName, "units": "metric"]
+        request(params, before: object, baseURL: baseURL, type: type, completion: completion)
+    }
+
+    private func request<T>(
+        _ params: [String: String],
+        before object: Storable?,
+        baseURL: BaseURL,
+        type: T.Type,
+        completion: @escaping ((ResponseResult<T>) -> Void)) {
+
         guard let url = WeatherAPI.url(baseURL: baseURL, parameters: params) else { return }
         NetworkSpinner.on()
-        session.dataTask(with: url) { [weak self] (data, _, error) in
-            if let result = self?.processRequest(type, data: data, error: error) {
-                completion(result)
-                self?.imageCache.deleteImageForkeys(keys: object?.cacheKeys)
-            }
+        session.dataTask(with: url) { [weak self] (data, response, _) in
+            guard let httpResponse = response as? HTTPURLResponse, let `self` = self else { return }
+            let result = self.processRequest(type, response: httpResponse, data: data)
+            completion(result)
+            self.imageCache.deleteImageForkeys(keys: object?.cacheKeys)
             NetworkSpinner.off()
-            }.resume()
+        }.resume()
+
     }
 
     func request(
@@ -66,11 +75,14 @@ final class NetworkManager {
         }
         guard let url = WeatherAPI.iconURL(baseURL: baseURL, key: weatherDetail.icon) else { return }
         NetworkSpinner.on()
-        session.dataTask(with: url) { (data, _, error) in
-            if let data = data, let image = UIImage(data: data) {
+        session.dataTask(with: url) { (data, response, error) in
+            guard let httpResponse = response as? HTTPURLResponse else { return }
+            let status = httpResponse.statusCode
+            if status == Http.Success,
+                let data = data, let image = UIImage(data: data) {
                 completion(.success(image))
             } else {
-                completion(.failure(error!))
+                completion(.failure(FailureResponse(statusCode: status).error))
             }
             NetworkSpinner.off()
         }.resume()
@@ -78,18 +90,19 @@ final class NetworkManager {
 
     private func processRequest<T: Decodable>(
         _ type: T.Type,
-        data: Data?,
-        error: Error?
-        ) -> ResponseResult<T>? {
-        if let error = error {
-            return .failure(error)
-        }
-        if let jsonData = data {
-            return WeatherAPI.objectFromJSONData(type, data: jsonData)
-        }
-        return nil
-    }
+        response: HTTPURLResponse,
+        data: Data?
+        ) -> ResponseResult<T> {
 
+        let status = response.statusCode
+        if status == Http.Success,
+            let jsonData = data {
+            return WeatherAPI.objectFromJSONData(type, data: jsonData)
+        } else {
+            return .failure(FailureResponse(statusCode: status).error)
+        }
+
+    }
 }
 
 protocol URLSessionProtocol {

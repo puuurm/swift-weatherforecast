@@ -32,7 +32,7 @@ struct WeatherAPI {
         do {
             let object = try DataSerializer.deserialize(data: data) as T
             return .success(object)
-        } catch let error {
+        } catch {
             return .failure(error)
         }
     }
