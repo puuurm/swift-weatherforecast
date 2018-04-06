@@ -25,28 +25,6 @@ final class NetworkManager {
     }
 
     func request<T>(
-        _ coordinate: Coordinate,
-        before object: Storable?,
-        baseURL: BaseURL,
-        type: T.Type,
-        completion: @escaping ((ResponseResult<T>) -> Void)) {
-
-        let params = ["lat": "\(coordinate.latitude)", "lon": "\(coordinate.longitude)", "units": "metric"]
-        request(params, before: object, baseURL: baseURL, type: type, completion: completion)
-    }
-
-    func request<T>(
-        _ localName: String,
-        before object: Storable?,
-        baseURL: BaseURL,
-        type: T.Type,
-        completion: @escaping ((ResponseResult<T>) -> Void)) {
-
-        let params = ["q": localName, "units": "metric"]
-        request(params, before: object, baseURL: baseURL, type: type, completion: completion)
-    }
-
-    private func request<T>(
         _ params: [String: String],
         before object: Storable?,
         baseURL: BaseURL,

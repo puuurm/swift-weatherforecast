@@ -7,29 +7,52 @@
 //
 
 import Foundation
+import MapKit
 import Contacts
 
 struct Address: Codable {
 
     private(set) var countryCode: String
-    private(set) var state: String
-    private(set) var city: String
-    private(set) var street: String
+    private(set) var coordinate: Coordinate
+    private(set) var state: String?
+    private(set) var city: String?
+    private(set) var street: String?
     private(set) var subLocality: String
 
-    private(set) var subAdministrativeArea: String
+    private(set) var subAdministrativeArea: String?
 
-    var queryItem: String {
-        return "\(subLocality),\(countryCode)"
-    }
-
-    init(postalAddress: CNPostalAddress) {
-        countryCode = postalAddress.isoCountryCode.lowercased()
+    init(location: CLLocation, postalAddress: CNPostalAddress) {
+        coordinate = Coordinate(
+            longitude: location.coordinate.longitude,
+            latitude: location.coordinate.latitude
+        )
+        countryCode = postalAddress.isoCountryCode
         state = postalAddress.state
         city = postalAddress.city
         street = postalAddress.street
         subLocality = postalAddress.subLocality
         subAdministrativeArea = postalAddress.subAdministrativeArea
+    }
+
+    init(name: String, placeMark: MKPlacemark) {
+        subLocality = name
+        countryCode = placeMark.countryCode ?? "Unknown"
+        coordinate = Coordinate(
+            longitude: placeMark.coordinate.longitude,
+            latitude: placeMark.coordinate.latitude
+        )
+    }
+
+}
+
+struct Request {
+
+    static func cityName(address: Address) -> [String: String] {
+        return ["q": "\(address.subLocality),\(address.countryCode)", "units": "metric"]
+    }
+
+    static func coordinates(address: Address) -> [String: String] {
+        return ["lat": "\(address.coordinate.latitude)", "lon": "\(address.coordinate.longitude)", "units": "metric"]
     }
 
 }

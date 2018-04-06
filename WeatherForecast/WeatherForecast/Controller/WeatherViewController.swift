@@ -82,7 +82,7 @@ class WeatherViewController: UIViewController, Presentable {
 
     private func requestCurrentWeather(_ address: Address) {
         networkManager?.request(
-            address.queryItem,
+            Request.cityName(address: address),
             before: History.shared.userLocationForecast?.current,
             baseURL: .current,
             type: CurrentWeather.self
@@ -179,8 +179,9 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ placeMark: CLPlacemark?) {
-        guard let postalAddress = placeMark?.postalAddress else { return }
-        let address = Address(postalAddress: postalAddress)
+        guard let location = placeMark?.location,
+            let postalAddress = placeMark?.postalAddress else { return }
+        let address = Address(location: location, postalAddress: postalAddress)
         guard Checker.isNeedUpdate(
             before: History.shared.userLocationForecast?.address,
             after: address,

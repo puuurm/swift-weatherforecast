@@ -40,7 +40,7 @@ final class LocationService: NSObject, Presentable {
         locationManager?.startUpdatingLocation()
     }
 
-    private func coordinateToCityName(location: CLLocation, completionHandler: @escaping AfterTask) {
+    private func convertToCityName(location: CLLocation, completionHandler: @escaping AfterTask) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
             if let error = error as? CLError {
@@ -50,13 +50,14 @@ final class LocationService: NSObject, Presentable {
             completionHandler(placemarks?.last)
         }
     }
+
 }
 
 extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = manager.location {
-            coordinateToCityName(location: location) { [weak self] (placeMark) in
+            convertToCityName(location: location) { [weak self] (placeMark) in
                 self?.delegate?.updateLocation(placeMark)
             }
             manager.stopUpdatingLocation()

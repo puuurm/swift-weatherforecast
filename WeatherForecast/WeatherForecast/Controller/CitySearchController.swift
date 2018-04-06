@@ -49,21 +49,21 @@ class CitySearchController: UIViewController, Presentable {
         searchBar.resignFirstResponder()
     }
 
-//    private func requestWeather(_ localName: String, completion: @escaping () -> Void) {
-//        networkManager?.request(
-//            localName,
-//            before: nil,
-//            baseURL: .current,
-//            type: CurrentWeather.self
-//        ) { result -> Void in
-//                switch result {
-//                case let .success(weather):
-//                    History.shared.append(ForecastStore(localName: localName, current: weather))
-//                case let .failure(error): print(error)
-//                }
-//                completion()
-//        }
-//    }
+    private func requestWeather(_ address: Address, completion: @escaping () -> Void) {
+        networkManager?.request(
+            Request.coordinates(address: address),
+            before: nil,
+            baseURL: .current,
+            type: CurrentWeather.self
+        ) { result -> Void in
+                switch result {
+                case let .success(weather):
+                    History.shared.append(ForecastStore(address: address, current: weather) )
+                case let .failure(error): print(error)
+                }
+                completion()
+        }
+    }
 
     @IBAction func viewDidPanned(_ sender: AnyObject) {
         dismissKeyboard()
@@ -101,7 +101,7 @@ extension CitySearchController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCompleter = filterdCities[indexPath.row]
-        var selectedCityName = selectedCompleter.title
+        let selectedCityName = selectedCompleter.title
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = selectedCityName
         MKLocalSearch(request: request).start { [weak self] (response, error) in
@@ -109,17 +109,17 @@ extension CitySearchController: UITableViewDelegate {
                 self?.presentErrorMessage(message: error.localizedDescription)
                 return
             }
-//            guard let mapItem = respon response?.mapItems.first,
-//                let cityName = mapItem.name else {
-//                    return
-//            }
-//            selectedCityName = cityName
-//            self?.requestWeather(selectedCityName) {
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.dismissKeyboard()
-//                    self?.dismiss(animated: true, completion: nil)
-//                }
-//            }
+            guard let mapItem = response?.mapItems.first,
+                let name = mapItem.name else {
+                    return
+            }
+            let address = Address(name: name, placeMark: mapItem.placemark)
+            self?.requestWeather(address) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.dismissKeyboard()
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            }
         }
 
     }

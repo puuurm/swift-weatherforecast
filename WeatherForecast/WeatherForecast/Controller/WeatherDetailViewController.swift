@@ -37,10 +37,10 @@ class WeatherDetailViewController: UIViewController {
     }
 
     private func loadWeeklyForecast() {
-        let localName = History.shared.localName(at: pageNumber)
+        let address = History.shared.address(at: pageNumber ?? 0)
         guard Checker.isNeedUpdate(before: weeklyForecast) else { return }
         networkManager?.request(
-            localName,
+            Request.coordinates(address: address),
             before: weeklyForecast,
             baseURL: .weekly,
             type: WeeklyForecast.self

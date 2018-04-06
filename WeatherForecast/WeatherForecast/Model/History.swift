@@ -53,8 +53,8 @@ final class History {
         }
     }
 
-    func localName(at index: Int) -> String {
-        return forecastStores[index].address.queryItem
+    func address(at index: Int) -> Address {
+        return forecastStores[index].address
     }
 
     func iconNames(at index: Int) -> [String] {
