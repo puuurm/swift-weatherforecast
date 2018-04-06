@@ -14,9 +14,9 @@ class WeatherTableViewCell: UITableViewCell {
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperature: UILabel!
     @IBOutlet weak var weatherIconImageView: UIImageView!
+    @IBOutlet weak var markerView: UIImageView!
 
     var isMovedHidden: Bool = false
-    private var hasMarkerLabel: Bool = false
 
     private var closedXPosition: CGFloat = 0
     private var closedYPosition: CGFloat = 0
@@ -45,20 +45,15 @@ class WeatherTableViewCell: UITableViewCell {
         cityLabel.text = viewModel.cityString
         temperature.text = viewModel.temperatureString
         timeLabel.text = viewModel.timeString
-        if viewModel.isUserLocation && !hasMarkerLabel {
-            createMarker()
-        }
+        showMarkerIfNeeded(isUserLocation: viewModel.isUserLocation)
     }
 
-    private func createMarker() {
-        let markerImageView = UIImageView(image: UIImage(named: "marker"))
-        addSubview(markerImageView)
-        markerImageView.contentMode = .scaleAspectFit
-        markerImageView.translatesAutoresizingMaskIntoConstraints = false
-        markerImageView.heightAnchor.constraint(equalTo: cityLabel.heightAnchor).isActive = true
-        markerImageView.trailingAnchor.constraint(equalTo: cityLabel.leadingAnchor, constant: -5).isActive = true
-        markerImageView.topAnchor.constraint(equalTo: cityLabel.topAnchor).isActive = true
-        hasMarkerLabel = true
+    private func showMarkerIfNeeded(isUserLocation: Bool) {
+        if isUserLocation {
+            markerView.isHidden = false
+        } else {
+            markerView.isHidden = true
+        }
     }
 
     private func makeCornerRound() {
