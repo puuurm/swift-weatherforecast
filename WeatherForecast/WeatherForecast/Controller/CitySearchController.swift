@@ -76,11 +76,7 @@ extension CitySearchController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellId = "SearchTableViewCell"
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: cellId,
-            for: indexPath
-            ) as? SearchTableViewCell else { return UITableViewCell() }
+        let cell: SearchTableViewCell? = tableView.dequeueReusableCell(for: indexPath)
         let city = filterdCities[indexPath.row]
         let mutableAttributedString = NSMutableAttributedString(
             string: city.title,
@@ -93,8 +89,8 @@ extension CitySearchController: UITableViewDataSource {
                 range: $0.rangeValue
             )
         }
-        cell.cityLabel.attributedText = mutableAttributedString
-        return cell
+        cell?.cityLabel.attributedText = mutableAttributedString
+        return cell ?? UITableViewCell()
     }
 }
 

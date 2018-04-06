@@ -116,6 +116,7 @@ extension WeatherTableViewCell {
     }
 
     func moveToCenter(_ duration: Double, offset: CGFloat) {
+
         UIView.animate(
             withDuration: duration,
             delay: 0,
@@ -125,6 +126,7 @@ extension WeatherTableViewCell {
             animations: { [weak self] in
                 self?.frame.origin.y = offset
             }, completion: nil)
+
     }
 
     func animationMoveCell(
@@ -133,6 +135,7 @@ extension WeatherTableViewCell {
         tableView: UITableView,
         selectedIndexPath: IndexPath,
         close: Bool) {
+
         let selfYPosition = close == false ? frame.origin.y : closedYPosition
         let selectedCellFrame = tableView.rectForRow(at: selectedIndexPath)
         var dy: CGFloat = 0
@@ -158,6 +161,7 @@ extension WeatherTableViewCell {
             animations: { () -> Void in
                 self.center.y += dy
         }, completion: nil)
+
     }
 }
 

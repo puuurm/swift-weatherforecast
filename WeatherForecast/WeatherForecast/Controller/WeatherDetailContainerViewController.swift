@@ -30,38 +30,29 @@ class WeatherDetailContainerViewController: UIViewController {
     }
 
     private func makepageViewController() -> UIPageViewController {
-        let id = "PageViewController"
-        guard let pageVC = storyboard?.instantiateViewController(
-            withIdentifier: id
-            ) as? UIPageViewController,
-            let startVC = viewController(at: currentIndex) else {
-                return UIPageViewController()
+        let pageVC: UIPageViewController? = storyboard?.viewController()
+        if let startVC = viewController(at: currentIndex) {
+            pageVC?.dataSource = self
+            pageVC?.setViewControllers(
+                [startVC],
+                direction: .forward,
+                animated: true,
+                completion: nil
+            )
         }
-        pageVC.dataSource = self
-        pageVC.setViewControllers(
-            [startVC],
-            direction: .forward,
-            animated: true,
-            completion: nil
-        )
-        return pageVC
+        return pageVC ?? UIPageViewController()
     }
 }
 
 extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
 
     func viewController (at index: Int?) -> WeatherDetailViewController? {
-        let id = "WeatherDetailViewController"
         let index = index ?? 0
-        guard let vc = storyboard?.instantiateViewController(
-            withIdentifier: id
-            ) as? WeatherDetailViewController else {
-            return nil
-        }
+        let detailVC: WeatherDetailViewController? = storyboard?.viewController()
         let vm = History.shared.weatherDetailViewModel(at: index)
-        vc.weatherDetailViewModel = vm
-        vc.pageNumber = index
-        return vc
+        detailVC?.weatherDetailViewModel = vm
+        detailVC?.pageNumber = index
+        return detailVC
     }
 
     func pageViewController(
@@ -92,7 +83,7 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
     }
 }
 
-// 출처: https://github.com/Ramotion/preview-transition
+// 출처:  https://github.com/Ramotion/preview-transition
 extension WeatherDetailContainerViewController {
 
     private func createBackButton() -> UIButton {

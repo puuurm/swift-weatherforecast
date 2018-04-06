@@ -237,7 +237,7 @@
         <!--Page View Controller-->
         <scene sceneID="dcD-jF-UOe">
             <objects>
-                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="MIF-vl-uhw" sceneMemberID="viewController">
+                <pageViewController storyboardIdentifier="UIPageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="MIF-vl-uhw" sceneMemberID="viewController">
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                 </pageViewController>

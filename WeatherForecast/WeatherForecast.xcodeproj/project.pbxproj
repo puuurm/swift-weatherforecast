@@ -85,6 +85,8 @@
 		C9E6018B2074FFB00085378C /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E601892074FDC90085378C /* Address.swift */; };
 		C9E6018D20762A960085378C /* FailureResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6018C20762A950085378C /* FailureResponse.swift */; };
 		C9E6018E20762B100085378C /* FailureResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6018C20762A950085378C /* FailureResponse.swift */; };
+		C9E60190207675390085378C /* Extension+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6018F207675380085378C /* Extension+UIView.swift */; };
+		C9E60192207676C40085378C /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E60191207676C40085378C /* Identifiable.swift */; };
 		C9E6FF9520603FFA0085378C /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6FF9420603FFA0085378C /* LineChartView.swift */; };
 		D3D74CABC0D4E91AA5543E51 /* Pods_WeatherForecast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678579E3ECBB50D6A5DCDA07 /* Pods_WeatherForecast.framework */; };
 /* End PBXBuildFile section */
@@ -162,6 +164,8 @@
 		C9E60183207485420085378C /* Snow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snow.swift; sourceTree = "<group>"; };
 		C9E601892074FDC90085378C /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		C9E6018C20762A950085378C /* FailureResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailureResponse.swift; sourceTree = "<group>"; };
+		C9E6018F207675380085378C /* Extension+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIView.swift"; sourceTree = "<group>"; };
+		C9E60191207676C40085378C /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		C9E6FF9420603FFA0085378C /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		EF35C21776787B24FF92741C /* Pods_WeatherForecastTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherForecastTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -303,6 +307,7 @@
 				C9C0FC43204858E7002D636F /* Extension+Date.swift */,
 				C9E60131206A46EA0085378C /* Extension+Error.swift */,
 				C9E60133206BE2060085378C /* Extension+Notification.swift */,
+				C9E6018F207675380085378C /* Extension+UIView.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -348,6 +353,7 @@
 			isa = PBXGroup;
 			children = (
 				C9E6012C20694CDA0085378C /* Presentable.swift */,
+				C9E60191207676C40085378C /* Identifiable.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -581,6 +587,7 @@
 			files = (
 				C90A7C62203DC8CC00B8DD95 /* History.swift in Sources */,
 				C90A7C4A2032BEEC00B8DD95 /* WeatherTableViewCell.swift in Sources */,
+				C9E60190207675390085378C /* Extension+UIView.swift in Sources */,
 				C9C0FC4D204D295E002D636F /* Coordinate.swift in Sources */,
 				C90A7C56203AE5A100B8DD95 /* Extenstion+Font.swift in Sources */,
 				C90A7C64203ED2B900B8DD95 /* WeatherDetailViewController.swift in Sources */,
@@ -626,6 +633,7 @@
 				C9C0FC44204858E7002D636F /* Extension+Date.swift in Sources */,
 				C9E60134206BE2070085378C /* Extension+Notification.swift in Sources */,
 				C9C0FC48204CF73F002D636F /* DataSerializer.swift in Sources */,
+				C9E60192207676C40085378C /* Identifiable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

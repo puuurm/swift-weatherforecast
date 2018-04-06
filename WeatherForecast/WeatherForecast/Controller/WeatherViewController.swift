@@ -85,7 +85,8 @@ class WeatherViewController: UIViewController, Presentable {
             address.queryItem,
             before: History.shared.userLocationForecast?.current,
             baseURL: .current,
-            type: CurrentWeather.self) { result -> Void in
+            type: CurrentWeather.self
+        ) { result -> Void in
                 switch result {
                 case let .success(weather):
                     History.shared.userLocationForecast = ForecastStore(address: address, current: weather)
@@ -100,25 +101,21 @@ extension WeatherViewController: UITableViewDataSource {
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
-        let cellId = "WeatherTableViewCell"
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: cellId,
-            for: indexPath
-            ) as? WeatherTableViewCell else {
-                return UITableViewCell()
-        }
+
+        let cell: WeatherTableViewCell? = tableView.dequeueReusableCell(for: indexPath)
         let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
-        cell.setContents(viewModel: cellViewModel)
+        cell?.setContents(viewModel: cellViewModel)
         networkManager?.request(cellViewModel.weatherDetail, baseURL: .icon) { result in
             switch result {
             case let .success(icon):
                 DispatchQueue.main.async {
-                    cell.weatherIconImageView.image = icon
+                    cell?.weatherIconImageView.image = icon
                 }
             case let .failure(error): print(error.localizedDescription)
             }
         }
-        return cell
+        return cell ?? UITableViewCell()
+
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -163,13 +160,10 @@ extension WeatherViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let weatherDetailVC = storyboard?.instantiateViewController(
-            withIdentifier: "WeatherDetailContainerViewController"
-            ) as? WeatherDetailContainerViewController else {
-            return
-        }
-        weatherDetailVC.currentIndex = indexPath.section
-        pushViewController(tableView, viewController: weatherDetailVC)
+        let weatherDetailVC: WeatherDetailContainerViewController? = storyboard?.viewController()
+        guard let vc = weatherDetailVC else { return }
+        vc.currentIndex = indexPath.section
+        pushViewController(tableView, viewController: vc)
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
@@ -177,7 +171,6 @@ extension WeatherViewController: UITableViewDelegate {
         guard let currentCell = tableView.cellForRow(at: indexPath) as? WeatherTableViewCell else {
             return indexPath
         }
-
         self.currentCell = currentCell
         return indexPath
     }

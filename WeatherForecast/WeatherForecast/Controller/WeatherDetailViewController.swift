@@ -31,14 +31,8 @@ class WeatherDetailViewController: UIViewController {
         super.viewDidLoad()
         forecastTableView.backgroundColor = UIColor.clear
         networkManager = NetworkManager(session: URLSession.shared)
-        forecastTableView.register(
-            UINib(nibName: "SunInfoCell", bundle: nil),
-            forCellReuseIdentifier: "SunInfoCell"
-        )
-        forecastTableView.register(
-            UINib(nibName: "WeatherDetailCell", bundle: nil),
-            forCellReuseIdentifier: "WeatherDetailCell"
-        )
+        forecastTableView.register(type: SunInfoCell.self)
+        forecastTableView.register(type: WeatherDetailCell.self)
         loadWeeklyForecast()
     }
 
@@ -78,29 +72,19 @@ extension WeatherDetailViewController: UITableViewDataSource {
         let defaultCell = UITableViewCell()
         switch indexPath.section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "WeatherDetailCell"
-                ) as? WeatherDetailCell else {
-                return defaultCell
-            }
-            cell.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
-            return cell
+            let cell: WeatherDetailCell? = tableView.dequeueReusableCell(for: indexPath)
+            cell?.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
+            return cell ?? defaultCell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "TodayWeatherCell"
-                ) as? TodayWeatherCell else {
-                return defaultCell
-            }
-            return cell
+            let cell: TodayWeatherCell? = tableView.dequeueReusableCell(for: indexPath)
+            return cell ?? defaultCell
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SunInfoCell") as? SunInfoCell else {
-                return defaultCell
-            }
+            let cell: SunInfoCell? = tableView.dequeueReusableCell(for: indexPath)
             let sunriseTimeInterval = History.shared.forecastStores[pageNumber].current.system.sunrise
             let sunsetTimeInterval = History.shared.forecastStores[pageNumber].current.system.sunset
-            cell.sunriseLabel.text = Date(timeIntervalSince1970: sunriseTimeInterval).convertString(format: "HH:mm a")
-            cell.sunsetLabel.text = Date(timeIntervalSince1970: sunsetTimeInterval).convertString(format: "HH:mm a")
-            return cell
+            cell?.sunriseLabel.text = Date(timeIntervalSince1970: sunriseTimeInterval).convertString(format: "HH:mm a")
+            cell?.sunsetLabel.text = Date(timeIntervalSince1970: sunsetTimeInterval).convertString(format: "HH:mm a")
+            return cell ?? defaultCell
         }
     }
 }
@@ -126,13 +110,10 @@ extension WeatherDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let cell = tableView
-            .dequeueReusableCell(withIdentifier: "SectionHeaderCell") as? SectionHeaderCell else {
-            return UIView()
-        }
+        let cell: SectionHeaderCell? = tableView.dequeueReusableCell()
         let section = Section(rawValue: section)
-        cell.dateLabel.text = section?.date
-        return cell
+        cell?.dateLabel.text = section?.date
+        return cell ?? UIView()
     }
 
     func tableView(
@@ -160,31 +141,31 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
 
     func collectionView(
         _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "HourWeatherCell", for: indexPath
-            ) as? HourWeatherCell,
-            let forecasts = weeklyForecast?.forecasts else {
-                return UICollectionViewCell()
-        }
+        cellForItemAt indexPath: IndexPath
+        ) -> UICollectionViewCell {
+
+        let cell: HourWeatherCell? = collectionView.dequeueReusableCell(for: indexPath)
+        let forecasts = weeklyForecast?.forecasts
         let row = indexPath.row
-        let current = forecasts[row]
-        cell.lineChartView.dataSource = self
-        cell.lineChartView.cellIndex = row
-        cell.hourLabel.text = current.date.convertString(format: "H시")
-        cell.temperatureLabel.text = current.mainWeather.temperature.convertCelsius
-        let weatherDetail = forecasts[row].moreWeather.first!
-        networkManager?.request(weatherDetail, baseURL: .icon) { result in
-            switch result {
-            case let .success(icon):
-                DispatchQueue.main.async {
-                    cell.weatherIconImageView.image = icon
-                    cell.weatherIconImageView.contentMode = .scaleAspectFit
+        let current = forecasts?[row]
+        cell?.lineChartView.dataSource = self
+        cell?.lineChartView.cellIndex = row
+        cell?.hourLabel.text = current?.date.convertString(format: "H시")
+        cell?.temperatureLabel.text = current?.mainWeather.temperature.convertCelsius
+        if let weatherDetail = forecasts?[row].moreWeather.first {
+            networkManager?.request(weatherDetail, baseURL: .icon) { result in
+                switch result {
+                case let .success(icon):
+                    DispatchQueue.main.async {
+                        cell?.weatherIconImageView.image = icon
+                        cell?.weatherIconImageView.contentMode = .scaleAspectFit
+                    }
+                case let .failure(error): print(error.localizedDescription)
                 }
-            case let .failure(error): print(error.localizedDescription)
             }
         }
-        return cell
+        return cell ?? UICollectionViewCell()
+
     }
 }
 
