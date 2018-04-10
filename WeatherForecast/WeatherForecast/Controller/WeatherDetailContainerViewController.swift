@@ -88,7 +88,7 @@ extension WeatherDetailContainerViewController {
 
     private func createBackButton() -> UIButton {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 44))
-        button.setImage(UIImage(named: "back"), for: .normal)
+        button.setImage(UIImage.Icons.Button.Back, for: .normal)
         button.addTarget(self, action: #selector(self.backButtonDidTap), for: .touchUpInside)
         return button
     }
