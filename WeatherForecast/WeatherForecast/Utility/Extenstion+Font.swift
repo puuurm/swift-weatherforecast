@@ -16,8 +16,8 @@ extension UIFont {
 
 extension UIColor {
 
-    class var skyBlue: UIColor {
-        return UIColor.rgb(red: 117, green: 217, blue: 242, alpha: 1)
+    class func skyBlue(alpha: CGFloat = 1) -> UIColor {
+        return UIColor.rgb(red: 117, green: 217, blue: 242, alpha: alpha)
     }
 
     class func rgb(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) -> UIColor {

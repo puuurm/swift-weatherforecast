@@ -11,6 +11,7 @@ import UIKit
 class WeatherDetailViewController: UIViewController {
 
     @IBOutlet weak var forecastTableView: UITableView!
+
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
     var networkManager: NetworkManager?
     var weeklyForecast: WeeklyForecast? {
@@ -123,7 +124,7 @@ extension WeatherDetailViewController: UITableViewDelegate {
         switch indexPath.section {
         case 1:
             guard let tableViewCell = cell as? TodayWeatherCell else { return }
-            tableViewCell.setDataSource(dataSource: self, at: indexPath.row)
+            tableViewCell.dataSource = self
         default: break
         }
 
@@ -131,46 +132,27 @@ extension WeatherDetailViewController: UITableViewDelegate {
 
 }
 
-extension WeatherDetailViewController: UICollectionViewDataSource {
+extension WeatherDetailViewController: TodayWeatherCellDataSource {
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int) -> Int {
-        return weeklyForecast?.forecasts.count ?? 0
-    }
+    func fetchImage(cell: UITableViewCell, indexPath: IndexPath, completion: @escaping ((UIImage?) -> Void)) {
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-        ) -> UICollectionViewCell {
-
-        let cell: HourWeatherCell? = collectionView.dequeueReusableCell(for: indexPath)
-        let forecasts = weeklyForecast?.forecasts
-        let row = indexPath.row
-        let current = forecasts?[row]
-        cell?.lineChartView.dataSource = self
-        cell?.lineChartView.cellIndex = row
-        cell?.hourLabel.text = current?.date.convertString(format: "H시")
-        cell?.temperatureLabel.text = current?.mainWeather.temperature.convertCelsius
-        if let weatherDetail = forecasts?[row].moreWeather.first {
+        let weatherDetail = weeklyForecast?.forecasts[indexPath.row].moreWeather.first
+        if let weatherDetail = weatherDetail {
             networkManager?.request(weatherDetail, baseURL: .icon) { result in
                 switch result {
                 case let .success(icon):
-                    DispatchQueue.main.async {
-                        cell?.weatherIconImageView.image = icon
-                        cell?.weatherIconImageView.contentMode = .scaleAspectFit
-                    }
-                case let .failure(error): print(error.localizedDescription)
+                    completion(icon)
+                case let .failure(error):
+                    completion(nil)
+                    print(error.localizedDescription)
                 }
             }
         }
-        return cell ?? UICollectionViewCell()
 
     }
-}
 
-extension WeatherDetailViewController: LineChartDataSource {
-    func baseData(lineChartView: LineChartView) -> [Float] {
-        return History.shared.temperatures(at: pageNumber)
+    func contentsData(cell: UITableViewCell) -> [Forecast] {
+        return weeklyForecast?.forecasts ?? []
     }
+
 }

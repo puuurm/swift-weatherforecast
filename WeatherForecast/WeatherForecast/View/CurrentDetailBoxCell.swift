@@ -14,6 +14,7 @@ class CurrentDetailBoxCell: ContentsCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+      //  currentDetailCollectionView.dataSource = self
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -23,7 +24,8 @@ class CurrentDetailBoxCell: ContentsCell {
 
     func setDataSource (
         dataSource: UICollectionViewDataSource,
-        at row: Int) {
+        at row: Int
+        ) {
         currentDetailCollectionView.dataSource = dataSource
         currentDetailCollectionView.tag = row
         currentDetailCollectionView.backgroundColor = UIColor.clear

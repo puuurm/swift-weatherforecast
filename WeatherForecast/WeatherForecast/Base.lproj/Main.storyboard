@@ -298,6 +298,7 @@
                                             <subviews>
                                                 <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aLN-Uw-gl1">
                                                     <rect key="frame" x="0.0" y="0.0" width="355" height="200"/>
+                                                    <color key="backgroundColor" red="0.45882352939999999" green="0.85098039219999999" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="YIr-N4-NYN">
                                                         <size key="itemSize" width="77" height="200"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -362,6 +363,7 @@
                                                     </cells>
                                                 </collectionView>
                                             </subviews>
+                                            <color key="backgroundColor" red="0.45882352939999999" green="0.85098039219999999" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="aLN-Uw-gl1" secondAttribute="bottom" id="HDU-O8-XZF"/>
                                                 <constraint firstItem="aLN-Uw-gl1" firstAttribute="leading" secondItem="cLO-Bf-MLB" secondAttribute="leading" id="TC1-6S-mZM"/>
@@ -369,7 +371,7 @@
                                                 <constraint firstItem="aLN-Uw-gl1" firstAttribute="top" secondItem="cLO-Bf-MLB" secondAttribute="top" id="zC9-wY-eNQ"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" red="0.45882352939999999" green="0.85098039219999999" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="hourWeatherCollectionView" destination="aLN-Uw-gl1" id="aIf-Qj-BVe"/>
                                         </connections>
