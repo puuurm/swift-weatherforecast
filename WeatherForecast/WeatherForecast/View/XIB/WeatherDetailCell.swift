@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherDetailCell: UITableViewCell {
+class WeatherDetailCell: ContentsCell {
 
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var weatherLabel: UILabel!
@@ -16,7 +16,23 @@ class WeatherDetailCell: UITableViewCell {
     @IBOutlet weak var minTemperatureLabel: UILabel!
     @IBOutlet weak var maxTemperatureLabel: UILabel!
 
-    func load(_ weatherDetailHeaderViewModel: WeatherDetailHeaderViewModel?) {
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        backgroundColor = UIColor.clear
+        configureLabel(fontColor: UIColor.white)
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+
+}
+
+// MARK: - Internal Methods
+
+extension WeatherDetailCell {
+
+    func setContents(_ weatherDetailHeaderViewModel: WeatherDetailHeaderViewModel?) {
         guard let vm = weatherDetailHeaderViewModel else { return }
         cityLabel.text = vm.city
         weatherLabel.text = vm.weather
@@ -25,16 +41,6 @@ class WeatherDetailCell: UITableViewCell {
         maxTemperatureLabel.text = vm.maxTemperature
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        backgroundColor = UIColor.clear
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 }
 
 struct WeatherDetailHeaderViewModel {

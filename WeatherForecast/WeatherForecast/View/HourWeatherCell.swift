@@ -17,15 +17,22 @@ class HourWeatherCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = UIColor.skyBlue()
-        contentView.backgroundColor = UIColor(white: 1, alpha: 0.2)
-        hourLabel.textColor = UIColor.white
-        temperatureLabel.textColor = UIColor.white
+        configureLabel(fontColor: UIColor.white)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
     }
+
+    private func configureLabel(fontColor: UIColor) {
+        contentView.subviews.forEach { ($0 as? UILabel)?.textColor = fontColor }
+    }
+
+}
+
+// MARK: - Internal methods
+
+extension HourWeatherCell {
 
     func setContents(dataSource: LineChartDataSource, index: Int, content: Forecast?) {
         lineChartView.dataSource = dataSource

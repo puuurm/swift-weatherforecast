@@ -8,24 +8,20 @@
 
 import UIKit
 
-class SectionHeaderCell: UITableViewCell {
-    @IBOutlet weak var dateLabel: UILabel!
+class SectionHeaderCell: ContentsCell {
+
+    @IBOutlet weak var titleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         makeTopCornerRound()
-        dateLabel.textColor = UIColor.white
+        configureLabel(fontColor: UIColor.white)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-    }
-
-    private func makeTopCornerRound() {
-        self.layer.cornerRadius = 15
-        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 
 }

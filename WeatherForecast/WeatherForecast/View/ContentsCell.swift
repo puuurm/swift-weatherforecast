@@ -12,7 +12,6 @@ class ContentsCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        makeBottomCornerRound()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -20,8 +19,19 @@ class ContentsCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    private func makeBottomCornerRound() {
+    func makeBottomCornerRound() {
         self.layer.cornerRadius = 15
         self.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
     }
+
+    func makeTopCornerRound() {
+        self.layer.cornerRadius = 15
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    }
+
+    func configureLabel(fontColor: UIColor) {
+        contentView.subviews.forEach { ($0 as? UILabel)?.textColor = fontColor }
+    }
+
+
 }

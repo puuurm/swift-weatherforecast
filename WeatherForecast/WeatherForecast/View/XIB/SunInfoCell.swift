@@ -15,8 +15,8 @@ class SunInfoCell: ContentsCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        sunriseLabel.textColor = UIColor.white
-        sunsetLabel.textColor = UIColor.white
+        configureLabel(fontColor: UIColor.white)
+        makeBottomCornerRound()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -24,4 +24,5 @@ class SunInfoCell: ContentsCell {
 
         // Configure the view for the selected state
     }
+
 }

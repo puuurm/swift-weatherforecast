@@ -103,6 +103,12 @@ final class History {
         )
     }
 
+    func currentDetailCell(at index: Int) -> CurrentDetailCellViewModel {
+        let current = forecastStores[index].current
+        let list = CurrentDetailList(current: current)
+        return list.viewModel(at: index)
+    }
+
     func weatherDetailViewModel(at index: Int) -> WeatherDetailHeaderViewModel? {
         let currentWeather = forecastStores[index].current
         guard let weatherDetail = currentWeather.weatherDetail.last?.main else {

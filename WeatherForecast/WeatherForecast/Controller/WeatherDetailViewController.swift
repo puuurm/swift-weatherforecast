@@ -54,6 +54,27 @@ class WeatherDetailViewController: UIViewController {
         }
     }
 
+    func setHourWeatherCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        let cell: HourWeatherCell? = collectionView.dequeueReusableCell(for: indexPath)
+        let row = indexPath.row
+        let forecast = weeklyForecast?.forecasts[row]
+        cell?.setContents(dataSource: self, index: row, content: forecast)
+        if let weatherDetail = forecast?.moreWeather.first {
+            networkManager?.request(weatherDetail, baseURL: .icon) { result in
+                switch result {
+                case let .success(icon):
+                    DispatchQueue.main.async {
+                        cell?.setImage(icon)
+                    }
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        return cell ?? UICollectionViewCell()
+
+    }
+
     @IBAction func closeButtonDidTap(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
@@ -74,10 +95,13 @@ extension WeatherDetailViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell: WeatherDetailCell? = tableView.dequeueReusableCell(for: indexPath)
-            cell?.load(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
+            cell?.setContents(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
             return cell ?? defaultCell
         case 1:
             let cell: TodayWeatherCell? = tableView.dequeueReusableCell(for: indexPath)
+            return cell ?? defaultCell
+        case 2:
+            let cell: CurrentDetailBoxCell? = tableView.dequeueReusableCell(for: indexPath)
             return cell ?? defaultCell
         default:
             let cell: SunInfoCell? = tableView.dequeueReusableCell(for: indexPath)
@@ -95,6 +119,7 @@ extension WeatherDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0: return 310
+        case 2: return 300
         default: return 200
         }
     }
@@ -113,7 +138,7 @@ extension WeatherDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell: SectionHeaderCell? = tableView.dequeueReusableCell()
         let section = Section(rawValue: section)
-        cell?.dateLabel.text = section?.date
+        cell?.titleLabel.text = section?.date
         return cell ?? UIView()
     }
 
@@ -124,7 +149,10 @@ extension WeatherDetailViewController: UITableViewDelegate {
         switch indexPath.section {
         case 1:
             guard let tableViewCell = cell as? TodayWeatherCell else { return }
-            tableViewCell.dataSource = self
+            tableViewCell.setDataSource(dataSource: self, at: indexPath.section)
+        case 2:
+            guard let tableViewCell = cell as? CurrentDetailBoxCell else { return }
+            tableViewCell.setDataSource(dataSource: self, at: indexPath.section)
         default: break
         }
 
@@ -132,27 +160,45 @@ extension WeatherDetailViewController: UITableViewDelegate {
 
 }
 
-extension WeatherDetailViewController: TodayWeatherCellDataSource {
+extension WeatherDetailViewController: UICollectionViewDataSource {
 
-    func fetchImage(cell: UITableViewCell, indexPath: IndexPath, completion: @escaping ((UIImage?) -> Void)) {
-
-        let weatherDetail = weeklyForecast?.forecasts[indexPath.row].moreWeather.first
-        if let weatherDetail = weatherDetail {
-            networkManager?.request(weatherDetail, baseURL: .icon) { result in
-                switch result {
-                case let .success(icon):
-                    completion(icon)
-                case let .failure(error):
-                    completion(nil)
-                    print(error.localizedDescription)
-                }
-            }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+        ) -> Int {
+        if collectionView.tag == 1 {
+            return weeklyForecast?.forecasts.count ?? 0
+        } else {
+            return 6
         }
-
     }
 
-    func contentsData(cell: UITableViewCell) -> [Forecast] {
-        return weeklyForecast?.forecasts ?? []
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+        ) -> UICollectionViewCell {
+
+        if collectionView.tag == 1 {
+            return setHourWeatherCell(collectionView: collectionView, indexPath: indexPath)
+        }
+
+        if collectionView.tag == 2 {
+            let cell: CurrentDetailCell? = collectionView.dequeueReusableCell(for: indexPath)
+            let row = indexPath.row
+            let current = History.shared.currentDetailCell(at: row)
+            cell?.setContents(viewModel: current)
+            return cell ?? UICollectionViewCell()
+        }
+
+        return UICollectionViewCell()
+    }
+
+}
+
+extension WeatherDetailViewController: LineChartDataSource {
+
+    func baseData(lineChartView: LineChartView) -> [Float] {
+        return History.shared.temperatures(at: pageNumber)
     }
 
 }
