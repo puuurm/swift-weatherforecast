@@ -10,6 +10,12 @@ import UIKit
 
 extension UIImage {
 
+    enum Background {
+
+        static let Cloudy = UIImage(named: "cloud")!
+
+    }
+
     enum Icons {
 
         enum Weather {

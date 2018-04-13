@@ -11,7 +11,6 @@ import UIKit
 class WeatherDetailViewController: UIViewController {
 
     @IBOutlet weak var forecastTableView: UITableView!
-
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
     var networkManager: NetworkManager?
     var weeklyForecast: WeeklyForecast? {
