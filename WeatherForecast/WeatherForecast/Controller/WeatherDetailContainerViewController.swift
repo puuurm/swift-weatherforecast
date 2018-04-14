@@ -20,7 +20,6 @@ class WeatherDetailContainerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = UIColor.skyBlue()
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)

@@ -10,44 +10,62 @@ import UIKit
 
 class CloudyView: UIView {
 
-    let image = UIImage.Background.Cloudy
-    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 400, height: 400 * 0.6))
+    private let image: UIImage = UIImage.Background.Cloudy
+    private var cloudyImageView: UIImageView?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        initColor()
+        cloudyImageView = makeClouds()
+        addSubview(cloudyImageView ?? UIImageView())
+        layoutClouds()
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clear
-        makeClouds()
+        initColor()
+        cloudyImageView = makeClouds()
+        addSubview(cloudyImageView ?? UIImageView())
         layoutClouds()
     }
 
-    func makeClouds() {
-        imageView.image = image
-        addSubview(imageView)
+    private func initColor() {
+        backgroundColor = UIColor.clear
     }
 
-    func layoutClouds() {
+    private func makeClouds() -> UIImageView {
+        let imageView = UIImageView(
+            frame: CGRect(x: frame.width, y: 0, width: image.size.width, height: image.size.height)
+        )
+        imageView.image = image
+        return imageView
+    }
+
+    private func layoutClouds() {
+        guard let imageView = cloudyImageView else { return }
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.trailingAnchor.constraint(equalTo: leadingAnchor, constant: -5).isActive = true
+        imageView.trailingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 400).isActive = true
-        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.6).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: image.size.width).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: image.size.height).isActive = true
         imageView.contentMode = .scaleToFill
     }
 
-    func moveClouds() {
+}
 
+// MARK: - Interanl methods
+
+extension CloudyView {
+
+    func moveClouds() {
         UIView.animate(
             withDuration: 10,
             delay: 1,
             options: UIViewAnimationOptions.repeat,
             animations: { [weak self] in
                 guard let `self` = self else { return }
-                self.imageView.frame.origin.x -= (self.frame.width+400)
-        },
+                self.layoutIfNeeded()
+            },
             completion: nil
         )
     }
