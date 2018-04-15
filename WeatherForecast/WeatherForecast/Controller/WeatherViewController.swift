@@ -191,7 +191,7 @@ extension WeatherViewController: LocationServiceDelegate {
     }
 }
 
-// 출처 : https://github.com/Ramotion/preview-transition
+// MARK: - Reference https://github.com/Ramotion/preview-transition
 
 extension WeatherViewController {
 
@@ -212,7 +212,7 @@ extension WeatherViewController {
         for case let cell as WeatherTableViewCell in tableView.visibleCells where cell != selectedCell {
             cell.isMovedHidden = true
             let section = tableView.indexPath(for: cell)?.section ?? 0
-            let direction = section < currentIndex.section ? WeatherTableViewCell.Direction.down : WeatherTableViewCell.Direction.up
+            let direction = section < currentIndex.section ? Direction.down : Direction.up
             cell.animationMoveCell(direction, duration: duration, tableView: tableView, selectedIndexPath: currentIndex, close: false)
         }
     }
@@ -229,7 +229,7 @@ extension WeatherViewController {
             if cell.isMovedHidden == false { continue }
 
             if let indexPath = weatherTableView.indexPath(for: cell) {
-                let direction = indexPath.section < currentIndex.section ? WeatherTableViewCell.Direction.up : WeatherTableViewCell.Direction.down
+                let direction = indexPath.section < currentIndex.section ? Direction.up : Direction.down
                 cell.animationMoveCell(direction, duration: duration, tableView: weatherTableView, selectedIndexPath: currentIndex, close: true)
                 cell.isMovedHidden = false
             }
