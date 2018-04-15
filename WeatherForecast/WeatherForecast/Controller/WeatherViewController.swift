@@ -15,9 +15,31 @@ class WeatherViewController: UIViewController, Presentable {
     @IBOutlet weak var weatherTableView: UITableView!
     private var locationService: LocationService?
     private var networkManager: NetworkManager?
+    private var selectedCell: FlexibleCell?
 
-    private var selectedCell: WeatherTableViewCell?
-    private var duration: Double = 0.8
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
+    private func requestCurrentWeather(_ address: Address) {
+        networkManager?.request(
+            Request.cityName(address: address),
+            before: History.shared.userLocationForecast?.current,
+            baseURL: .current,
+            type: CurrentWeather.self
+        ) { result -> Void in
+                switch result {
+                case let .success(weather):
+                    History.shared.userLocationForecast = ForecastStore(address: address, current: weather)
+                case let .failure(error): print(error)
+                }
+        }
+    }
+}
+
+// MARK: - View Lifecycle
+
+extension WeatherViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,9 +54,21 @@ class WeatherViewController: UIViewController, Presentable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        moveCellsBackIfNeed()
-        closeSelectedCellIfNeed(duration)
+        moveCellsBackIfNeed(weatherTableView, selectedCell: selectedCell)
+        closeSelectedCellIfNeed(
+            weatherTableView,
+            selectedCell: selectedCell,
+            duration: duration
+        ) { [weak self] in
+            self?.selectedCell = nil
+        }
     }
+
+}
+
+// MARK: - Initializer
+
+extension WeatherViewController {
 
     private func initNotification() {
 
@@ -74,27 +108,12 @@ class WeatherViewController: UIViewController, Presentable {
         )
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
-    private func requestCurrentWeather(_ address: Address) {
-        networkManager?.request(
-            Request.cityName(address: address),
-            before: History.shared.userLocationForecast?.current,
-            baseURL: .current,
-            type: CurrentWeather.self
-        ) { result -> Void in
-                switch result {
-                case let .success(weather):
-                    History.shared.userLocationForecast = ForecastStore(address: address, current: weather)
-                case let .failure(error): print(error)
-                }
-        }
-    }
 }
 
+// MARK: - UITableViewDataSource
+
 extension WeatherViewController: UITableViewDataSource {
+
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
@@ -132,6 +151,8 @@ extension WeatherViewController: UITableViewDataSource {
     }
 
 }
+
+// MARK: - UITableViewDelegate
 
 extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -173,7 +194,19 @@ extension WeatherViewController: UITableViewDelegate {
         return indexPath
     }
 
+    func pushViewController(_ tableView: UITableView, viewController: UIViewController) {
+
+        guard let selectedCell = self.selectedCell else { return }
+        selectedCell.openCell(tableView, duration: duration)
+        moveCells(tableView, selectedCell: selectedCell, duration: duration)
+        delay(duration) { [weak self] in
+            self?.navigationController?.pushViewController(viewController, animated: false)
+        }
+    }
+
 }
+
+// MARK: - LocationServiceDelegate
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ placeMark: CLPlacemark?) {
@@ -184,73 +217,23 @@ extension WeatherViewController: LocationServiceDelegate {
             before: History.shared.userLocationForecast?.address,
             after: address,
             object: History.shared.userLocationForecast?.current
-        ) else {
-            return
+            ) else {
+                return
         }
         requestCurrentWeather(address)
     }
 }
 
-// MARK: - Reference https://github.com/Ramotion/preview-transition
+// MARK: - AvailableFlexibleCells
 
-extension WeatherViewController {
-
-    func pushViewController(_ tableView: UITableView, viewController: WeatherDetailContainerViewController) {
-
-        guard let selectedCell = self.selectedCell else { return }
-        selectedCell.openCell(tableView, duration: duration)
-        moveCells(tableView, selectedCell: selectedCell, duration: duration)
-        delay(duration) { [weak self] in
-            self?.navigationController?.pushViewController(viewController, animated: false)
-        }
-    }
-
-    func moveCells(_ tableView: UITableView, selectedCell: WeatherTableViewCell, duration: Double) {
-        guard let currentIndex = tableView.indexPath(for: selectedCell) else {
-            return
-        }
-        for case let cell as WeatherTableViewCell in tableView.visibleCells where cell != selectedCell {
-            cell.isMovedHidden = true
-            let section = tableView.indexPath(for: cell)?.section ?? 0
-            let direction = section < currentIndex.section ? Direction.down : Direction.up
-            cell.animationMoveCell(direction, duration: duration, tableView: tableView, selectedIndexPath: currentIndex, close: false)
-        }
-    }
-
-    func moveCellsBackIfNeed() {
-
-        guard let selectedCell = self.selectedCell,
-            let currentIndex = weatherTableView.indexPath(for: selectedCell) else {
-                return
-        }
-
-        for case let cell as WeatherTableViewCell in weatherTableView.visibleCells where cell != selectedCell {
-
-            if cell.isMovedHidden == false { continue }
-
-            if let indexPath = weatherTableView.indexPath(for: cell) {
-                let direction = indexPath.section < currentIndex.section ? Direction.up : Direction.down
-                cell.animationMoveCell(direction, duration: duration, tableView: weatherTableView, selectedIndexPath: currentIndex, close: true)
-                cell.isMovedHidden = false
-            }
-        }
-    }
-
-    func closeSelectedCellIfNeed(_ duration: Double) {
-        selectedCell?.closeCell(duration, tableView: weatherTableView) { [weak self] in
-            self?.selectedCell = nil
-        }
-    }
-
-    func delay(_ delay: Double, closure: @escaping () -> Void) {
-        DispatchQueue.main.asyncAfter(
-            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
-            execute: closure
-        )
+extension WeatherViewController: AvailableFlexibleCells {
+    var duration: Double {
+        return 0.8
     }
 }
 
-// MARK: - Events
+// MARK: - Action
+
 extension WeatherViewController {
 
     @objc func updateTime() {
