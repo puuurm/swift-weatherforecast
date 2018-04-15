@@ -16,7 +16,7 @@ class WeatherViewController: UIViewController, Presentable {
     private var locationService: LocationService?
     private var networkManager: NetworkManager?
 
-    private var currentCell: WeatherTableViewCell?
+    private var selectedCell: WeatherTableViewCell?
     private var duration: Double = 0.8
 
     override func viewDidLoad() {
@@ -32,10 +32,8 @@ class WeatherViewController: UIViewController, Presentable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        moveCellsBackIfNeed(duration) {
-            self.weatherTableView.reloadData()
-        }
-        closeCurrentCellIfNeed(duration)
+        moveCellsBackIfNeed()
+        closeSelectedCellIfNeed(duration)
     }
 
     private func initNotification() {
@@ -168,10 +166,10 @@ extension WeatherViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
 
-        guard let currentCell = tableView.cellForRow(at: indexPath) as? WeatherTableViewCell else {
+        guard let selectedCell = tableView.cellForRow(at: indexPath) as? WeatherTableViewCell else {
             return indexPath
         }
-        self.currentCell = currentCell
+        self.selectedCell = selectedCell
         return indexPath
     }
 
@@ -199,19 +197,19 @@ extension WeatherViewController {
 
     func pushViewController(_ tableView: UITableView, viewController: WeatherDetailContainerViewController) {
 
-        guard let currentCell = self.currentCell else { return }
-        currentCell.openCell(self.view, duration: duration)
-        moveCells(tableView, currentCell: currentCell, duration: duration)
+        guard let selectedCell = self.selectedCell else { return }
+        selectedCell.openCell(tableView, duration: duration)
+        moveCells(tableView, selectedCell: selectedCell, duration: duration)
         delay(duration) { [weak self] in
             self?.navigationController?.pushViewController(viewController, animated: false)
         }
     }
 
-    func moveCells(_ tableView: UITableView, currentCell: WeatherTableViewCell, duration: Double) {
-        guard let currentIndex = tableView.indexPath(for: currentCell) else {
+    func moveCells(_ tableView: UITableView, selectedCell: WeatherTableViewCell, duration: Double) {
+        guard let currentIndex = tableView.indexPath(for: selectedCell) else {
             return
         }
-        for case let cell as WeatherTableViewCell in tableView.visibleCells where cell != currentCell {
+        for case let cell as WeatherTableViewCell in tableView.visibleCells where cell != selectedCell {
             cell.isMovedHidden = true
             let section = tableView.indexPath(for: cell)?.section ?? 0
             let direction = section < currentIndex.section ? WeatherTableViewCell.Direction.down : WeatherTableViewCell.Direction.up
@@ -219,14 +217,14 @@ extension WeatherViewController {
         }
     }
 
-    func moveCellsBackIfNeed(_ duration: Double, completion: @escaping () -> Void) {
+    func moveCellsBackIfNeed() {
 
-        guard let currentCell = self.currentCell,
-            let currentIndex = weatherTableView.indexPath(for: currentCell) else {
+        guard let selectedCell = self.selectedCell,
+            let currentIndex = weatherTableView.indexPath(for: selectedCell) else {
                 return
         }
 
-        for case let cell as WeatherTableViewCell in weatherTableView.visibleCells where cell != currentCell {
+        for case let cell as WeatherTableViewCell in weatherTableView.visibleCells where cell != selectedCell {
 
             if cell.isMovedHidden == false { continue }
 
@@ -236,12 +234,11 @@ extension WeatherViewController {
                 cell.isMovedHidden = false
             }
         }
-        delay(duration, closure: completion)
     }
 
-    func closeCurrentCellIfNeed(_ duration: Double) {
-        currentCell?.closeCell(duration, tableView: weatherTableView) { [weak self] in
-            self?.currentCell = nil
+    func closeSelectedCellIfNeed(_ duration: Double) {
+        selectedCell?.closeCell(duration, tableView: weatherTableView) { [weak self] in
+            self?.selectedCell = nil
         }
     }
 

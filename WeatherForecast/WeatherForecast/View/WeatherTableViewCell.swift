@@ -18,10 +18,10 @@ class WeatherTableViewCell: UITableViewCell {
 
     var isMovedHidden: Bool = false
 
-    private var closedXPosition: CGFloat = 0
-    private var closedYPosition: CGFloat = 0
+    private var closedFrame: CGRect = CGRect.zero
     private var closedHeight: CGFloat = 0
-    private var closedWidth: CGFloat = 0
+    private var closedY: CGFloat = 0
+
 
     private var damping: CGFloat = 0.78
 
@@ -32,7 +32,6 @@ class WeatherTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        makeCornerRound()
         backgroundColor = UIColor.skyBlue()
     }
 
@@ -55,42 +54,29 @@ class WeatherTableViewCell: UITableViewCell {
             markerView.isHidden = true
         }
     }
-
-    private func makeCornerRound() {
-        self.layer.cornerRadius = 10
-        self.layer.maskedCorners = [
-            .layerMaxXMaxYCorner,
-            .layerMinXMinYCorner,
-            .layerMaxXMinYCorner,
-            .layerMinXMaxYCorner
-        ]
-    }
 }
 
 // 출처: https://github.com/Ramotion/preview-transition
 
 extension WeatherTableViewCell {
-    func openCell(_ baseView: UIView, duration: Double) {
 
-        closedXPosition = center.x
-        closedYPosition = center.y
-        closedHeight = self.frame.height
-        closedWidth = self.frame.width
-
+    func openCell(_ tableView: UITableView, duration: Double) {
+        closedY = frame.origin.y
+        closedHeight = frame.height
         subviews.forEach { $0.isHidden = true }
-
-        UIView.animate(withDuration: 0.5, animations: {
-            self.superview?.frame.origin.x -= 10
-            self.superview?.frame.size.width += 20
-            self.frame.size.height = baseView.frame.size.height
-        }, completion: nil)
-
+        frame.origin.y = tableView.contentOffset.y
+        frame.size.height = UIScreen.main.bounds.height
+        UIView.animate(
+            withDuration: 0.5,
+            animations: { [weak self] in
+                self?.layoutIfNeeded() },
+            completion: nil )
         superview?.sendSubview(toBack: self)
-        moveToCenter(duration, offset: 0)
     }
 
-    func closeCell(_ duration: Double, tableView _: UITableView, completion: @escaping () -> Void) {
-
+    func closeCell(_ duration: Double, tableView: UITableView, completion: @escaping () -> Void) {
+        frame.origin.y = closedY
+        frame.size.height = closedHeight
         UIView.animate(
             withDuration: duration,
             delay: 0,
@@ -98,30 +84,11 @@ extension WeatherTableViewCell {
             initialSpringVelocity: 0,
             options: UIViewAnimationOptions(),
             animations: { [weak self] in
-                guard let `self` = self else { return }
-                self.superview?.frame.origin.x += 10
-                self.superview?.frame.size.width -= 20
-                self.frame.size.height = self.closedHeight
-                self.center = CGPoint(x: self.center.x, y: self.closedYPosition)
+                self?.layoutIfNeeded()
             }, completion: { [weak self] _ in
                 self?.subviews.forEach { $0.isHidden = false }
                 completion()
         })
-
-    }
-
-    func moveToCenter(_ duration: Double, offset: CGFloat) {
-
-        UIView.animate(
-            withDuration: duration,
-            delay: 0,
-            usingSpringWithDamping: 0.78,
-            initialSpringVelocity: 0,
-            options: UIViewAnimationOptions(),
-            animations: { [weak self] in
-                self?.frame.origin.y = offset
-            }, completion: nil)
-
     }
 
     func animationMoveCell(
@@ -131,7 +98,7 @@ extension WeatherTableViewCell {
         selectedIndexPath: IndexPath,
         close: Bool) {
 
-        let selfYPosition = close == false ? frame.origin.y : closedYPosition
+        let selfYPosition = close == false ? frame.origin.y : closedFrame.origin.y
         let selectedCellFrame = tableView.rectForRow(at: selectedIndexPath)
         var dy: CGFloat = 0
         if selfYPosition < selectedCellFrame.origin.y {
@@ -141,9 +108,9 @@ extension WeatherTableViewCell {
         }
         dy = direction == .down ? dy * -1 : dy
         if close == false {
-            closedYPosition = center.y
+            closedFrame.origin.y = frame.origin.y
         } else {
-            center.y = closedYPosition - dy
+            frame.origin.y = closedFrame.origin.y - dy
         }
 
         superview?.bringSubview(toFront: self)
@@ -153,8 +120,8 @@ extension WeatherTableViewCell {
             usingSpringWithDamping: damping,
             initialSpringVelocity: 0,
             options: UIViewAnimationOptions(),
-            animations: { () -> Void in
-                self.center.y += dy
+            animations: { [weak self] in
+                self?.frame.origin.y += dy
         }, completion: nil)
 
     }
