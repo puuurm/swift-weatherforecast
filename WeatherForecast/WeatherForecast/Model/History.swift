@@ -95,7 +95,6 @@ final class History {
         let currentWeather = forecastStores[indexPath.section].current
         let isUserLocation = indexPath.section == 0 ? true : false
         return WeatherTableCellViewModel(
-            timeString: Date().convertString(format: "h:mm a"),
             cityString: cityName,
             temperatureString: currentWeather.weather.temperature.convertCelsius,
             weatherDetail: currentWeather.weatherDetail.first!,
@@ -103,20 +102,20 @@ final class History {
         )
     }
 
-    func currentDetailCell(at index: Int) -> CurrentDetailCellViewModel {
-        print(index)
+    func currentDetailCell(at index: Int, row: Int) -> CurrentDetailCellViewModel {
         let current = forecastStores[index].current
         let list = CurrentDetailList(current: current)
-        return list.viewModel(at: index)
+        return list.viewModel(at: row)
     }
 
     func weatherDetailViewModel(at index: Int) -> WeatherDetailHeaderViewModel? {
+        let cityName = forecastStores[index].address.subLocality
         let currentWeather = forecastStores[index].current
         guard let weatherDetail = currentWeather.weatherDetail.last?.main else {
             return nil
         }
         return WeatherDetailHeaderViewModel (
-            city: currentWeather.cityName,
+            city: cityName,
             weather: weatherDetail,
             temperature: currentWeather.weather.temperature.convertCelsius,
             minTemperature: currentWeather.weather.minTemperature.convertCelsius,

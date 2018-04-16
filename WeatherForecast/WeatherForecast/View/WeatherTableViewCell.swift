@@ -10,7 +10,6 @@ import UIKit
 
 class WeatherTableViewCell: FlexibleCell {
 
-    @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperature: UILabel!
     @IBOutlet weak var weatherIconImageView: UIImageView!
@@ -21,7 +20,6 @@ class WeatherTableViewCell: FlexibleCell {
         backgroundColor = UIColor.skyBlue()
         cityLabel.textColor = UIColor.white
         temperature.textColor = UIColor.white
-        timeLabel.textColor = UIColor.white
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -32,7 +30,6 @@ class WeatherTableViewCell: FlexibleCell {
     func setContents(viewModel: WeatherTableCellViewModel) {
         cityLabel.text = viewModel.cityString
         temperature.text = viewModel.temperatureString
-        timeLabel.text = viewModel.timeString
         showMarkerIfNeeded(isUserLocation: viewModel.isUserLocation)
     }
 
@@ -46,7 +43,6 @@ class WeatherTableViewCell: FlexibleCell {
 }
 
 struct WeatherTableCellViewModel {
-    var timeString: String
     var cityString: String
     var temperatureString: String
     var weatherDetail: WeatherDetail
