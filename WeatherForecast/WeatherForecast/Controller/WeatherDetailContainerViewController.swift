@@ -18,16 +18,6 @@ class WeatherDetailContainerViewController: UIViewController {
 
     var backButton: UIButton?
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.skyBlue()
-        addChildViewController(pageViewController)
-        view.addSubview(pageViewController.view)
-        backButton = createBackButton()
-        createNavigationBarBackItem(button: backButton)
-
-    }
-
     private func makepageViewController() -> UIPageViewController {
         let pageVC: UIPageViewController? = storyboard?.viewController()
         if let startVC = viewController(at: currentIndex) {
@@ -42,6 +32,24 @@ class WeatherDetailContainerViewController: UIViewController {
         return pageVC ?? UIPageViewController()
     }
 }
+
+// MARK: - View Lifecycle
+
+extension WeatherDetailContainerViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.skyBlue()
+        addChildViewController(pageViewController)
+        view.addSubview(pageViewController.view)
+        backButton = createBackButton()
+        createNavigationBarBackItem(button: backButton)
+
+    }
+
+}
+
+// MARK: - UIPageViewControllerDataSource
 
 extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
 
@@ -102,6 +110,8 @@ extension WeatherDetailContainerViewController {
         return buttonItem
     }
 }
+
+// MARK: - Action
 
 extension WeatherDetailContainerViewController {
 

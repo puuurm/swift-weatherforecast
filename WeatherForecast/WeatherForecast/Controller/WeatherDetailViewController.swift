@@ -27,15 +27,6 @@ class WeatherDetailViewController: UIViewController {
 
     var pageNumber: Int!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        forecastTableView.backgroundColor = UIColor.clear
-        networkManager = NetworkManager(session: URLSession.shared)
-        forecastTableView.register(type: SunInfoCell.self)
-        forecastTableView.register(type: WeatherDetailCell.self)
-        loadWeeklyForecast()
-    }
-
     private func loadWeeklyForecast() {
         let address = History.shared.address(at: pageNumber ?? 0)
         guard Checker.isNeedUpdate(before: weeklyForecast) else { return }
@@ -53,7 +44,7 @@ class WeatherDetailViewController: UIViewController {
         }
     }
 
-    func setHourWeatherCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+    private func setHourWeatherCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         let cell: HourWeatherCell? = collectionView.dequeueReusableCell(for: indexPath)
         let row = indexPath.row
         let forecast = weeklyForecast?.forecasts[row]
@@ -73,11 +64,23 @@ class WeatherDetailViewController: UIViewController {
         return cell ?? UICollectionViewCell()
 
     }
-
-    @IBAction func closeButtonDidTap(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
-    }
 }
+
+// MARK: - View Lifecycle
+extension WeatherDetailViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        forecastTableView.backgroundColor = UIColor.clear
+        networkManager = NetworkManager(session: URLSession.shared)
+        forecastTableView.register(type: SunInfoCell.self)
+        forecastTableView.register(type: WeatherDetailCell.self)
+        loadWeeklyForecast()
+    }
+
+}
+
+// MAKR: - UITableViewDataSource
 
 extension WeatherDetailViewController: UITableViewDataSource {
 
@@ -112,6 +115,8 @@ extension WeatherDetailViewController: UITableViewDataSource {
         }
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension WeatherDetailViewController: UITableViewDelegate {
 
@@ -159,6 +164,8 @@ extension WeatherDetailViewController: UITableViewDelegate {
 
 }
 
+// MARK: - UICollectionViewDataSource
+
 extension WeatherDetailViewController: UICollectionViewDataSource {
 
     func collectionView(
@@ -194,6 +201,7 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
 
 }
 
+// MARK: - LineChartDataSource
 extension WeatherDetailViewController: LineChartDataSource {
 
     func baseData(lineChartView: LineChartView) -> [Float] {

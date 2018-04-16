@@ -25,7 +25,7 @@ class RainyView: UIView {
     }
 
     private var randomDuration: Double {
-        return 0.1 + drand48()
+        return drand48()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,7 +38,7 @@ class RainyView: UIView {
         makeRainyDrops()
     }
 
-    private func makeRainyDrops() {
+    func makeRainyDrops() {
         for _ in 0..<numberOfDrops {
             makeDrop()
         }
@@ -64,13 +64,11 @@ class RainyView: UIView {
         animation.fromValue = 0
         animation.toValue = frame.height
         animation.duration = randomDuration
-        animation.repeatCount = .greatestFiniteMagnitude
+        animation.repeatCount = 100
         layer.add(animation, forKey: "animation")
     }
 
     private func randomValue(from minValue: UInt32, to maxValue: UInt32) -> Double {
         return Double(minValue + arc4random_uniform(maxValue - minValue))
     }
-
 }
-

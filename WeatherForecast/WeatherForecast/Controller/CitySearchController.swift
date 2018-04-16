@@ -30,17 +30,6 @@ class CitySearchController: UIViewController, Presentable {
         return completer
     }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        searchBar.showsCancelButton = true
-        networkManager = NetworkManager(session: URLSession.shared)
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        searchBar.becomeFirstResponder()
-    }
-
     private func searchBarIsEmpty() -> Bool {
         return searchBar.text?.isEmpty ?? true
     }
@@ -70,6 +59,25 @@ class CitySearchController: UIViewController, Presentable {
     }
 }
 
+// MARK: - View Lifecycle
+
+extension CitySearchController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        searchBar.showsCancelButton = true
+        networkManager = NetworkManager(session: URLSession.shared)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchBar.becomeFirstResponder()
+    }
+
+}
+
+// MARK: - UITableViewDataSource
+
 extension CitySearchController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filterdCities.count
@@ -93,6 +101,8 @@ extension CitySearchController: UITableViewDataSource {
         return cell ?? UITableViewCell()
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension CitySearchController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -125,6 +135,8 @@ extension CitySearchController: UITableViewDelegate {
     }
 }
 
+// MARK: - UISearchBarDelegate
+
 extension CitySearchController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBarIsEmpty() {
@@ -139,6 +151,8 @@ extension CitySearchController: UISearchBarDelegate {
         dismiss(animated: true, completion: nil)
     }
 }
+
+// MARK: - MKLocalSearchCompleterDelegate
 
 extension CitySearchController: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
