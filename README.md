@@ -1,2 +1,4 @@
 # swift-weatherforecast
-iOS app
+날씨 앱 입니다.
+
+- [개발 일지](https://github.com/puuurm/swift-weatherforecast/issues?q=is%3Aopen+is%3Aissue)

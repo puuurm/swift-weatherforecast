@@ -104,6 +104,7 @@ final class History {
     }
 
     func currentDetailCell(at index: Int) -> CurrentDetailCellViewModel {
+        print(index)
         let current = forecastStores[index].current
         let list = CurrentDetailList(current: current)
         return list.viewModel(at: index)

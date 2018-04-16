@@ -190,8 +190,7 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
 
         if collectionView.tag == 2 {
             let cell: CurrentDetailCell? = collectionView.dequeueReusableCell(for: indexPath)
-            let row = indexPath.row
-            let current = History.shared.currentDetailCell(at: row)
+            let current = History.shared.currentDetailCell(at: pageNumber)
             cell?.setContents(viewModel: current)
             return cell ?? UICollectionViewCell()
         }
