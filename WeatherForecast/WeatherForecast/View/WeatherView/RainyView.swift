@@ -10,22 +10,23 @@ import UIKit
 
 class RainyView: UIView {
 
-    private let numberOfDrops = 200
+    private let makeOverZero: Double = 0.01
+    private let numberOfDrops: Int = 1000
 
     private var randomPositionX: Double {
         return randomValue(from: 0, to: UInt32(frame.width))
     }
 
     private var randomDropWidth: Double {
-        return randomValue(from: 0, to: 2)
+        return makeOverZero + drand48()
     }
 
     private var randomDropHeight: Double {
-        return randomValue(from: 2, to: 30)
+        return randomValue(from: 2, to: 20)
     }
 
     private var randomDuration: Double {
-        return drand48()
+        return makeOverZero + drand48()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,7 +39,7 @@ class RainyView: UIView {
         makeRainyDrops()
     }
 
-    func makeRainyDrops() {
+    private func makeRainyDrops() {
         for _ in 0..<numberOfDrops {
             makeDrop()
         }
@@ -52,7 +53,10 @@ class RainyView: UIView {
             width: randomDropWidth,
             height: randomDropHeight
         )
-        drop.colors = [UIColor.clear.cgColor, UIColor.white.cgColor]
+        drop.colors = [
+            UIColor.clear.cgColor,
+            UIColor(white: 1, alpha: 0.6).cgColor
+        ]
         drop.locations = [0, 0.8]
         drop.cornerRadius = 5
         layer.addSublayer(drop)
@@ -64,7 +68,7 @@ class RainyView: UIView {
         animation.fromValue = 0
         animation.toValue = frame.height
         animation.duration = randomDuration
-        animation.repeatCount = 100
+        animation.repeatCount = .greatestFiniteMagnitude
         layer.add(animation, forKey: "animation")
     }
 
