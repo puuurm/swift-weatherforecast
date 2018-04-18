@@ -15,18 +15,29 @@ struct QueryItem {
             "method": "flickr.photos.search",
             "api_key": Flicker.apiKey,
             "tags": tags,
+            "text": "landscape",
             "page": "1",
             "per_page": "30",
             "format": "json",
+            "content_type": "1",
             "nojsoncallback": "1"]
     }
 
     static func cityName(address: Address) -> [String: String] {
-        return ["APPID": OpenWeatherMap.apiKey, "q": "\(address.subLocality),\(address.countryCode)", "units": "metric"]
+        return [
+            "APPID": OpenWeatherMap.apiKey,
+            "q": "\(address.subLocality),\(address.countryCode)",
+            "units": "metric"
+        ]
     }
 
     static func coordinates(address: Address) -> [String: String] {
-        return ["lat": "\(address.coordinate.latitude)", "lon": "\(address.coordinate.longitude)", "units": "metric"]
+        return [
+            "APPID": OpenWeatherMap.apiKey,
+            "lat": "\(address.coordinate.latitude)",
+            "lon": "\(address.coordinate.longitude)",
+            "units": "metric"
+        ]
     }
 
 }

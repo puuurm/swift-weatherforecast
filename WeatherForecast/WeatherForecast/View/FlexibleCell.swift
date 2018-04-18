@@ -16,6 +16,7 @@ enum Direction {
 class FlexibleCell: UITableViewCell {
 
     var isMovedHidden: Bool = false
+    private var flexibleImageView: UIImageView = UIImageView()
     private var closedFrame: CGRect = CGRect.zero
     private var closedHeight: CGFloat = 0
     private var closedY: CGFloat = 0
@@ -23,10 +24,23 @@ class FlexibleCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        flexibleImageView.frame = contentView.frame
+        contentView.addSubview(flexibleImageView)
+        flexibleImageView.translatesAutoresizingMaskIntoConstraints = false
+        flexibleImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        flexibleImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        flexibleImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        flexibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        contentView.sendSubview(toBack: flexibleImageView)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+
+    func setBackgroundImage(_ image: UIImage?) {
+        guard let image = image else { return }
+        flexibleImageView.image = image
     }
 
 }

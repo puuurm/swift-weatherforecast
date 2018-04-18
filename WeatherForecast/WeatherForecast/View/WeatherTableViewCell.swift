@@ -17,7 +17,6 @@ class WeatherTableViewCell: FlexibleCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = UIColor.skyBlue()
         cityLabel.textColor = UIColor.white
         temperature.textColor = UIColor.white
     }

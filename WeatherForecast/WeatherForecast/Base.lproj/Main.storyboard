@@ -39,6 +39,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eZ2-7j-ccr">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="100.5"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10º" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72b-FD-k1W">
                                                     <rect key="frame" x="289" y="25" width="76" height="50"/>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="60"/>
@@ -63,11 +67,15 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="ew6-5g-jwS" firstAttribute="leading" secondItem="420-kD-IS2" secondAttribute="trailing" constant="3" id="2TE-nw-ZhX"/>
+                                                <constraint firstItem="eZ2-7j-ccr" firstAttribute="leading" secondItem="Ita-63-lxj" secondAttribute="leading" id="8LK-WB-2eg"/>
+                                                <constraint firstAttribute="trailing" secondItem="eZ2-7j-ccr" secondAttribute="trailing" id="CUr-7c-W0a"/>
+                                                <constraint firstItem="eZ2-7j-ccr" firstAttribute="top" secondItem="Ita-63-lxj" secondAttribute="top" id="PgX-qF-buH"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Bzf-tU-Ivz" secondAttribute="trailing" constant="20" symbolic="YES" id="RUh-T9-JRc"/>
                                                 <constraint firstItem="Bzf-tU-Ivz" firstAttribute="top" secondItem="Ita-63-lxj" secondAttribute="topMargin" constant="20" id="RxD-aU-f7z"/>
                                                 <constraint firstItem="72b-FD-k1W" firstAttribute="centerY" secondItem="Ita-63-lxj" secondAttribute="centerY" id="SAh-14-CVr"/>
                                                 <constraint firstAttribute="trailing" secondItem="72b-FD-k1W" secondAttribute="trailing" constant="10" id="Z8M-Tw-jdX"/>
                                                 <constraint firstItem="420-kD-IS2" firstAttribute="centerY" secondItem="Ita-63-lxj" secondAttribute="centerY" id="cwv-VB-JAi"/>
+                                                <constraint firstAttribute="bottom" secondItem="eZ2-7j-ccr" secondAttribute="bottom" id="e1w-iU-waK"/>
                                                 <constraint firstItem="420-kD-IS2" firstAttribute="centerX" secondItem="Ita-63-lxj" secondAttribute="centerX" multiplier="0.25" id="fZD-DW-z6t"/>
                                                 <constraint firstItem="72b-FD-k1W" firstAttribute="height" secondItem="Ita-63-lxj" secondAttribute="height" multiplier="0.5" id="li9-t4-cja"/>
                                                 <constraint firstItem="72b-FD-k1W" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ita-63-lxj" secondAttribute="leading" constant="20" symbolic="YES" id="nga-Sg-7vK"/>

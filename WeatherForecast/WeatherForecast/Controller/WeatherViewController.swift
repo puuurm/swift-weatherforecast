@@ -16,6 +16,14 @@ class WeatherViewController: UIViewController, Presentable {
     private var locationService: LocationService?
     private var networkManager: NetworkManager?
     private var selectedCell: FlexibleCell?
+    private var flickerJSON: FlickerJSON? = nil {
+        willSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.weatherTableView.reloadData()
+            }
+
+        }
+    }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -35,6 +43,21 @@ class WeatherViewController: UIViewController, Presentable {
                 }
         }
     }
+
+    private func requestFlickerImage() {
+        networkManager?.request(
+            QueryItem.photoSearch(tags: "nature, backgorund, landscape"),
+            before: nil,
+            baseURL: .photoList,
+            type: FlickerJSON.self
+        ) { [weak self] result -> Void in
+            switch result {
+            case let .success(flickerJSON):
+                self?.flickerJSON = flickerJSON
+            case let .failure(error): print(error)
+            }
+        }
+    }
 }
 
 // MARK: - View Lifecycle
@@ -47,6 +70,7 @@ extension WeatherViewController {
         locationService = LocationService()
         locationService?.delegate = self
         initNotification()
+        requestFlickerImage()
         updateUserLocation()
     }
 
@@ -104,6 +128,7 @@ extension WeatherViewController {
             name: .DidDeleteWeather,
             object: nil
         )
+
     }
 
 }
@@ -120,6 +145,15 @@ extension WeatherViewController: UITableViewDataSource {
         let cell: WeatherTableViewCell? = tableView.dequeueReusableCell(for: indexPath)
         let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
         cell?.setContents(viewModel: cellViewModel)
+        networkManager?.request(flickerJSON?.photoObejct(at: indexPath)) { result in
+            switch result {
+            case let .success(photo):
+                DispatchQueue.main.async {
+                    cell?.setBackgroundImage(photo)
+                }
+            case let .failure(error): print(error)
+            }
+        }
         networkManager?.request(cellViewModel.weatherDetail, baseURL: .icon) { result in
             switch result {
             case let .success(icon):

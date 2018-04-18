@@ -67,9 +67,15 @@ final class NetworkManager {
     }
 
     func request(
-        _ photo: Photo,
+        _ photo: Photo?,
         completion: @escaping ImageHandler) {
-        guard let url = API.imageURL(photo: photo) else { return }
+
+        guard let photo = photo,
+            let url = API.imageURL(photo: photo) else { return }
+        if let image = imageCache.imageForKey(key: photo.cacheKey) {
+            completion(.success(image))
+            return
+        }
         NetworkSpinner.on()
         session.dataTask(with: url) { (data, response, error) in
             guard let httpResponse = response as? HTTPURLResponse else { return }
@@ -81,9 +87,8 @@ final class NetworkManager {
                 completion(.failure(FailureResponse(statusCode: status).error))
             }
             NetworkSpinner.off()
-            }.resume()
+        }.resume()
     }
-
 
     private func processRequest<T: Decodable>(
         _ type: T.Type,
