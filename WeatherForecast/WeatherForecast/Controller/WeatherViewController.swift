@@ -46,7 +46,7 @@ class WeatherViewController: UIViewController, Presentable {
 
     private func requestFlickerImage() {
         networkManager?.request(
-            QueryItem.photoSearch(tags: "nature, backgorund, landscape"),
+            QueryItem.photoSearch(tags: "landscape"),
             before: nil,
             baseURL: .photoList,
             type: FlickerJSON.self
@@ -145,7 +145,7 @@ extension WeatherViewController: UITableViewDataSource {
         let cell: WeatherTableViewCell? = tableView.dequeueReusableCell(for: indexPath)
         let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
         cell?.setContents(viewModel: cellViewModel)
-        networkManager?.request(flickerJSON?.photoObejct(at: indexPath.section)) { [weak self] result in
+        networkManager?.request(flickerJSON?.photoObejct(at: indexPath.section)) { result in
             switch result {
             case let .success(photo):
                 DispatchQueue.main.async {
@@ -214,7 +214,12 @@ extension WeatherViewController: UITableViewDelegate {
         let weatherDetailVC: WeatherDetailContainerViewController? = storyboard?.viewController()
         guard let vc = weatherDetailVC else { return }
         vc.currentIndex = indexPath.section
-        vc.flickerJSON = flickerJSON
+        networkManager?.request(flickerJSON?.photoObejct(at: indexPath.section)) { result in
+            switch result {
+            case let .success(photo): vc.backgroundImage = photo
+            case let .failure(error): print(error)
+            }
+        }
         pushViewController(tableView, viewController: vc)
     }
 

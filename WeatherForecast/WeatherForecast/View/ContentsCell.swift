@@ -33,5 +33,4 @@ class ContentsCell: UITableViewCell {
         contentView.subviews.forEach { ($0 as? UILabel)?.textColor = fontColor }
     }
 
-
 }

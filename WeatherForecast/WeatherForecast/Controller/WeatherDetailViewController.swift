@@ -11,10 +11,8 @@ import UIKit
 class WeatherDetailViewController: UIViewController {
 
     @IBOutlet weak var forecastTableView: UITableView!
-    @IBOutlet weak var backgroundImageView: UIImageView!
-
+    var backgroundImage: UIImage?
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
-    var flickerJSON: FlickerJSON?
     var networkManager: NetworkManager?
     var weeklyForecast: WeeklyForecast? {
         get {
@@ -74,27 +72,50 @@ extension WeatherDetailViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        forecastTableView.backgroundColor = UIColor.clear
         networkManager = NetworkManager(session: URLSession.shared)
-        forecastTableView.register(type: SunInfoCell.self)
-        forecastTableView.register(type: WeatherDetailCell.self)
+        addBackgroundImageView()
+        initTableViewAttributes()
+        registerXib()
         loadWeeklyForecast()
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        networkManager?.request(flickerJSON?.photoObejct(at: pageNumber)) { [weak self] result in
-            switch result {
-            case let .success(photo):
-                DispatchQueue.main.async { [weak self] in
-                    self?.backgroundImageView.image = photo
-                }
-            case let .failure(error): print(error)
-            }
-        }
-
     }
 
+}
+
+// MAKR: - Initializer
+
+extension WeatherDetailViewController {
+
+    private func addBackgroundImageView() {
+        let backgroundImageView = makeBackgroundImageView()
+        view.insertSubview(backgroundImageView, at: 0)
+    }
+
+    private func makeBackgroundImageView() -> UIImageView {
+        let backgroundImageView = UIImageView()
+        backgroundImageView.frame = view.frame
+        backgroundImageView.image = backgroundImage
+        backgroundImageView.contentMode = .scaleToFill
+        return backgroundImageView
+    }
+
+    private func initTableViewAttributes() {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = 0.7
+        forecastTableView.layer.add(animation, forKey: "animation")
+        forecastTableView.backgroundColor = UIColor.clear
+    }
+
+    func registerXib() {
+        forecastTableView.register(type: SunInfoCell.self)
+        forecastTableView.register(type: WeatherDetailCell.self)
+    }
 }
 
 // MAKR: - UITableViewDataSource

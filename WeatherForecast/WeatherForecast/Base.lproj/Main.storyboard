@@ -254,9 +254,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i3o-nR-Rlu">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                             <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="16" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Rqd-TQ-GmS">
                                 <rect key="frame" x="10" y="20" width="355" height="647"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -452,16 +449,9 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="i3o-nR-Rlu" secondAttribute="bottom" id="0JD-Qt-B8F"/>
-                            <constraint firstAttribute="trailing" secondItem="i3o-nR-Rlu" secondAttribute="trailing" id="88u-eS-ka1"/>
-                            <constraint firstItem="i3o-nR-Rlu" firstAttribute="top" secondItem="ONG-BB-QF4" secondAttribute="top" id="Xiq-YN-Ex5"/>
-                            <constraint firstItem="i3o-nR-Rlu" firstAttribute="leading" secondItem="ONG-BB-QF4" secondAttribute="leading" id="fLe-Ub-Svz"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="pn7-bQ-Jri"/>
                     </view>
                     <connections>
-                        <outlet property="backgroundImageView" destination="i3o-nR-Rlu" id="BWc-5R-e36"/>
                         <outlet property="forecastTableView" destination="Rqd-TQ-GmS" id="7FZ-eS-wxL"/>
                     </connections>
                 </viewController>

@@ -17,6 +17,7 @@ class WeatherTableViewCell: FlexibleCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        initAnimation()
         cityLabel.textColor = UIColor.white
         temperature.textColor = UIColor.white
     }
@@ -38,6 +39,14 @@ class WeatherTableViewCell: FlexibleCell {
         } else {
             markerView.isHidden = true
         }
+    }
+
+    func initAnimation() {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = 1
+        contentView.subviews.forEach { $0.layer.add(animation, forKey: "animation") }
     }
 }
 

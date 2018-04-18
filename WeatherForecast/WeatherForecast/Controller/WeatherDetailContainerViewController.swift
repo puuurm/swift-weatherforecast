@@ -11,7 +11,7 @@ import UIKit
 class WeatherDetailContainerViewController: UIViewController {
 
     var currentIndex: Int!
-    var flickerJSON: FlickerJSON?
+    var backgroundImage: UIImage?
 
     private lazy var pageViewController: UIPageViewController = {
         return makepageViewController()
@@ -59,7 +59,7 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
         let vm = History.shared.weatherDetailViewModel(at: index)
         detailVC?.weatherDetailViewModel = vm
         detailVC?.pageNumber = index
-        detailVC?.flickerJSON = flickerJSON
+        detailVC?.backgroundImage = backgroundImage
         return detailVC
     }
 
