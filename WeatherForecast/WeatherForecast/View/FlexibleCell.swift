@@ -26,6 +26,7 @@ class FlexibleCell: UITableViewCell {
         super.awakeFromNib()
         flexibleImageView.frame = contentView.frame
         contentView.addSubview(flexibleImageView)
+        flexibleImageView.tag = 10000
         flexibleImageView.translatesAutoresizingMaskIntoConstraints = false
         flexibleImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         flexibleImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
@@ -52,7 +53,7 @@ extension FlexibleCell {
     func openCell(_ tableView: UITableView, duration: Double) {
         closedY = frame.origin.y
         closedHeight = frame.height
-        subviews.forEach { $0.isHidden = true }
+        contentView.subviews.forEach { if $0.tag != 10000 { $0.isHidden = true } }
         frame.origin.y = tableView.contentOffset.y
         frame.size.height = UIScreen.main.bounds.height
         UIView.animate(
@@ -75,7 +76,7 @@ extension FlexibleCell {
             animations: { [weak self] in
                 self?.layoutIfNeeded()
             }, completion: { [weak self] _ in
-                self?.subviews.forEach { $0.isHidden = false }
+                self?.contentView.subviews.forEach { $0.isHidden = false }
                 completion()
         })
     }

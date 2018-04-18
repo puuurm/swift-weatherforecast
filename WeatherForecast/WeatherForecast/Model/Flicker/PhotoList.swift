@@ -12,8 +12,8 @@ struct FlickerJSON: Codable {
     private(set) var photos: Photos
     private(set) var stat: String
 
-    func photoObejct(at indexPath: IndexPath) -> Photo? {
-        return photos.photo[indexPath.section]
+    func photoObejct(at index: Int) -> Photo? {
+        return photos.photo[index]
     }
 
 }

@@ -11,7 +11,10 @@ import UIKit
 class WeatherDetailViewController: UIViewController {
 
     @IBOutlet weak var forecastTableView: UITableView!
+    @IBOutlet weak var backgroundImageView: UIImageView!
+
     var weatherDetailViewModel: WeatherDetailHeaderViewModel?
+    var flickerJSON: FlickerJSON?
     var networkManager: NetworkManager?
     var weeklyForecast: WeeklyForecast? {
         get {
@@ -76,6 +79,20 @@ extension WeatherDetailViewController {
         forecastTableView.register(type: SunInfoCell.self)
         forecastTableView.register(type: WeatherDetailCell.self)
         loadWeeklyForecast()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        networkManager?.request(flickerJSON?.photoObejct(at: pageNumber)) { [weak self] result in
+            switch result {
+            case let .success(photo):
+                DispatchQueue.main.async { [weak self] in
+                    self?.backgroundImageView.image = photo
+                }
+            case let .failure(error): print(error)
+            }
+        }
+
     }
 
 }

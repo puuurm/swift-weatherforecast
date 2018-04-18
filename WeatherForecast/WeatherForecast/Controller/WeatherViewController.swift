@@ -145,7 +145,7 @@ extension WeatherViewController: UITableViewDataSource {
         let cell: WeatherTableViewCell? = tableView.dequeueReusableCell(for: indexPath)
         let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
         cell?.setContents(viewModel: cellViewModel)
-        networkManager?.request(flickerJSON?.photoObejct(at: indexPath)) { result in
+        networkManager?.request(flickerJSON?.photoObejct(at: indexPath.section)) { [weak self] result in
             switch result {
             case let .success(photo):
                 DispatchQueue.main.async {
@@ -214,6 +214,7 @@ extension WeatherViewController: UITableViewDelegate {
         let weatherDetailVC: WeatherDetailContainerViewController? = storyboard?.viewController()
         guard let vc = weatherDetailVC else { return }
         vc.currentIndex = indexPath.section
+        vc.flickerJSON = flickerJSON
         pushViewController(tableView, viewController: vc)
     }
 
