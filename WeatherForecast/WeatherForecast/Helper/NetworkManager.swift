@@ -31,7 +31,7 @@ final class NetworkManager {
         type: T.Type,
         completion: @escaping ((ResponseResult<T>) -> Void)) {
 
-        guard let url = WeatherAPI.url(baseURL: baseURL, parameters: params) else { return }
+        guard let url = API.url(baseURL: baseURL, parameters: params) else { return }
         NetworkSpinner.on()
         session.dataTask(with: url) { [weak self] (data, response, _) in
             guard let httpResponse = response as? HTTPURLResponse, let `self` = self else { return }
@@ -51,7 +51,7 @@ final class NetworkManager {
             completion(.success(image))
             return
         }
-        guard let url = WeatherAPI.iconURL(baseURL: baseURL, key: weatherDetail.icon) else { return }
+        guard let url = API.iconURL(baseURL: baseURL, key: weatherDetail.icon) else { return }
         NetworkSpinner.on()
         session.dataTask(with: url) { (data, response, error) in
             guard let httpResponse = response as? HTTPURLResponse else { return }
@@ -66,6 +66,25 @@ final class NetworkManager {
         }.resume()
     }
 
+    func request(
+        _ photo: Photo,
+        completion: @escaping ImageHandler) {
+        guard let url = API.imageURL(photo: photo) else { return }
+        NetworkSpinner.on()
+        session.dataTask(with: url) { (data, response, error) in
+            guard let httpResponse = response as? HTTPURLResponse else { return }
+            let status = httpResponse.statusCode
+            if status == Http.Success,
+                let data = data, let image = UIImage(data: data) {
+                completion(.success(image))
+            } else {
+                completion(.failure(FailureResponse(statusCode: status).error))
+            }
+            NetworkSpinner.off()
+            }.resume()
+    }
+
+
     private func processRequest<T: Decodable>(
         _ type: T.Type,
         response: HTTPURLResponse,
@@ -75,7 +94,7 @@ final class NetworkManager {
         let status = response.statusCode
         if status == Http.Success,
             let jsonData = data {
-            return WeatherAPI.objectFromJSONData(type, data: jsonData)
+            return API.objectFromJSONData(type, data: jsonData)
         } else {
             return .failure(FailureResponse(statusCode: status).error)
         }

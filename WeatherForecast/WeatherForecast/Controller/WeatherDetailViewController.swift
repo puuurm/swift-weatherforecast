@@ -31,7 +31,7 @@ class WeatherDetailViewController: UIViewController {
         let address = History.shared.address(at: pageNumber ?? 0)
         guard Checker.isNeedUpdate(before: weeklyForecast) else { return }
         networkManager?.request(
-            Request.coordinates(address: address),
+            QueryItem.coordinates(address: address),
             before: weeklyForecast,
             baseURL: .weekly,
             type: WeeklyForecast.self

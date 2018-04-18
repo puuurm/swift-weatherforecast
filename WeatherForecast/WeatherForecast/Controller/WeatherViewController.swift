@@ -23,7 +23,7 @@ class WeatherViewController: UIViewController, Presentable {
 
     private func requestCurrentWeather(_ address: Address) {
         networkManager?.request(
-            Request.cityName(address: address),
+            QueryItem.cityName(address: address),
             before: History.shared.userLocationForecast?.current,
             baseURL: .current,
             type: CurrentWeather.self
@@ -46,9 +46,7 @@ extension WeatherViewController {
         networkManager = NetworkManager(session: URLSession.shared)
         locationService = LocationService()
         locationService?.delegate = self
-
         initNotification()
-
         updateUserLocation()
     }
 

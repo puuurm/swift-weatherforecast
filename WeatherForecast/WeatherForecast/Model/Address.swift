@@ -45,14 +45,3 @@ struct Address: Codable {
 
 }
 
-struct Request {
-
-    static func cityName(address: Address) -> [String: String] {
-        return ["q": "\(address.subLocality),\(address.countryCode)", "units": "metric"]
-    }
-
-    static func coordinates(address: Address) -> [String: String] {
-        return ["lat": "\(address.coordinate.latitude)", "lon": "\(address.coordinate.longitude)", "units": "metric"]
-    }
-
-}

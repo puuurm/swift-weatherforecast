@@ -40,7 +40,7 @@ class CitySearchController: UIViewController, Presentable {
 
     private func requestWeather(_ address: Address, completion: @escaping () -> Void) {
         networkManager?.request(
-            Request.coordinates(address: address),
+            QueryItem.coordinates(address: address),
             before: nil,
             baseURL: .current,
             type: CurrentWeather.self
