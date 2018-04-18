@@ -17,6 +17,7 @@ class SunInfoCell: ContentsCell {
         super.awakeFromNib()
         configureLabel(fontColor: UIColor.white)
         makeBottomCornerRound()
+        contentView.subviews.forEach { $0.layer.shadowEffect() }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

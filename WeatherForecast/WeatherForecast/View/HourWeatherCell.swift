@@ -18,6 +18,7 @@ class HourWeatherCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         configureLabel(fontColor: UIColor.white)
+        contentView.subviews.forEach { $0.layer.shadowEffect() }
     }
 
     override func prepareForReuse() {
@@ -25,7 +26,8 @@ class HourWeatherCell: UICollectionViewCell {
     }
 
     private func configureLabel(fontColor: UIColor) {
-        contentView.subviews.forEach { ($0 as? UILabel)?.textColor = fontColor }
+        hourLabel.textColor = fontColor
+        temperatureLabel.textColor = fontColor
     }
 
 }
@@ -35,10 +37,11 @@ class HourWeatherCell: UICollectionViewCell {
 extension HourWeatherCell {
 
     func setContents(dataSource: LineChartDataSource, index: Int, content: Forecast?) {
+        guard let content = content else { return }
         lineChartView.dataSource = dataSource
         lineChartView.cellIndex = index
-        hourLabel.text = content?.date.convertString(format: "H시")
-        temperatureLabel.text = content?.mainWeather.temperature.convertCelsius
+        hourLabel.attributedText = NSMutableAttributedString(string: content.date.convertString(format: "H시"), attributes: StringAttribute.textWithBorder(fontSize: 13))
+        temperatureLabel.attributedText = NSMutableAttributedString(string: content.mainWeather.temperature.convertCelsius, attributes: StringAttribute.textWithBorder(fontSize: 17))
     }
 
     func setImage(_ image: UIImage?) {

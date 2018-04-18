@@ -51,3 +51,12 @@ extension UIStoryboard {
     }
 }
 
+extension CALayer {
+    func shadowEffect() {
+        shadowColor = UIColor.black.cgColor
+        shadowRadius = 3.0
+        shadowOpacity = 1
+        shadowOffset = CGSize(width: 4, height: 4)
+        masksToBounds = false
+    }
+}

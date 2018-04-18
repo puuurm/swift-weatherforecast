@@ -20,6 +20,7 @@ class WeatherTableViewCell: FlexibleCell {
         initAnimation()
         cityLabel.textColor = UIColor.white
         temperature.textColor = UIColor.white
+        contentView.subviews.forEach { $0.layer.shadowEffect() }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -41,7 +42,7 @@ class WeatherTableViewCell: FlexibleCell {
         }
     }
 
-    func initAnimation() {
+    private func initAnimation() {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = 0
         animation.toValue = 1

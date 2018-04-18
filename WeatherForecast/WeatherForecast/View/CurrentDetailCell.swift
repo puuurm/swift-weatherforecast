@@ -18,6 +18,7 @@ class CurrentDetailCell: UICollectionViewCell {
         super.awakeFromNib()
         backgroundColor = UIColor.clear
         configureLabel(fontColor: UIColor.white)
+        contentView.subviews.forEach { $0.layer.shadowEffect() }
     }
 
     override func prepareForReuse() {
@@ -27,12 +28,19 @@ class CurrentDetailCell: UICollectionViewCell {
     func setContents(viewModel: CurrentDetailCellViewModel) {
         guard let description = viewModel.description else { return }
         iconImageView.image = viewModel.image
-        titleLabel.text = viewModel.title
-        descriptionLabel.text = "\(description)"
+        titleLabel.attributedText = NSMutableAttributedString(
+            string: viewModel.title,
+            attributes: StringAttribute.textWithBorder(fontSize: 11)
+        )
+        descriptionLabel.attributedText = NSMutableAttributedString(
+            string: "\(description)",
+            attributes: StringAttribute.textWithBorder(fontSize: 17)
+        )
     }
 
-    private func configureLabel(fontColor: UIColor) {
-        contentView.subviews.forEach { ($0 as? UILabel)?.textColor = fontColor }
+    func configureLabel(fontColor: UIColor) {
+        titleLabel.textColor =  fontColor
+        descriptionLabel.textColor = fontColor
     }
 
 }

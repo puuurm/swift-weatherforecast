@@ -34,7 +34,7 @@
                             <constraint firstAttribute="width" secondItem="ENp-RX-gpv" secondAttribute="height" multiplier="1:1" id="R83-JW-fHH"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hN-hY-XS5">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hN-hY-XS5">
                         <rect key="frame" x="40" y="125" width="42" height="21"/>
                         <fontDescription key="fontDescription" name="Georgia" family="Georgia" pointSize="17"/>
                         <nil key="textColor"/>

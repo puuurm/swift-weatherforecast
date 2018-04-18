@@ -18,8 +18,11 @@ class WeatherDetailCell: ContentsCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = UIColor.clear
         configureLabel(fontColor: UIColor.white)
+        contentView.subviews.forEach { $0.layer.shadowEffect() }
+        minTemperatureLabel.layer.shadowEffect()
+        maxTemperatureLabel.layer.shadowEffect()
+        backgroundColor = UIColor.clear
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -34,11 +37,26 @@ extension WeatherDetailCell {
 
     func setContents(_ weatherDetailHeaderViewModel: WeatherDetailHeaderViewModel?) {
         guard let vm = weatherDetailHeaderViewModel else { return }
-        cityLabel.text = vm.city
-        weatherLabel.text = vm.weather
-        temperatureLabel.text = vm.temperature
-        minTemperatureLabel.text = vm.minTemperature
-        maxTemperatureLabel.text = vm.maxTemperature
+        cityLabel.attributedText = NSMutableAttributedString(
+            string: vm.city,
+            attributes: StringAttribute.textWithBorder(fontSize: 31)
+        )
+        weatherLabel.attributedText = NSMutableAttributedString(
+            string: vm.weather,
+            attributes: StringAttribute.textWithBorder(fontSize: 20)
+        )
+        temperatureLabel.attributedText = NSMutableAttributedString(
+            string: vm.temperature,
+            attributes: StringAttribute.textWithBorder(fontSize: 50)
+        )
+        minTemperatureLabel.attributedText = NSMutableAttributedString(
+            string: vm.minTemperature,
+            attributes: StringAttribute.textWithBorder(fontSize: 17)
+        )
+        maxTemperatureLabel.attributedText = NSMutableAttributedString(
+            string: vm.maxTemperature,
+            attributes: StringAttribute.textWithBorder(fontSize: 17)
+        )
     }
 
 }

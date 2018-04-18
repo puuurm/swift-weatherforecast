@@ -15,6 +15,7 @@ struct QueryItem {
             "method": "flickr.photos.search",
             "api_key": Flicker.apiKey,
             "tags": tags,
+            "tag_mode": "all",
             "text": "landscape",
             "page": "1",
             "per_page": "30",

@@ -46,7 +46,7 @@ class WeatherViewController: UIViewController, Presentable {
 
     private func requestFlickerImage() {
         networkManager?.request(
-            QueryItem.photoSearch(tags: "landscape"),
+            QueryItem.photoSearch(tags: "sky,building"),
             before: nil,
             baseURL: .photoList,
             type: FlickerJSON.self

@@ -16,12 +16,20 @@ class SectionHeaderCell: ContentsCell {
         super.awakeFromNib()
         makeTopCornerRound()
         configureLabel(fontColor: UIColor.white)
+        titleLabel.layer.shadowEffect()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+
+    func setContents(title: String) {
+        titleLabel.attributedText = NSMutableAttributedString(
+            string: title,
+            attributes: StringAttribute.textWithBorder(fontSize: 17)
+        )
     }
 
 }

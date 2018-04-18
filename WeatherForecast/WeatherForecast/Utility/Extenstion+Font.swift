@@ -24,3 +24,15 @@ extension UIColor {
         return UIColor(red: red/256, green: green/256, blue: blue/256, alpha: alpha)
     }
 }
+
+struct StringAttribute {
+
+    static func textWithBorder(fontSize: CGFloat) -> [NSAttributedStringKey: Any] {
+        return [
+            NSAttributedStringKey.strokeColor: UIColor.black,
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.strokeWidth: -1,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: fontSize, weight: .regular)
+            ] as [NSAttributedStringKey : Any]
+    }
+}
