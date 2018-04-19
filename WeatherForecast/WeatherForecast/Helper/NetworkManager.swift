@@ -24,12 +24,31 @@ final class NetworkManager {
         imageCache = ImageCache()
     }
 
+    private func processRequest<T: Decodable>(
+        _ type: T.Type,
+        response: HTTPURLResponse,
+        data: Data?
+        ) -> ResponseResult<T> {
+        let status = response.statusCode
+        if status == Http.Success,
+            let jsonData = data {
+            return API.objectFromJSONData(type, data: jsonData)
+        } else {
+            return .failure(FailureResponse(statusCode: status).error)
+        }
+    }
+}
+
+// MARK: - Internal Methods
+
+extension NetworkManager {
+
     func request<T>(
         _ params: [String: String],
         before object: Storable?,
         baseURL: BaseURL,
         type: T.Type,
-        completion: @escaping ((ResponseResult<T>) -> Void)) {
+        completion: @escaping ((ResponseResult<T>) -> Void) ) {
 
         guard let url = API.url(baseURL: baseURL, parameters: params) else { return }
         NetworkSpinner.on()
@@ -44,14 +63,15 @@ final class NetworkManager {
     }
 
     func request(
-        _ weatherDetail: WeatherDetail,
-        baseURL: BaseURL,
+        _ object: StorableImage?,
+        imageExtension: ImageExtension,
         completion: @escaping ImageHandler) {
-        if let image = imageCache.imageForKey(key: weatherDetail.iconKey) {
+        guard let object = object else { return }
+        if let image = imageCache.imageForKey(key: object.cacheKey) {
             completion(.success(image))
             return
         }
-        guard let url = API.iconURL(baseURL: baseURL, key: weatherDetail.icon) else { return }
+        guard let url = API.url(object: object, imageExtension: imageExtension) else { return }
         NetworkSpinner.on()
         session.dataTask(with: url) { (data, response, error) in
             guard let httpResponse = response as? HTTPURLResponse else { return }
@@ -64,46 +84,6 @@ final class NetworkManager {
             }
             NetworkSpinner.off()
         }.resume()
-    }
-
-    func request(
-        _ photo: Photo?,
-        completion: @escaping ImageHandler) {
-
-        guard let photo = photo,
-            let url = API.imageURL(photo: photo) else { return }
-        if let image = imageCache.imageForKey(key: photo.cacheKey) {
-            completion(.success(image))
-            return
-        }
-        NetworkSpinner.on()
-        session.dataTask(with: url) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse else { return }
-            let status = httpResponse.statusCode
-            if status == Http.Success,
-                let data = data, let image = UIImage(data: data) {
-                completion(.success(image))
-            } else {
-                completion(.failure(FailureResponse(statusCode: status).error))
-            }
-            NetworkSpinner.off()
-        }.resume()
-    }
-
-    private func processRequest<T: Decodable>(
-        _ type: T.Type,
-        response: HTTPURLResponse,
-        data: Data?
-        ) -> ResponseResult<T> {
-
-        let status = response.statusCode
-        if status == Http.Success,
-            let jsonData = data {
-            return API.objectFromJSONData(type, data: jsonData)
-        } else {
-            return .failure(FailureResponse(statusCode: status).error)
-        }
-
     }
 }
 

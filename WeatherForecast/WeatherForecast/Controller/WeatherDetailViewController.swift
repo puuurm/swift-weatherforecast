@@ -51,7 +51,7 @@ class WeatherDetailViewController: UIViewController {
         let forecast = weeklyForecast?.forecasts[row]
         cell?.setContents(dataSource: self, index: row, content: forecast)
         if let weatherDetail = forecast?.moreWeather.first {
-            networkManager?.request(weatherDetail, baseURL: .icon) { result in
+            networkManager?.request(weatherDetail, imageExtension: .png) { result in
                 switch result {
                 case let .success(icon):
                     DispatchQueue.main.async {
@@ -145,10 +145,8 @@ extension WeatherDetailViewController: UITableViewDataSource {
             return cell ?? defaultCell
         default:
             let cell: SunInfoCell? = tableView.dequeueReusableCell(for: indexPath)
-            let sunriseTimeInterval = History.shared.forecastStores[pageNumber].current.system.sunrise
-            let sunsetTimeInterval = History.shared.forecastStores[pageNumber].current.system.sunset
-            cell?.sunriseLabel.text = Date(timeIntervalSince1970: sunriseTimeInterval).convertString(format: "HH:mm a")
-            cell?.sunsetLabel.text = Date(timeIntervalSince1970: sunsetTimeInterval).convertString(format: "HH:mm a")
+            let system = History.shared.forecastStores[pageNumber].current.system
+            cell?.setContents(system: system)
             return cell ?? defaultCell
         }
     }

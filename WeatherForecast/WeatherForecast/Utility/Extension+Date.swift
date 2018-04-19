@@ -35,4 +35,5 @@ extension Float {
         let numberString = formatter.string(from: NSNumber(value: self)) ?? "0"
         return numberString.appending("º")
     }
+
 }

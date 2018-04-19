@@ -14,7 +14,7 @@ protocol LocationServiceDelegate: class {
 
 final class LocationService: NSObject, Presentable {
 
-    typealias AfterTask = ((CLPlacemark?) -> Void)
+    typealias Handler = ((CLPlacemark?) -> Void)
 
     private var locationManager: CLLocationManager?
     weak var delegate: LocationServiceDelegate?
@@ -24,10 +24,22 @@ final class LocationService: NSObject, Presentable {
         initLocationManager()
     }
 
+}
+
+// MARK: - Initializer
+
+extension LocationService {
+
     private func initLocationManager() {
         locationManager = CLLocationManager()
         locationManager?.requestWhenInUseAuthorization()
     }
+
+}
+
+// MARK: - Internal Methods
+
+extension LocationService {
 
     func startReceivingLocationChanges() {
         let authorizationStatus = CLLocationManager.authorizationStatus()
@@ -40,7 +52,7 @@ final class LocationService: NSObject, Presentable {
         locationManager?.startUpdatingLocation()
     }
 
-    private func convertToCityName(location: CLLocation, completionHandler: @escaping AfterTask) {
+    func convertToCityName(location: CLLocation, completionHandler: @escaping Handler) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
             if let error = error as? CLError {
@@ -57,7 +69,7 @@ extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = manager.location {
-            convertToCityName(location: location) { [weak self] (placeMark) in
+            convertToCityName(location: location) { [weak self] placeMark in
                 self?.delegate?.updateLocation(placeMark)
             }
             manager.stopUpdatingLocation()

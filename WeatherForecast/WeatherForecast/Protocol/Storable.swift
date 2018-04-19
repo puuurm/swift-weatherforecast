@@ -12,3 +12,8 @@ protocol Storable {
     var isOutOfDate: Bool { get }
     var cacheKeys: [String] { get }
 }
+
+protocol StorableImage {
+    var cacheKey: String { get }
+    var url: String { get }
+}

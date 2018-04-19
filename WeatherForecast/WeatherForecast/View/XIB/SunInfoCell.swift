@@ -26,4 +26,11 @@ class SunInfoCell: ContentsCell {
         // Configure the view for the selected state
     }
 
+    func setContents(system: System) {
+        let sunriseTimeInterval = system.sunrise
+        let sunsetTimeInterval = system.sunset
+        sunriseLabel.text = Date(timeIntervalSince1970: sunriseTimeInterval).convertString(format: "HH:mm a")
+        sunsetLabel.text = Date(timeIntervalSince1970: sunsetTimeInterval).convertString(format: "HH:mm a")
+    }
 }
+

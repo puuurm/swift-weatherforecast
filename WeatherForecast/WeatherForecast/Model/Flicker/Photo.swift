@@ -1,33 +1,15 @@
 //
-//  PhotoList.swift
+//  Photo.swift
 //  WeatherForecast
 //
-//  Created by yangpc on 2018. 4. 18..
+//  Created by yangpc on 2018. 4. 19..
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
-import UIKit
-
-struct FlickerJSON: Codable {
-    private(set) var photos: Photos
-    private(set) var stat: String
-
-    func photoObejct(at index: Int) -> Photo? {
-        return photos.photo[index]
-    }
-
-}
-
-struct Photos: Codable {
-    private(set) var page: Int
-    private(set) var pages: Int
-    private(set) var perpage: Int
-    private(set) var total: String
-    private(set) var photo: [Photo]
-}
+import Foundation
 
 struct Photo {
-    private(set) var cacheKey: String = UUID().uuidString
+    private(set) var photoKey: String = UUID().uuidString
     private(set) var farm: Int
     private(set) var id: String
     private(set) var server: String
@@ -36,7 +18,6 @@ struct Photo {
 }
 
 extension Photo: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case farm
         case id
@@ -52,7 +33,7 @@ extension Photo: Codable {
         server = try container.decode(String.self, forKey: .server)
         secret = try container.decode(String.self, forKey: .secret)
         title = try container.decode(String.self, forKey: .title)
-        cacheKey = UUID().uuidString
+        photoKey = UUID().uuidString
     }
 
     func encode(to encoder: Encoder) throws {
@@ -65,3 +46,12 @@ extension Photo: Codable {
     }
 }
 
+extension Photo: StorableImage {
+    var url: String {
+        return "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)"
+    }
+
+    var cacheKey: String {
+        return photoKey
+    }
+}

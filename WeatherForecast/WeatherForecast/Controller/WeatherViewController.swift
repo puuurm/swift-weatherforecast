@@ -44,7 +44,7 @@ class WeatherViewController: UIViewController, Presentable {
         }
     }
 
-    private func requestFlickerImage() {
+    private func requestFlickerJSON() {
         networkManager?.request(
             QueryItem.photoSearch(tags: "sky,building"),
             before: nil,
@@ -55,6 +55,36 @@ class WeatherViewController: UIViewController, Presentable {
             case let .success(flickerJSON):
                 self?.flickerJSON = flickerJSON
             case let .failure(error): print(error)
+            }
+        }
+    }
+
+    private func requestFlickerImage(indexPath: IndexPath, cell: WeatherTableViewCell?) {
+        networkManager?.request(
+            flickerJSON?.photo(at: indexPath.section),
+            imageExtension: .jpg
+        ) { result in
+            switch result {
+            case let .success(photo):
+                DispatchQueue.main.async {
+                    cell?.setBackgroundImage(photo)
+                }
+            case let .failure(error): print(error)
+            }
+        }
+    }
+
+    private func requestIcon(viewModel: WeatherTableCellViewModel, cell: WeatherTableViewCell?) {
+        networkManager?.request(
+            viewModel.weatherDetail,
+            imageExtension: .png
+        ) { result in
+            switch result {
+            case let .success(icon):
+                DispatchQueue.main.async {
+                    cell?.weatherIconImageView.image = icon
+                }
+            case let .failure(error): print(error.localizedDescription)
             }
         }
     }
@@ -70,7 +100,7 @@ extension WeatherViewController {
         locationService = LocationService()
         locationService?.delegate = self
         initNotification()
-        requestFlickerImage()
+        requestFlickerJSON()
         updateUserLocation()
     }
 
@@ -143,28 +173,11 @@ extension WeatherViewController: UITableViewDataSource {
         ) -> UITableViewCell {
 
         let cell: WeatherTableViewCell? = tableView.dequeueReusableCell(for: indexPath)
-        let cellViewModel = History.shared.currentWeatherCell(at: indexPath)
-        cell?.setContents(viewModel: cellViewModel)
-        networkManager?.request(flickerJSON?.photoObejct(at: indexPath.section)) { result in
-            switch result {
-            case let .success(photo):
-                DispatchQueue.main.async {
-                    cell?.setBackgroundImage(photo)
-                }
-            case let .failure(error): print(error)
-            }
-        }
-        networkManager?.request(cellViewModel.weatherDetail, baseURL: .icon) { result in
-            switch result {
-            case let .success(icon):
-                DispatchQueue.main.async {
-                    cell?.weatherIconImageView.image = icon
-                }
-            case let .failure(error): print(error.localizedDescription)
-            }
-        }
+        let viewModel = History.shared.currentWeatherCell(at: indexPath)
+        cell?.setContents(viewModel: viewModel)
+        requestFlickerImage(indexPath: indexPath, cell: cell)
+        requestIcon(viewModel: viewModel, cell: cell)
         return cell ?? UITableViewCell()
-
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -214,7 +227,10 @@ extension WeatherViewController: UITableViewDelegate {
         let weatherDetailVC: WeatherDetailContainerViewController? = storyboard?.viewController()
         guard let vc = weatherDetailVC else { return }
         vc.currentIndex = indexPath.section
-        networkManager?.request(flickerJSON?.photoObejct(at: indexPath.section)) { result in
+        networkManager?.request(
+            flickerJSON?.photo(at: indexPath.section),
+            imageExtension: .jpg
+        ) { result in
             switch result {
             case let .success(photo): vc.backgroundImage = photo
             case let .failure(error): print(error)
@@ -224,7 +240,6 @@ extension WeatherViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-
         guard let selectedCell = tableView.cellForRow(at: indexPath) as? WeatherTableViewCell else {
             return indexPath
         }
@@ -233,7 +248,6 @@ extension WeatherViewController: UITableViewDelegate {
     }
 
     func pushViewController(_ tableView: UITableView, viewController: UIViewController) {
-
         guard let selectedCell = self.selectedCell else { return }
         selectedCell.openCell(tableView, duration: duration)
         moveCells(tableView, selectedCell: selectedCell, duration: duration)
