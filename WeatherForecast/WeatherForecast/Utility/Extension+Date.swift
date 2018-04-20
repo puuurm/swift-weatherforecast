@@ -24,16 +24,3 @@ extension Date {
         return formatter.string(from: self)
     }
 }
-
-extension Float {
-
-    var convertCelsius: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        formatter.roundingMode = .halfEven
-        let numberString = formatter.string(from: NSNumber(value: self)) ?? "0"
-        return numberString.appending("º")
-    }
-
-}
