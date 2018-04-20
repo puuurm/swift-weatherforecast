@@ -9,13 +9,16 @@
 import CoreLocation
 
 struct City {
+
     private(set) var identifier: Int
     private(set) var name: String
     private(set) var coordinate: Coordinate
     private(set) var country: String
+
 }
 
 extension City: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case name

@@ -9,14 +9,17 @@
 import Foundation
 
 struct WeeklyForecast {
+
     private(set) var code: String
     private(set) var message: Float
     private(set) var cnt: Int
     private(set) var forecasts: [Forecast]
     private(set) var city: City
+
 }
 
 extension WeeklyForecast: Storable {
+
     var isOutOfDate: Bool {
         return forecasts.first?.date.isMoreThanSinceNow(hour: 3) ?? true
     }
@@ -24,6 +27,7 @@ extension WeeklyForecast: Storable {
     var cacheKeys: [String] {
         return forecasts.flatMap { $0.moreWeather.first?.iconKey }
     }
+
 }
 
 extension WeeklyForecast: Codable {
@@ -53,4 +57,5 @@ extension WeeklyForecast: Codable {
         try container.encode(forecasts, forKey: .forecasts)
         try container.encode(city, forKey: .city)
     }
+
 }

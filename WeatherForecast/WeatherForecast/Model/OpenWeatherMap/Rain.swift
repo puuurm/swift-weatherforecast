@@ -9,10 +9,13 @@
 import Foundation
 
 struct Rain {
+
     private(set) var volume3Hours: Float // Rain volume for the last 3 hours
+
 }
 
 extension Rain: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case volume3Hours = "3h"
     }
@@ -26,4 +29,5 @@ extension Rain: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(volume3Hours, forKey: .volume3Hours)
     }
+
 }

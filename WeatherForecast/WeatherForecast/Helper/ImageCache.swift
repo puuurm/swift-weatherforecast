@@ -47,4 +47,5 @@ class ImageCache {
             try? FileManager.default.removeItem(at: imageURL)
         }
     }
+
 }

@@ -20,6 +20,7 @@ struct System {
 }
 
 extension System: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case type
         case identifier = "id"
@@ -54,4 +55,5 @@ extension System: Codable {
         try container.encode(sunrise, forKey: .sunrise)
         try container.encode(sunset, forKey: .sunset)
     }
+
 }

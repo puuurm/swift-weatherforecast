@@ -141,4 +141,5 @@ extension History: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(forecastStores, forKey: .forecastStores)
     }
+
 }

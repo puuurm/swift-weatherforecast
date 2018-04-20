@@ -9,10 +9,13 @@
 import Foundation
 
 struct Snow {
+
     private(set) var volume3Hours: Float // Snow volume for the last 3 hours
+
 }
 
 extension Snow: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case volume3Hours = "3h"
     }

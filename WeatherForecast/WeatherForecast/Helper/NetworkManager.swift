@@ -100,6 +100,7 @@ protocol URLSessionDataTaskProtocol {
 }
 
 extension URLSession: URLSessionProtocol {
+
     func dataTask(
         with url: URL,
         completionHandler: @escaping URLSessionProtocol.DataTaskResult
@@ -107,7 +108,9 @@ extension URLSession: URLSessionProtocol {
         return (dataTask(with: url, completionHandler: completionHandler)
             as URLSessionDataTask) as URLSessionDataTaskProtocol
     }
+
 }
+
 extension URLSessionDataTask: URLSessionDataTaskProtocol { }
 
 enum ImageResult {

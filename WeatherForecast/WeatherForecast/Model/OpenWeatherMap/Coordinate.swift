@@ -32,4 +32,5 @@ extension Coordinate: Codable {
         try container.encode(longitude, forKey: .longitude)
         try container.encode(latitude, forKey: .latitude)
     }
+
 }

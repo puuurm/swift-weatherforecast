@@ -9,6 +9,7 @@
 import Foundation
 
 struct Photo {
+
     private(set) var photoKey: String = UUID().uuidString
     private(set) var farm: Int
     private(set) var id: String
@@ -18,6 +19,7 @@ struct Photo {
 }
 
 extension Photo: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case farm
         case id
@@ -47,6 +49,7 @@ extension Photo: Codable {
 }
 
 extension Photo: StorableImage {
+
     var url: String {
         return "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)"
     }

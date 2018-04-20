@@ -9,9 +9,11 @@
 import Foundation
 
 struct Photos: Codable {
+
     private(set) var page: Int
     private(set) var pages: Int
     private(set) var perpage: Int
     private(set) var total: String
     private(set) var photo: [Photo]
+
 }

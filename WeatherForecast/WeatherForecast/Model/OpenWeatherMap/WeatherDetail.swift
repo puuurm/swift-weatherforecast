@@ -9,14 +9,17 @@
 import Foundation
 
 struct WeatherDetail {
+
     private(set) var identifier: Int?
     private(set) var main: String?
     private(set) var description: String?
     private(set) var icon: String
     private(set) var iconKey: String
+
 }
 
 extension WeatherDetail: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case main
@@ -47,9 +50,11 @@ extension WeatherDetail: Codable {
         try container.encode(icon, forKey: .icon)
         try container.encode(iconKey, forKey: .iconKey)
     }
+
 }
 
 extension WeatherDetail: StorableImage {
+
     var url: String {
         return "https://openweathermap.org/img/w/\(icon)"
     }
@@ -57,4 +62,5 @@ extension WeatherDetail: StorableImage {
     var cacheKey: String {
         return iconKey
     }
+
 }

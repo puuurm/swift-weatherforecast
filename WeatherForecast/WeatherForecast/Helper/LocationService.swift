@@ -84,4 +84,5 @@ extension LocationService: CLLocationManagerDelegate {
             presentErrorMessage(message: error.localizedDescription)
         }
     }
+
 }

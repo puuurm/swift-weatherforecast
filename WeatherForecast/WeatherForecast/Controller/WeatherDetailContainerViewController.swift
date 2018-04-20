@@ -8,18 +8,23 @@
 
 import UIKit
 
+enum Position {
+    case left
+    case right
+}
+
 class WeatherDetailContainerViewController: UIViewController {
 
     var currentIndex: Int!
     var backgroundImage: UIImage?
+    private var backButton: UIButton?
+    private var backgroundSettingButton: UIButton?
 
     private lazy var pageViewController: UIPageViewController = {
-        return makepageViewController()
+        return createPageViewController()
     }()
 
-    var backButton: UIButton?
-
-    private func makepageViewController() -> UIPageViewController {
+    private func createPageViewController() -> UIPageViewController {
         let pageVC: UIPageViewController? = storyboard?.viewController()
         if let startVC = viewController(at: currentIndex) {
             pageVC?.dataSource = self
@@ -32,6 +37,25 @@ class WeatherDetailContainerViewController: UIViewController {
         }
         return pageVC ?? UIPageViewController()
     }
+
+    private func createButton(image: UIImage, action: Action) -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 44))
+        button.setImage(image, for: .normal)
+        button.addTarget(action.target, action: action.selector, for: .touchUpInside)
+        return button
+    }
+
+    @discardableResult private func createBarButtonItem(button: UIButton?, position: Position) -> UIBarButtonItem? {
+        guard let button = button else { return nil }
+        let barButtonItem = UIBarButtonItem(customView: button)
+        if position == .left {
+            navigationItem.leftBarButtonItem = barButtonItem
+        } else {
+            navigationItem.rightBarButtonItem = barButtonItem
+        }
+        return barButtonItem
+    }
+
 }
 
 // MARK: - View Lifecycle
@@ -42,11 +66,27 @@ extension WeatherDetailContainerViewController {
         super.viewDidLoad()
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
-        backButton = createBackButton()
-        createNavigationBarBackItem(button: backButton)
-
+        initBarButtonItem()
     }
 
+}
+
+// MARK: - Initializer
+
+extension WeatherDetailContainerViewController {
+
+    private func initBarButtonItem() {
+        backButton = createButton(
+            image: UIImage.Icons.Button.Back,
+            action: Action(target: self, selector: #selector(self.backButtonDidTap))
+        )
+        backgroundSettingButton = createButton(
+            image: UIImage.Icons.Button.BackgroundSetting,
+            action: Action(target: self, selector: #selector(self.backgroundSettingButtonDidTap))
+        )
+        createBarButtonItem(button: backButton, position: .left)
+        createBarButtonItem(button: backgroundSettingButton, position: .right)
+    }
 }
 
 // MARK: - UIPageViewControllerDataSource
@@ -89,27 +129,7 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
         }
         return self.viewController(at: index)
     }
-}
 
-// MARK: - Reference https://github.com/Ramotion/preview-transition
-
-extension WeatherDetailContainerViewController {
-
-    private func createBackButton() -> UIButton {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 44))
-        button.setImage(UIImage.Icons.Button.Back, for: .normal)
-        button.addTarget(self, action: #selector(self.backButtonDidTap), for: .touchUpInside)
-        return button
-    }
-
-    @discardableResult private func createNavigationBarBackItem(button: UIButton?) -> UIBarButtonItem? {
-        guard let button = button else {
-            return nil
-        }
-        let buttonItem = UIBarButtonItem(customView: button)
-        navigationItem.leftBarButtonItem = buttonItem
-        return buttonItem
-    }
 }
 
 // MARK: - Action
@@ -118,5 +138,9 @@ extension WeatherDetailContainerViewController {
 
     @objc func backButtonDidTap() {
         navigationController?.popViewController(animated: false)
+    }
+
+    @objc func backgroundSettingButtonDidTap() {
+
     }
 }

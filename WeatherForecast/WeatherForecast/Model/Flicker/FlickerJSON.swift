@@ -16,4 +16,5 @@ struct FlickerJSON: Codable {
     func photo(at index: Int) -> Photo? {
         return photos.photo.count > index ? photos.photo[index] : nil
     }
+
 }

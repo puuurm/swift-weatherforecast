@@ -10,6 +10,7 @@ import Foundation
 import CoreLocation
 
 struct ForecastStore {
+
     var address: Address
     var current: CurrentWeather
     var weekly: WeeklyForecast?
@@ -18,6 +19,7 @@ struct ForecastStore {
         self.address = address
         self.current = current
     }
+
 }
 
 extension ForecastStore: Codable {
@@ -41,4 +43,5 @@ extension ForecastStore: Codable {
         try container.encode(current, forKey: .current)
         try? container.encode(weekly, forKey: .weekly)
     }
+
 }

@@ -9,6 +9,7 @@
 import Foundation
 
 enum Section: Int {
+
     case main, today, detail, sunInfo
     var date: String {
         switch self {
@@ -19,4 +20,5 @@ enum Section: Int {
         }
     }
     static var numberOfSections: Int { return 4 }
+
 }

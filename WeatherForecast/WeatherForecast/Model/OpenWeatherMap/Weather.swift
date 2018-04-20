@@ -53,4 +53,5 @@ extension Weather: Codable {
         try? container.encode(groundLevel, forKey: .groundLevel)
         try? container.encode(humidity, forKey: .humidity)
     }
+
 }

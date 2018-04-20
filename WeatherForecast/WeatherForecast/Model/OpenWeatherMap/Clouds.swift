@@ -9,10 +9,13 @@
 import Foundation
 
 struct Clouds {
+
     private(set) var all: Int // Cloudiness, %
+
 }
 
 extension Clouds: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case all
     }
@@ -26,4 +29,5 @@ extension Clouds: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(all, forKey: .all)
     }
+
 }

@@ -9,6 +9,7 @@
 import Foundation
 
 struct FailureResponse {
+
     let statusCode: Int
 
     var error: HttpError {
@@ -35,4 +36,5 @@ struct FailureResponse {
             }
         }
     }
+
 }

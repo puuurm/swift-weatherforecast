@@ -21,4 +21,5 @@ struct NetworkSpinner {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
     }
+
 }

@@ -9,6 +9,7 @@
 import Foundation
 
 class Clock {
+
     private var timer: Timer
     private let calendar = Calendar.current
 
@@ -37,4 +38,5 @@ class Clock {
             NotificationCenter.default.post(name: Notification.Name.DidUpdateTime, object: nil)
         }
     }
+
 }

@@ -9,11 +9,14 @@
 import Foundation
 
 struct Wind {
+
     private(set) var speed: Float
     private(set) var degrees: Float
+
 }
 
 extension Wind: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case speed
         case degrees = "deg"
@@ -30,4 +33,5 @@ extension Wind: Codable {
         try container.encode(speed, forKey: .speed)
         try container.encode(degrees, forKey: .degrees)
     }
+
 }
