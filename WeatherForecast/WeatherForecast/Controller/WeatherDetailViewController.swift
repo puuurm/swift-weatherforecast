@@ -77,11 +77,6 @@ extension WeatherDetailViewController {
         initTableViewAttributes()
         registerXib()
         loadWeeklyForecast()
-
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
 
 }

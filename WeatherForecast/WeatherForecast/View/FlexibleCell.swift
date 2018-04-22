@@ -60,7 +60,7 @@ extension FlexibleCell {
             withDuration: 0.5,
             animations: { [weak self] in
                 self?.layoutIfNeeded() },
-            completion: nil )
+            completion: nil)
         superview?.sendSubview(toBack: self)
     }
 

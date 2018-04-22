@@ -29,65 +29,6 @@ class WeatherViewController: UIViewController, Presentable {
         return .lightContent
     }
 
-    private func requestCurrentWeather(_ address: Address) {
-        networkManager?.request(
-            QueryItem.cityName(address: address),
-            before: History.shared.userLocationForecast?.current,
-            baseURL: .current,
-            type: CurrentWeather.self
-        ) { result -> Void in
-                switch result {
-                case let .success(weather):
-                    History.shared.userLocationForecast = ForecastStore(address: address, current: weather)
-                case let .failure(error): print(error)
-                }
-        }
-    }
-
-    private func requestFlickerJSON() {
-        networkManager?.request(
-            QueryItem.photoSearch(tags: "sky,building"),
-            before: nil,
-            baseURL: .photoList,
-            type: FlickerJSON.self
-        ) { [weak self] result -> Void in
-            switch result {
-            case let .success(flickerJSON):
-                self?.flickerJSON = flickerJSON
-            case let .failure(error): print(error)
-            }
-        }
-    }
-
-    private func requestFlickerImage(indexPath: IndexPath, cell: WeatherTableViewCell?) {
-        networkManager?.request(
-            flickerJSON?.photo(at: indexPath.section),
-            imageExtension: .jpg
-        ) { result in
-            switch result {
-            case let .success(photo):
-                DispatchQueue.main.async {
-                    cell?.setBackgroundImage(photo)
-                }
-            case let .failure(error): print(error)
-            }
-        }
-    }
-
-    private func requestIcon(viewModel: WeatherTableCellViewModel, cell: WeatherTableViewCell?) {
-        networkManager?.request(
-            viewModel.weatherDetail,
-            imageExtension: .png
-        ) { result in
-            switch result {
-            case let .success(icon):
-                DispatchQueue.main.async {
-                    cell?.weatherIconImageView.image = icon
-                }
-            case let .failure(error): print(error.localizedDescription)
-            }
-        }
-    }
 }
 
 // MARK: - View Lifecycle
@@ -282,6 +223,72 @@ extension WeatherViewController: AvailableFlexibleCells {
     var duration: Double {
         return 0.8
     }
+}
+
+// MARK: - Networking
+
+extension WeatherViewController {
+
+    private func requestCurrentWeather(_ address: Address) {
+        networkManager?.request(
+            QueryItem.cityName(address: address),
+            before: History.shared.userLocationForecast?.current,
+            baseURL: .current,
+            type: CurrentWeather.self
+        ) { result -> Void in
+            switch result {
+            case let .success(weather):
+                History.shared.userLocationForecast = ForecastStore(address: address, current: weather)
+            case let .failure(error): print(error)
+            }
+        }
+    }
+
+    private func requestFlickerJSON() {
+        networkManager?.request(
+            QueryItem.photoSearch(tags: "sky,building"),
+            before: nil,
+            baseURL: .photoList,
+            type: FlickerJSON.self
+        ) { [weak self] result -> Void in
+            switch result {
+            case let .success(flickerJSON):
+                self?.flickerJSON = flickerJSON
+            case let .failure(error): print(error)
+            }
+        }
+    }
+
+    private func requestFlickerImage(indexPath: IndexPath, cell: WeatherTableViewCell?) {
+        networkManager?.request(
+            flickerJSON?.photo(at: indexPath.section),
+            imageExtension: .jpg
+        ) { result in
+            switch result {
+            case let .success(photo):
+                DispatchQueue.main.async {
+                    cell?.setBackgroundImage(photo)
+                }
+            case let .failure(error): print(error)
+            }
+        }
+    }
+
+    private func requestIcon(viewModel: WeatherTableCellViewModel, cell: WeatherTableViewCell?) {
+        networkManager?.request(
+            viewModel.weatherDetail,
+            imageExtension: .png
+        ) { result in
+            switch result {
+            case let .success(icon):
+                DispatchQueue.main.async {
+                    cell?.weatherIconImageView.image = icon
+                }
+            case let .failure(error): print(error.localizedDescription)
+            }
+        }
+    }
+
 }
 
 // MARK: - Action

@@ -38,24 +38,6 @@ class WeatherDetailContainerViewController: UIViewController {
         return pageVC ?? UIPageViewController()
     }
 
-    private func createButton(image: UIImage, action: Action) -> UIButton {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 44))
-        button.setImage(image, for: .normal)
-        button.addTarget(action.target, action: action.selector, for: .touchUpInside)
-        return button
-    }
-
-    @discardableResult private func createBarButtonItem(button: UIButton?, position: Position) -> UIBarButtonItem? {
-        guard let button = button else { return nil }
-        let barButtonItem = UIBarButtonItem(customView: button)
-        if position == .left {
-            navigationItem.leftBarButtonItem = barButtonItem
-        } else {
-            navigationItem.rightBarButtonItem = barButtonItem
-        }
-        return barButtonItem
-    }
-
 }
 
 // MARK: - View Lifecycle
@@ -84,9 +66,38 @@ extension WeatherDetailContainerViewController {
             image: UIImage.Icons.Button.BackgroundSetting,
             action: Action(target: self, selector: #selector(self.backgroundSettingButtonDidTap))
         )
-        createBarButtonItem(button: backButton, position: .left)
-        createBarButtonItem(button: backgroundSettingButton, position: .right)
+        let leftBarButtonItem = createBarButtonItem(button: backButton, position: .left)
+        let rightBarButtonItem = createBarButtonItem(button: backgroundSettingButton, position: .right)
+        adddAnimation(barbuttomItem: leftBarButtonItem!)
+        adddAnimation(barbuttomItem: rightBarButtonItem!)
     }
+
+    private func adddAnimation(barbuttomItem: UIBarButtonItem) {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = 0.7
+        barbuttomItem.customView?.layer.add(animation, forKey: "animation")
+    }
+
+    private func createButton(image: UIImage, action: Action) -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 44))
+        button.setImage(image, for: .normal)
+        button.addTarget(action.target, action: action.selector, for: .touchUpInside)
+        return button
+    }
+
+    @discardableResult private func createBarButtonItem(button: UIButton?, position: Position) -> UIBarButtonItem? {
+        guard let button = button else { return nil }
+        let barButtonItem = UIBarButtonItem(customView: button)
+        if position == .left {
+            navigationItem.leftBarButtonItem = barButtonItem
+        } else {
+            navigationItem.rightBarButtonItem = barButtonItem
+        }
+        return barButtonItem
+    }
+
 }
 
 // MARK: - UIPageViewControllerDataSource
