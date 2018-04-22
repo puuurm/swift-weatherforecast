@@ -21,3 +21,9 @@ extension Identifiable {
 extension UITableViewCell: Identifiable {}
 extension UICollectionViewCell: Identifiable {}
 extension UIViewController: Identifiable {}
+
+protocol AvailableDetailWeather {
+    var image: UIImage { get }
+    var title: String { get }
+    var contents: String { get }
+}

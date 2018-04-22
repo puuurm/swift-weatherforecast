@@ -68,11 +68,11 @@ extension WeatherDetailContainerViewController {
         )
         let leftBarButtonItem = createBarButtonItem(button: backButton, position: .left)
         let rightBarButtonItem = createBarButtonItem(button: backgroundSettingButton, position: .right)
-        adddAnimation(barbuttomItem: leftBarButtonItem!)
-        adddAnimation(barbuttomItem: rightBarButtonItem!)
+        addAnimation(barbuttomItem: leftBarButtonItem!)
+        addAnimation(barbuttomItem: rightBarButtonItem!)
     }
 
-    private func adddAnimation(barbuttomItem: UIBarButtonItem) {
+    private func addAnimation(barbuttomItem: UIBarButtonItem) {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = 0
         animation.toValue = 1

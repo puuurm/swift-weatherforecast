@@ -6,7 +6,7 @@
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Snow {
 
@@ -30,3 +30,20 @@ extension Snow: Codable {
         try container.encode(volume3Hours, forKey: .volume3Hours)
     }
 }
+
+extension Snow: AvailableDetailWeather {
+
+    var image: UIImage {
+        return UIImage.Icons.Weather.Snow
+    }
+
+    var title: String {
+        return "snow"
+    }
+
+    var contents: String {
+        return "\(volume3Hours)"
+    }
+
+}
+

@@ -105,7 +105,12 @@ final class History {
     func currentDetailCell(at index: Int, row: Int) -> CurrentDetailCellViewModel {
         let current = forecastStores[index].current
         let list = CurrentDetailList(current: current)
-        return list.viewModel(at: row)
+        return list.currentDetailCellViewModel(at: row)
+    }
+
+    func currentDetailCount(at index: Int) -> Int {
+        let current = forecastStores[index].current
+        return CurrentDetailList(current: current).count
     }
 
     func weatherDetailViewModel(at index: Int) -> WeatherDetailHeaderViewModel? {

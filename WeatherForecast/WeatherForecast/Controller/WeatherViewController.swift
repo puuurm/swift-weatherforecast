@@ -21,7 +21,6 @@ class WeatherViewController: UIViewController, Presentable {
             DispatchQueue.main.async { [weak self] in
                 self?.weatherTableView.reloadData()
             }
-
         }
     }
 

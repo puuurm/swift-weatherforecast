@@ -6,17 +6,21 @@
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
+import UIKit
 import Foundation
+
+typealias Humidity = Int
+typealias Pressure = Float
 
 struct Weather {
 
     private(set) var temperature: Float
     private(set) var minTemperature: Float
     private(set) var maxTemperature: Float
-    private(set) var pressure: Float?
+    private(set) var pressure: Pressure?
     private(set) var seaLevel: Float?
     private(set) var groundLevel: Float?
-    private(set) var humidity: Int?
+    private(set) var humidity: Humidity?
 
 }
 
@@ -37,10 +41,10 @@ extension Weather: Codable {
         temperature = try container.decode(Float.self, forKey: .temperature)
         minTemperature = try container.decode(Float.self, forKey: .minTemperature)
         maxTemperature = try container.decode(Float.self, forKey: .maxTemperature)
-        pressure = try? container.decode(Float.self, forKey: .pressure)
+        pressure = try? container.decode(Pressure.self, forKey: .pressure)
         seaLevel = try? container.decode(Float.self, forKey: .seaLevel)
         groundLevel = try? container.decode(Float.self, forKey: .groundLevel)
-        humidity = try? container.decode(Int.self, forKey: .humidity)
+        humidity = try? container.decode(Humidity.self, forKey: .humidity)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -52,6 +56,38 @@ extension Weather: Codable {
         try? container.encode(seaLevel, forKey: .seaLevel)
         try? container.encode(groundLevel, forKey: .groundLevel)
         try? container.encode(humidity, forKey: .humidity)
+    }
+
+}
+
+extension Humidity: AvailableDetailWeather {
+    var title: String {
+        return "humidity"
+    }
+
+    var contents: String {
+        return "\(self)%"
+    }
+
+    var image: UIImage {
+        return UIImage.Icons.Weather.Humidity
+    }
+
+}
+
+extension Pressure: AvailableDetailWeather {
+
+    var title: String {
+        return "pressure"
+    }
+
+    var contents: String {
+        let value = self.rounded()
+        return "\(Int(value))hPa"
+    }
+
+    var image: UIImage {
+        return UIImage.Icons.Weather.Pressure
     }
 
 }

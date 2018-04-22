@@ -6,7 +6,7 @@
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Wind {
 
@@ -33,5 +33,22 @@ extension Wind: Codable {
         try container.encode(speed, forKey: .speed)
         try container.encode(degrees, forKey: .degrees)
     }
+
+}
+
+extension Wind: AvailableDetailWeather {
+
+    var image: UIImage {
+        return UIImage.Icons.Weather.Wind
+    }
+
+    var title: String {
+        return "wind"
+    }
+
+    var contents: String {
+        return "\(speed)m/s \(degrees)"
+    }
+
 
 }

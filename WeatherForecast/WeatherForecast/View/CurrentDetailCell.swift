@@ -26,14 +26,13 @@ class CurrentDetailCell: UICollectionViewCell {
     }
 
     func setContents(viewModel: CurrentDetailCellViewModel) {
-        guard let description = viewModel.description else { return }
         iconImageView.image = viewModel.image
         titleLabel.attributedText = NSMutableAttributedString(
             string: viewModel.title,
             attributes: StringAttribute.textWithBorder(fontSize: 11)
         )
         descriptionLabel.attributedText = NSMutableAttributedString(
-            string: "\(description)",
+            string: viewModel.description,
             attributes: StringAttribute.textWithBorder(fontSize: 17)
         )
     }
@@ -47,34 +46,39 @@ class CurrentDetailCell: UICollectionViewCell {
 
 struct CurrentDetailList {
 
-    let current: CurrentWeather
-    let icon = UIImage.Icons.Weather.self
-
-    private var title: [String] {
-        return ["pressure", "humidity", "wind", "clouds", "rain", "snow"]
+    private let current: CurrentWeather
+    private var detailWeathers: [AvailableDetailWeather] = []
+    var count: Int {
+        return detailWeathers.count
     }
 
-    private var description: [Any?] {
-        return [ current.weather.pressure,
-                 current.weather.humidity,
-                 current.wind,
-                 current.clouds,
-                 current.rain,
-                 current.snow ]
+    init(current: CurrentWeather) {
+        self.current = current
+        createDetailWeathers()
     }
 
-    private var image: [UIImage] {
-        return [ icon.Pressure, icon.Humidity, icon.Wind, icon.Clouds, icon.Rain, icon.Snow ]
+    mutating func createDetailWeathers() {
+        let details: [AvailableDetailWeather?] = [ current.weather.pressure,
+                                                   current.weather.humidity,
+                                                   current.wind,
+                                                   current.clouds,
+                                                   current.rain,
+                                                   current.snow ]
+        detailWeathers = details.flatMap { $0 }
     }
 
-    func viewModel(at index: Int) -> CurrentDetailCellViewModel {
-        return CurrentDetailCellViewModel(image: image[index], title: title[index], description: description[index])
+    func currentDetailCellViewModel(at index: Int) -> CurrentDetailCellViewModel {
+        let current = detailWeathers[index]
+        return CurrentDetailCellViewModel(
+            image: current.image,
+            title: current.title,
+            description: current.contents
+        )
     }
-
 }
 
 struct CurrentDetailCellViewModel {
     var image: UIImage
     var title: String
-    var description: Any?
+    var description: String
 }

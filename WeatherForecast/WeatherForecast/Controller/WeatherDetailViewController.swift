@@ -206,7 +206,7 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         if collectionView.tag == 1 {
             return weeklyForecast?.forecasts.count ?? 0
         } else {
-            return 6
+            return History.shared.currentDetailCount(at: pageNumber)
         }
     }
 

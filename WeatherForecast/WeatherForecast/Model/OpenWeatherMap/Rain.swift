@@ -6,7 +6,7 @@
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Rain {
 
@@ -31,3 +31,21 @@ extension Rain: Codable {
     }
 
 }
+
+extension Rain: AvailableDetailWeather {
+
+    var image: UIImage {
+        return UIImage.Icons.Weather.Rain
+    }
+
+    var title: String {
+        return "rain"
+    }
+
+    var contents: String {
+        return "\(volume3Hours)"
+    }
+
+
+}
+

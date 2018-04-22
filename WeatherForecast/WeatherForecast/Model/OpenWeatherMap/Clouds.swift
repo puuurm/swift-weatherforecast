@@ -6,7 +6,7 @@
 //  Copyright © 2018년 yang hee jung. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Clouds {
 
@@ -31,3 +31,21 @@ extension Clouds: Codable {
     }
 
 }
+
+extension Clouds: AvailableDetailWeather {
+
+    var image: UIImage {
+        return UIImage.Icons.Weather.Clouds
+    }
+
+    var title: String {
+        return "clouds"
+    }
+
+    var contents: String {
+        return "\(all)%"
+    }
+
+
+}
+
