@@ -474,12 +474,39 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xe9-gF-R7H">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="poF-Vs-9Ka">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CWf-EA-HfJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="529-TF-hlB">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </view>
+                                            <vibrancyEffect>
+                                                <blurEffect style="light"/>
+                                            </vibrancyEffect>
+                                        </visualEffectView>
+                                    </subviews>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="internet" translatesAutoresizingMaskIntoConstraints="NO" id="kg2-Xm-JcL">
                                 <rect key="frame" x="280" y="105" width="35" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="kg2-Xm-JcL" secondAttribute="height" multiplier="11:10" id="YCd-uG-hwg"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flicker" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vTJ-5X-0c4">
+                                <rect key="frame" x="205" y="107" width="68" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAQ-rJ-lby">
                                 <rect key="frame" x="333" y="25" width="32" height="32"/>
                                 <state key="normal" image="close"/>
@@ -487,21 +514,19 @@
                                     <action selector="closeButtonDidTap:" destination="k58-gb-ep8" eventType="touchUpInside" id="FUr-PO-xex"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flicker" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vTJ-5X-0c4">
-                                <rect key="frame" x="205" y="107" width="68" height="29"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.50644263698630132" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="xe9-gF-R7H" firstAttribute="leading" secondItem="4zO-bY-bdY" secondAttribute="leading" id="CR3-xk-S2G"/>
                             <constraint firstItem="vTJ-5X-0c4" firstAttribute="centerY" secondItem="kg2-Xm-JcL" secondAttribute="centerY" id="GFE-Yd-nBs"/>
                             <constraint firstItem="tEL-07-CWY" firstAttribute="trailing" secondItem="qAQ-rJ-lby" secondAttribute="trailing" constant="10" id="Lgg-Qk-q5x"/>
                             <constraint firstItem="qAQ-rJ-lby" firstAttribute="top" secondItem="tEL-07-CWY" secondAttribute="top" constant="5" id="OlN-H1-Mw1"/>
                             <constraint firstItem="kg2-Xm-JcL" firstAttribute="top" secondItem="tEL-07-CWY" secondAttribute="top" constant="85" id="U4q-4o-3sP"/>
+                            <constraint firstAttribute="bottom" secondItem="xe9-gF-R7H" secondAttribute="bottom" id="XG9-fL-mTz"/>
+                            <constraint firstAttribute="trailing" secondItem="xe9-gF-R7H" secondAttribute="trailing" id="Yed-o5-dRS"/>
                             <constraint firstItem="tEL-07-CWY" firstAttribute="trailing" secondItem="kg2-Xm-JcL" secondAttribute="trailing" constant="60" id="cEq-hN-PVJ"/>
                             <constraint firstItem="kg2-Xm-JcL" firstAttribute="leading" secondItem="vTJ-5X-0c4" secondAttribute="trailing" constant="7" id="jYf-Pk-ttS"/>
+                            <constraint firstItem="xe9-gF-R7H" firstAttribute="top" secondItem="4zO-bY-bdY" secondAttribute="top" id="xmu-jv-IKe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tEL-07-CWY"/>
                     </view>
