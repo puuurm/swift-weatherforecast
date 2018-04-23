@@ -60,11 +60,11 @@ extension WeatherDetailContainerViewController {
     private func initBarButtonItem() {
         backButton = createButton(
             image: UIImage.Icons.Button.Back,
-            action: Action(target: self, selector: #selector(self.backButtonDidTap))
+            action: Action(target: self, selector: #selector(self.backButtonDidTap(_:)))
         )
         backgroundSettingButton = createButton(
             image: UIImage.Icons.Button.BackgroundSetting,
-            action: Action(target: self, selector: #selector(self.backgroundSettingButtonDidTap))
+            action: Action(target: self, selector: #selector(self.backgroundSettingButtonDidTap(_:)))
         )
         let leftBarButtonItem = createBarButtonItem(button: backButton, position: .left)
         let rightBarButtonItem = createBarButtonItem(button: backgroundSettingButton, position: .right)
@@ -147,11 +147,13 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
 
 extension WeatherDetailContainerViewController {
 
-    @objc func backButtonDidTap() {
+    @objc func backButtonDidTap(_ sender: UIButton) {
         navigationController?.popViewController(animated: false)
     }
 
-    @objc func backgroundSettingButtonDidTap() {
-
+    @objc func backgroundSettingButtonDidTap(_ sender: UIButton) {
+        guard let menuVC: MenuViewController = storyboard?.viewController() else { return }
+        menuVC.modalPresentationStyle = .overFullScreen
+        present(menuVC, animated: true, completion: nil)
     }
 }

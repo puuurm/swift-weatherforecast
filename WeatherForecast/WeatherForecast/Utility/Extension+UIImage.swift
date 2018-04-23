@@ -27,6 +27,7 @@ extension UIImage {
         enum Button {
             static let Back = UIImage(named: "back")!
             static let BackgroundSetting = UIImage(named: "backgroundSetting")!
+            static let Close = UIImage(named: "close")!
         }
 
         enum SunInfo {
