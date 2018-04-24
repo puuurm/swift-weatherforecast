@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if History.shared.count != 0 {
             NotificationCenter.default.post(name: Notification.Name.DidUpdateTime, object: self)
             NotificationCenter.default.post(name: Notification.Name.DidUpdateUserLocation, object: self)
-            //NotificationCenter.default.post(name: Notification.Name.DidUpdateCurrentWeather, object: self)
+            NotificationCenter.default.post(name: Notification.Name.DidUpdateAllCurrentWeather, object: self)
         }
     }
 

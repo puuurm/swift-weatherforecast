@@ -38,6 +38,10 @@ class WeatherViewController: UIViewController, Presentable {
         return .lightContent
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 }
 
 // MARK: - View Lifecycle
@@ -74,42 +78,53 @@ extension WeatherViewController {
 extension WeatherViewController {
 
     private func initNotification() {
+        NotificationCenter.default.addObserver(
+            forName: .DidUpdateTime,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateTime()
+        }
 
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.updateTime),
-            name: .DidUpdateTime,
-            object: nil
-        )
+            forName: .DidUpdateUserLocation,
+            object: nil,
+            queue: .current
+        ) { [weak self] _ in
+            self?.updateUserLocation()
+        }
 
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.updateUserLocation),
-            name: .DidUpdateUserLocation,
-            object: nil
-        )
+            forName: .DidInsertWeather,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.insertWeather(notification: notification)
+        }
 
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.insertWeather(notification:)),
-            name: .DidInsertWeather,
-            object: nil
-        )
+            forName: .DidUpdateCurrentWeather,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.updateCurrent(notification: notification)
+        }
 
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.updateCurrent(notification:)),
-            name: .DidUpdateCurrentWeather,
-            object: nil
-        )
+            forName: .DidDeleteWeather,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            self?.deleteWeather(notification: notification)
+        }
 
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.deleteWeather(notification:)),
-            name: .DidDeleteWeather,
-            object: nil
-        )
-
+            forName: .DidUpdateAllCurrentWeather,
+            object: nil,
+            queue: .current
+        ) { [weak self]_ in
+            self?.updateAllCurrentWeather()
+        }
     }
 
 }
@@ -310,52 +325,48 @@ extension WeatherViewController {
 extension WeatherViewController {
 
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        for index in 0..<History.shared.count {
-            requestCurrentWeather(index, address: History.shared.address(at: index))
-        }
+        updateAllCurrentWeather()
         refreshControl.endRefreshing()
     }
 
-    @objc func updateTime() {
-        DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.reloadData()
+    func updateAllCurrentWeather() {
+        for index in 0..<History.shared.count {
+            requestCurrentWeather(index, address: History.shared.address(at: index))
         }
     }
 
-    @objc func updateUserLocation() {
+    func updateTime() {
+        weatherTableView.reloadData()
+    }
+
+    func updateUserLocation() {
         locationService?.startReceivingLocationChanges()
     }
 
-    @objc func insertWeather(notification: Notification) {
+    func insertWeather(notification: Notification) {
         guard let userInfo = notification.userInfo,
             let index = userInfo["index"] as? Int else {
                 return
         }
         let indexSet = IndexSet.init(integer: index)
-        DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.insertSections(indexSet, with: .automatic)
-        }
+        weatherTableView.insertSections(indexSet, with: .automatic)
     }
 
-    @objc func updateCurrent(notification: Notification) {
+    func updateCurrent(notification: Notification) {
         guard let userInfo = notification.userInfo,
             let index = userInfo["index"] as? Int else {
                 return
         }
         let indexSet = IndexSet.init(integer: index)
-        DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.reloadSections(indexSet, with: .automatic)
-        }
+        weatherTableView.reloadSections(indexSet, with: .automatic)
     }
 
-    @objc func deleteWeather(notification: Notification) {
+    func deleteWeather(notification: Notification) {
         guard let userInfo = notification.userInfo,
             let index = userInfo["index"] as? Int else {
                 return
         }
         let indexSet = IndexSet.init(integer: index)
-        DispatchQueue.main.async { [weak self] in
-            self?.weatherTableView.deleteSections(indexSet, with: .automatic)
-        }
+        weatherTableView.deleteSections(indexSet, with: .automatic)
     }
 }

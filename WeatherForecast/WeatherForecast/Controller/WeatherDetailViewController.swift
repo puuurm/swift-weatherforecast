@@ -26,6 +26,10 @@ class WeatherDetailViewController: UIViewController {
 
     var pageNumber: Int!
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 }
 
 // MARK: - View Lifecycle
@@ -34,18 +38,26 @@ extension WeatherDetailViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.updateCurrent),
-            name: .DidUpdateCurrentWeather,
-            object: nil
-        )
-
+            forName: .DidUpdateCurrentWeather,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateCurrent()
+        }
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.updateWeekly),
-            name: .DidUpdateWeeklyWeather,
-            object: nil
-        )
+            forName: .DidUpdateWeeklyWeather,
+            object: nil,
+            queue: OperationQueue.main
+        ) { [weak self] _ in
+            self?.updateWeekly()
+        }
+        NotificationCenter.default.addObserver(
+            forName: .DidUpdateCurrentAndWeeklyOneLocation,
+            object: nil,
+            queue: .current
+        ) { [weak self] _ in
+            self?.updateCurrentAndWeekly()
+        }
         networkManager = NetworkManager(session: URLSession.shared)
         forecastTableView.addSubview(refreshControl)
         addBackgroundImageView()
@@ -53,7 +65,6 @@ extension WeatherDetailViewController {
         registerXib()
         requestWeeklyForecast()
     }
-
 }
 
 // MAKR: - Initializer
@@ -293,23 +304,23 @@ extension WeatherDetailViewController {
 extension WeatherDetailViewController {
 
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        requestWeeklyForecast()
-        requestCurrentWeather()
+        updateCurrentAndWeekly()
         refreshControl.endRefreshing()
     }
 
-    @objc func updateCurrent() {
-        let indexSet = IndexSet([0, 2, 3])
-        DispatchQueue.main.async { [weak self] in
-            self?.forecastTableView.reloadSections(indexSet, with: .none)
-        }
+    func updateCurrentAndWeekly() {
+        requestWeeklyForecast()
+        requestCurrentWeather()
     }
 
-    @objc func updateWeekly() {
+    func updateCurrent() {
+        let indexSet = IndexSet([0, 2, 3])
+        forecastTableView.reloadSections(indexSet, with: .none)
+    }
+
+    func updateWeekly() {
         let indexSet = IndexSet.init(integer: 1)
-        DispatchQueue.main.async { [weak self] in
-            self?.forecastTableView.reloadSections(indexSet, with: .none)
-        }
+        forecastTableView.reloadSections(indexSet, with: .none)
     }
 
 }
