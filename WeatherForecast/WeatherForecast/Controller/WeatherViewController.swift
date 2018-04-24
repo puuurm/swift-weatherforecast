@@ -15,6 +15,16 @@ class WeatherViewController: UIViewController, Presentable {
     @IBOutlet weak var weatherTableView: UITableView!
     private var locationService: LocationService?
     private var networkManager: NetworkManager?
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(
+            self,
+            action: #selector(self.handleRefresh(_:)),
+            for: UIControlEvents.valueChanged
+        )
+        return refreshControl
+    }()
+
     private var selectedCell: FlexibleCell?
     private var flickerJSON: FlickerJSON? = nil {
         willSet {
@@ -37,6 +47,7 @@ extension WeatherViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         networkManager = NetworkManager(session: URLSession.shared)
+        weatherTableView.addSubview(refreshControl)
         locationService = LocationService()
         locationService?.delegate = self
         initNotification()
@@ -202,17 +213,11 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: LocationServiceDelegate {
     func updateLocation(_ placeMark: CLPlacemark?) {
+        let userLocationIndex: Int = 0
         guard let location = placeMark?.location,
             let postalAddress = placeMark?.postalAddress else { return }
         let address = Address(location: location, postalAddress: postalAddress)
-        guard Checker.isNeedUpdate(
-            before: History.shared.userLocationForecast?.address,
-            after: address,
-            object: History.shared.userLocationForecast?.current
-            ) else {
-                return
-        }
-        requestCurrentWeather(address)
+        requestCurrentWeather(userLocationIndex, address: address)
     }
 }
 
@@ -228,16 +233,26 @@ extension WeatherViewController: AvailableFlexibleCells {
 
 extension WeatherViewController {
 
-    private func requestCurrentWeather(_ address: Address) {
+    private func requestCurrentWeather(_ index: Int, address: Address) {
+        guard Checker.isNeedUpdate(
+            before: History.shared.forecastStores[index].address,
+            after: address,
+            object: History.shared.forecastStores[index].current
+            ) else {
+                return
+        }
         networkManager?.request(
-            QueryItem.cityName(address: address),
-            before: History.shared.userLocationForecast?.current,
+            QueryItem.coordinates(address: History.shared.address(at: index)),
+            before: History.shared.forecastStores[index].current,
             baseURL: .current,
             type: CurrentWeather.self
         ) { result -> Void in
             switch result {
             case let .success(weather):
-                History.shared.userLocationForecast = ForecastStore(address: address, current: weather)
+                History.shared.updateCurrentWeather(
+                    at: index,
+                    forecastStore: ForecastStore(address: address, current: weather)
+                )
             case let .failure(error): print(error)
             }
         }
@@ -293,6 +308,13 @@ extension WeatherViewController {
 // MARK: - Action
 
 extension WeatherViewController {
+
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        for index in 0..<History.shared.count {
+            requestCurrentWeather(index, address: History.shared.address(at: index))
+        }
+        refreshControl.endRefreshing()
+    }
 
     @objc func updateTime() {
         DispatchQueue.main.async { [weak self] in

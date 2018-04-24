@@ -15,14 +15,6 @@ final class History {
         return sharedInstance
     }
     lazy var clock = Clock()
-    var userLocationForecast: ForecastStore? {
-        get {
-            return forecastStores.first
-        }
-        set {
-            updateUserLocationWeather(newValue)
-        }
-    }
     var forecastStores: [ForecastStore]
 
     var count: Int {
@@ -37,20 +29,24 @@ final class History {
         self.sharedInstance = history
     }
 
-    private func updateUserLocationWeather(_ forecastStore: ForecastStore?) {
+    func updateCurrentWeather(at index: Int, forecastStore: ForecastStore?) {
         guard let forecast = forecastStore else { return }
-        let userInfo: [String: Int] = ["index": 0]
-        if forecastStores.isEmpty {
-            append(forecast)
-            clock.start()
-        } else {
-            forecastStores[0] = forecast
+        let userInfo: [String: Int] = ["index": index]
+        if forecastStores.count > index {
+            forecastStores[index] = forecast
             NotificationCenter.default.post(
                 name: .DidUpdateCurrentWeather,
                 object: self,
                 userInfo: userInfo
             )
+        } else {
+            append(forecast)
         }
+    }
+
+    func updateWeeklyWeather(at index: Int, weekly: WeeklyForecast) {
+        forecastStores[index].weekly = weekly
+        NotificationCenter.default.post(name: .DidUpdateWeeklyWeather, object: nil)
     }
 
     func address(at index: Int) -> Address {
@@ -62,7 +58,7 @@ final class History {
     }
 
     func append(_ forecastStore: ForecastStore) {
-         let userInfo: [String: Int] = ["index": forecastStores.count]
+        let userInfo: [String: Int] = ["index": forecastStores.count]
         forecastStores.append(forecastStore)
         NotificationCenter.default.post(
             name: .DidInsertWeather,
@@ -84,6 +80,12 @@ final class History {
             object: self,
             userInfo: userInfo
         )
+    }
+
+    func weekly(at index: Int) -> WeeklyForecast? {
+        guard forecastStores.count > index,
+            let weekly = forecastStores[index].weekly else { return nil }
+        return weekly
     }
 
     func temperatures(at index: Int) -> [Float] {

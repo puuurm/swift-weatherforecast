@@ -107,8 +107,6 @@ extension WeatherDetailContainerViewController: UIPageViewControllerDataSource {
     func viewController (at index: Int?) -> WeatherDetailViewController? {
         let index = index ?? 0
         let detailVC: WeatherDetailViewController? = storyboard?.viewController()
-        let vm = History.shared.weatherDetailViewModel(at: index)
-        detailVC?.weatherDetailViewModel = vm
         detailVC?.pageNumber = index
         detailVC?.backgroundImage = backgroundImage
         return detailVC

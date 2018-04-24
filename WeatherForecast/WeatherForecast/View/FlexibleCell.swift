@@ -25,14 +25,13 @@ class FlexibleCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         flexibleImageView.frame = contentView.frame
-        contentView.addSubview(flexibleImageView)
+        contentView.insertSubview(flexibleImageView, at: 0)
         flexibleImageView.contentMode = .scaleToFill
         flexibleImageView.translatesAutoresizingMaskIntoConstraints = false
         flexibleImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         flexibleImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         flexibleImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         flexibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        contentView.sendSubview(toBack: flexibleImageView)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

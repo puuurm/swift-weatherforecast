@@ -11,60 +11,21 @@ import UIKit
 class WeatherDetailViewController: UIViewController {
 
     @IBOutlet weak var forecastTableView: UITableView!
+
     var backgroundImage: UIImage?
-    var weatherDetailViewModel: WeatherDetailHeaderViewModel?
     var networkManager: NetworkManager?
-    var weeklyForecast: WeeklyForecast? {
-        get {
-            return History.shared.forecastStores[pageNumber].weekly
-        }
-        set {
-            History.shared.add(at: pageNumber ?? 0, weeklyForecast: newValue)
-            DispatchQueue.main.async { [weak self] in
-                self?.forecastTableView.reloadData()
-            }
-        }
-    }
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(
+            self,
+            action: #selector(self.handleRefresh(_:)),
+            for: UIControlEvents.valueChanged
+        )
+        return refreshControl
+    }()
 
     var pageNumber: Int!
 
-    private func loadWeeklyForecast() {
-        let address = History.shared.address(at: pageNumber ?? 0)
-        guard Checker.isNeedUpdate(before: weeklyForecast) else { return }
-        networkManager?.request(
-            QueryItem.coordinates(address: address),
-            before: weeklyForecast,
-            baseURL: .weekly,
-            type: WeeklyForecast.self
-        ) { [weak self] result -> Void in
-                switch result {
-                case let .success(weeklyForecast):
-                    self?.weeklyForecast = weeklyForecast
-                case let .failure(error): print(error.localizedDescription)
-                }
-        }
-    }
-
-    private func setHourWeatherCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: HourWeatherCell? = collectionView.dequeueReusableCell(for: indexPath)
-        let row = indexPath.row
-        let forecast = weeklyForecast?.forecasts[row]
-        cell?.setContents(dataSource: self, index: row, content: forecast)
-        if let weatherDetail = forecast?.moreWeather.first {
-            networkManager?.request(weatherDetail, imageExtension: .png) { result in
-                switch result {
-                case let .success(icon):
-                    DispatchQueue.main.async {
-                        cell?.setImage(icon)
-                    }
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        return cell ?? UICollectionViewCell()
-
-    }
 }
 
 // MARK: - View Lifecycle
@@ -72,11 +33,25 @@ extension WeatherDetailViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.updateCurrent),
+            name: .DidUpdateCurrentWeather,
+            object: nil
+        )
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.updateWeekly),
+            name: .DidUpdateWeeklyWeather,
+            object: nil
+        )
         networkManager = NetworkManager(session: URLSession.shared)
+        forecastTableView.addSubview(refreshControl)
         addBackgroundImageView()
         initTableViewAttributes()
         registerXib()
-        loadWeeklyForecast()
+        requestWeeklyForecast()
     }
 
 }
@@ -130,7 +105,7 @@ extension WeatherDetailViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell: WeatherDetailCell? = tableView.dequeueReusableCell(for: indexPath)
-            cell?.setContents(History.shared.weatherDetailViewModel(at: pageNumber ?? 0))
+            cell?.setContents(History.shared.weatherDetailViewModel(at: pageNumber))
             return cell ?? defaultCell
         case 1:
             let cell: TodayWeatherCell? = tableView.dequeueReusableCell(for: indexPath)
@@ -204,7 +179,7 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
         numberOfItemsInSection section: Int
         ) -> Int {
         if collectionView.tag == 1 {
-            return weeklyForecast?.forecasts.count ?? 0
+            return History.shared.weekly(at: pageNumber)?.forecasts.count ?? 0
         } else {
             return History.shared.currentDetailCount(at: pageNumber)
         }
@@ -232,10 +207,109 @@ extension WeatherDetailViewController: UICollectionViewDataSource {
 }
 
 // MARK: - LineChartDataSource
+
 extension WeatherDetailViewController: LineChartDataSource {
 
     func baseData(lineChartView: LineChartView) -> [Float] {
         return History.shared.temperatures(at: pageNumber)
+    }
+
+}
+
+// MARK: - Networking
+
+extension WeatherDetailViewController {
+
+    private func requestWeeklyForecast() {
+        let address = History.shared.address(at: pageNumber ?? 0)
+        if let weekly = History.shared.weekly(at: pageNumber),
+            !Checker.isNeedUpdate(before: weekly) {
+                return
+        }
+        networkManager?.request(
+            QueryItem.coordinates(address: address),
+            before: History.shared.weekly(at: pageNumber),
+            baseURL: .weekly,
+            type: WeeklyForecast.self
+        ) { [weak self] result -> Void in
+            guard let `self` = self else { return }
+            switch result {
+            case let .success(weeklyForecast):
+                History.shared.updateWeeklyWeather(at: self.pageNumber, weekly: weeklyForecast)
+            case let .failure(error): print(error.localizedDescription)
+            }
+        }
+    }
+
+    private func requestCurrentWeather() {
+        let address = History.shared.address(at: pageNumber ?? 0)
+        guard Checker.isNeedUpdate(
+            before: History.shared.forecastStores[pageNumber].current
+            ) else {
+                return
+        }
+        networkManager?.request(
+            QueryItem.coordinates(address: address),
+            before: History.shared.forecastStores[pageNumber].current,
+            baseURL: .current,
+            type: CurrentWeather.self
+        ) { [weak self] result -> Void in
+            guard let `self` = self else { return }
+            switch result {
+            case let .success(weather):
+                History.shared.updateCurrentWeather(
+                    at: self.pageNumber,
+                    forecastStore: ForecastStore(address: address, current: weather)
+                )
+            case let .failure(error): print(error)
+            }
+        }
+    }
+
+    private func setHourWeatherCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        let cell: HourWeatherCell? = collectionView.dequeueReusableCell(for: indexPath)
+        let row = indexPath.row
+        let forecast = History.shared.weekly(at: pageNumber)?.forecasts[row]
+        cell?.setContents(dataSource: self, index: row, content: forecast)
+        if let weatherDetail = forecast?.moreWeather.first {
+            networkManager?.request(weatherDetail, imageExtension: .png) { result in
+                switch result {
+                case let .success(icon):
+                    DispatchQueue.main.async {
+                        cell?.setImage(icon)
+                    }
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        return cell ?? UICollectionViewCell()
+
+    }
+
+}
+
+// MARK: - Action
+extension WeatherDetailViewController {
+
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        requestWeeklyForecast()
+        requestCurrentWeather()
+        refreshControl.endRefreshing()
+    }
+
+    @objc func updateCurrent() {
+        let indexSet = IndexSet([0, 2, 3])
+        DispatchQueue.main.async { [weak self] in
+            self?.forecastTableView.reloadSections(indexSet, with: .none)
+        }
+    }
+
+    @objc func updateWeekly() {
+        let indexSet = IndexSet.init(integer: 1)
+        DispatchQueue.main.async { [weak self] in
+            self?.forecastTableView.reloadSections(indexSet, with: .none)
+        }
     }
 
 }
