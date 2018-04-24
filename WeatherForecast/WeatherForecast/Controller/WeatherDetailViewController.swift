@@ -47,7 +47,7 @@ extension WeatherDetailViewController {
         NotificationCenter.default.addObserver(
             forName: .DidUpdateWeeklyWeather,
             object: nil,
-            queue: OperationQueue.main
+            queue: .main
         ) { [weak self] _ in
             self?.updateWeekly()
         }
@@ -94,8 +94,9 @@ extension WeatherDetailViewController {
     }
 
     func registerXib() {
-        forecastTableView.register(type: SunInfoCell.self)
-        forecastTableView.register(type: WeatherDetailCell.self)
+        forecastTableView.registerCell(type: SunInfoCell.self)
+        forecastTableView.registerCell(type: WeatherDetailCell.self)
+        forecastTableView.registerView(type: SectionHeaderView.self)
     }
 }
 
@@ -157,10 +158,13 @@ extension WeatherDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell: SectionHeaderCell? = tableView.dequeueReusableCell()
+//        let cell: SectionHeaderCell? = tableView.dequeueReusableCell()
+//        let section = Section(rawValue: section)
+//        cell?.titleLabel.text = section?.date
+        let header: SectionHeaderView? = tableView.dequeueReusableView()
         let section = Section(rawValue: section)
-        cell?.titleLabel.text = section?.date
-        return cell ?? UIView()
+        header?.titleLabel.text = section?.date
+        return header ?? UIView()
     }
 
     func tableView(

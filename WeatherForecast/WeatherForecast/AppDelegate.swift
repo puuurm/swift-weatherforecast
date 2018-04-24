@@ -37,9 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         if History.shared.count != 0 {
-            NotificationCenter.default.post(name: Notification.Name.DidUpdateTime, object: self)
-            NotificationCenter.default.post(name: Notification.Name.DidUpdateUserLocation, object: self)
-            NotificationCenter.default.post(name: Notification.Name.DidUpdateAllCurrentWeather, object: self)
+            NotificationCenter.default.post(name: .DidUpdateTime, object: self)
+            NotificationCenter.default.post(name: .DidUpdateUserLocation, object: self)
+            NotificationCenter.default.post(name: .DidUpdateAllCurrentWeather, object: self)
         }
     }
 

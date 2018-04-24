@@ -24,11 +24,26 @@ extension UITableView {
         return cell
     }
 
-    func register<T: Identifiable>(type: T.Type) {
+    func dequeueReusableView<T: Identifiable>() -> T? {
+        guard let view = dequeueReusableHeaderFooterView(withIdentifier: T.defaultIdentifier) as? T else {
+            return nil
+        }
+        return view
+    }
+
+    func registerCell<T: Identifiable>(type: T.Type) {
         let bundle = Bundle(for: type)
         let uiNib = UINib(nibName: T.defaultIdentifier, bundle: bundle)
         register(uiNib, forCellReuseIdentifier: T.defaultIdentifier)
     }
+
+    func registerView<T: Identifiable>(type: T.Type) {
+        let bundle = Bundle(for: type)
+        let uiNib = UINib(nibName: T.defaultIdentifier, bundle: bundle)
+        register(uiNib, forHeaderFooterViewReuseIdentifier: T.defaultIdentifier)
+    }
+
+
 }
 
 extension UICollectionView {
