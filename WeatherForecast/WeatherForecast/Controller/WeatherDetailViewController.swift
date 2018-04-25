@@ -127,7 +127,7 @@ extension WeatherDetailViewController: UITableViewDataSource {
             return cell ?? defaultCell
         default:
             let cell: SunInfoCell? = tableView.dequeueReusableCell(for: indexPath)
-            let system = History.shared.forecastStores[pageNumber].current.system
+            let system = History.shared.current(at: pageNumber)?.system
             cell?.setContents(system: system)
             return cell ?? defaultCell
         }
@@ -158,9 +158,6 @@ extension WeatherDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let cell: SectionHeaderCell? = tableView.dequeueReusableCell()
-//        let section = Section(rawValue: section)
-//        cell?.titleLabel.text = section?.date
         let header: SectionHeaderView? = tableView.dequeueReusableView()
         let section = Section(rawValue: section)
         header?.titleLabel.text = section?.date
@@ -236,7 +233,7 @@ extension WeatherDetailViewController: LineChartDataSource {
 extension WeatherDetailViewController {
 
     private func requestWeeklyForecast() {
-        let address = History.shared.address(at: pageNumber ?? 0)
+        guard let address = History.shared.address(at: pageNumber ?? 0) else {return}
         if let weekly = History.shared.weekly(at: pageNumber),
             !Checker.isNeedUpdate(before: weekly) {
                 return
@@ -257,15 +254,15 @@ extension WeatherDetailViewController {
     }
 
     private func requestCurrentWeather() {
-        let address = History.shared.address(at: pageNumber ?? 0)
-        guard Checker.isNeedUpdate(
-            before: History.shared.forecastStores[pageNumber].current
+        guard let address = History.shared.address(at: pageNumber ?? 0),
+            Checker.isNeedUpdate(
+            before: History.shared.current(at: pageNumber)
             ) else {
                 return
         }
         networkManager?.request(
             QueryItem.coordinates(address: address),
-            before: History.shared.forecastStores[pageNumber].current,
+            before: History.shared.current(at: pageNumber),
             baseURL: .current,
             type: CurrentWeather.self
         ) { [weak self] result -> Void in

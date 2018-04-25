@@ -38,6 +38,12 @@ class WeatherViewController: UIViewController, Presentable {
         return .lightContent
     }
 
+    @IBAction func settingButtonDidTap(_ sender: UIBarButtonItem) {
+        if let settingVC: SettingViewController = storyboard?.viewController() {
+            present(settingVC, animated: true, completion: nil)
+        }
+    }
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -50,11 +56,11 @@ extension WeatherViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initNotification()
         networkManager = NetworkManager(session: URLSession.shared)
         weatherTableView.addSubview(refreshControl)
         locationService = LocationService()
         locationService?.delegate = self
-        initNotification()
         requestFlickerJSON()
         updateUserLocation()
     }
@@ -249,16 +255,17 @@ extension WeatherViewController: AvailableFlexibleCells {
 extension WeatherViewController {
 
     private func requestCurrentWeather(_ index: Int, address: Address) {
-        guard Checker.isNeedUpdate(
-            before: History.shared.forecastStores[index].address,
+        guard let address = History.shared.address(at: index),
+            Checker.isNeedUpdate(
+            before: History.shared.address(at: index),
             after: address,
-            object: History.shared.forecastStores[index].current
+            object: History.shared.current(at: index)
             ) else {
                 return
         }
         networkManager?.request(
-            QueryItem.coordinates(address: History.shared.address(at: index)),
-            before: History.shared.forecastStores[index].current,
+            QueryItem.coordinates(address: address),
+            before: History.shared.current(at: index),
             baseURL: .current,
             type: CurrentWeather.self
         ) { result -> Void in
@@ -330,8 +337,8 @@ extension WeatherViewController {
     }
 
     func updateAllCurrentWeather() {
-        for index in 0..<History.shared.count {
-            requestCurrentWeather(index, address: History.shared.address(at: index))
+        for index in 0..<History.shared.count where History.shared.address(at: index) != nil {
+            requestCurrentWeather(index, address: History.shared.address(at: index)!)
         }
     }
 

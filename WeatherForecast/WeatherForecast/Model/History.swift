@@ -49,7 +49,8 @@ final class History {
         NotificationCenter.default.post(name: .DidUpdateWeeklyWeather, object: nil)
     }
 
-    func address(at index: Int) -> Address {
+    func address(at index: Int) -> Address? {
+        guard forecastStores.count > index else { return nil }
         return forecastStores[index].address
     }
 
@@ -80,6 +81,11 @@ final class History {
             object: self,
             userInfo: userInfo
         )
+    }
+
+    func current(at index: Int) -> CurrentWeather? {
+        guard forecastStores.count > index else { return nil }
+        return forecastStores[index].current
     }
 
     func weekly(at index: Int) -> WeeklyForecast? {
