@@ -13,8 +13,18 @@ import Contacts
 class WeatherViewController: UIViewController, Presentable {
 
     @IBOutlet weak var weatherTableView: UITableView!
+    private var settingTransitionManager: SettingTransitionManager?
     private var locationService: LocationService?
     private var networkManager: NetworkManager?
+    private var selectedCell: FlexibleCell?
+
+    private var flickerJSON: FlickerJSON? = nil {
+        willSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.weatherTableView.reloadData()
+            }
+        }
+    }
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(
@@ -25,21 +35,13 @@ class WeatherViewController: UIViewController, Presentable {
         return refreshControl
     }()
 
-    private var selectedCell: FlexibleCell?
-    private var flickerJSON: FlickerJSON? = nil {
-        willSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.weatherTableView.reloadData()
-            }
-        }
-    }
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 
     @IBAction func settingButtonDidTap(_ sender: UIBarButtonItem) {
         if let settingVC: SettingViewController = storyboard?.viewController() {
+            settingVC.transitioningDelegate = settingTransitionManager
             present(settingVC, animated: true, completion: nil)
         }
     }
@@ -58,6 +60,7 @@ extension WeatherViewController {
         super.viewDidLoad()
         initNotification()
         networkManager = NetworkManager(session: URLSession.shared)
+        settingTransitionManager = SettingTransitionManager()
         weatherTableView.addSubview(refreshControl)
         locationService = LocationService()
         locationService?.delegate = self
