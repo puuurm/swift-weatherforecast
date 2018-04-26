@@ -145,7 +145,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="rOe-ze-Bqu">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="setting" id="ivo-2N-oz8">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="settings" id="ivo-2N-oz8">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="settingButtonDidTap:" destination="BYZ-38-t0r" id="KLF-oL-Ot7"/>
@@ -562,6 +562,6 @@
         <image name="close" width="32" height="32"/>
         <image name="internet" width="32" height="32"/>
         <image name="marker" width="12" height="12"/>
-        <image name="setting" width="24" height="24"/>
+        <image name="settings" width="24" height="24"/>
     </resources>
 </document>
