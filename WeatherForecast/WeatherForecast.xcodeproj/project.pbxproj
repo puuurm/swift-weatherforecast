@@ -40,6 +40,8 @@
 		C90A7C62203DC8CC00B8DD95 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C61203DC8CC00B8DD95 /* History.swift */; };
 		C90A7C64203ED2B900B8DD95 /* WeatherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C63203ED2B900B8DD95 /* WeatherDetailViewController.swift */; };
 		C90A7CA9203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7CA8203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift */; };
+		C91780F82093A3340018DCDD /* SegmentedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91780F72093A3340018DCDD /* SegmentedSwitch.swift */; };
+		C91780FA2093A3600018DCDD /* SegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91780F92093A3600018DCDD /* SegmentedView.swift */; };
 		C91FA1FA208CFAD1003855D6 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E60191207676C40085378C /* Identifiable.swift */; };
 		C91FA1FB208CFB4D003855D6 /* Extension+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6030B207D21D80085378C /* Extension+UIImage.swift */; };
 		C91FA1FD208D8959003855D6 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91FA1FC208D8959003855D6 /* MenuViewController.swift */; };
@@ -164,6 +166,8 @@
 		C90A7C61203DC8CC00B8DD95 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		C90A7C63203ED2B900B8DD95 /* WeatherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewController.swift; sourceTree = "<group>"; };
 		C90A7CA8203FF5CB00B8DD95 /* WeatherDetailContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailContainerViewController.swift; sourceTree = "<group>"; };
+		C91780F72093A3340018DCDD /* SegmentedSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedSwitch.swift; sourceTree = "<group>"; };
+		C91780F92093A3600018DCDD /* SegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedView.swift; sourceTree = "<group>"; };
 		C91FA1FC208D8959003855D6 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		C91FA202208F9CE7003855D6 /* SectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionHeaderView.xib; sourceTree = "<group>"; };
 		C91FA204208F9D22003855D6 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
@@ -368,6 +372,8 @@
 				C9E60309207CBA550085378C /* CurrentDetailCell.swift */,
 				C9E6FF9420603FFA0085378C /* LineChartView.swift */,
 				C942A99D2083C0EE00C32D1F /* FlexibleCell.swift */,
+				C91780F72093A3340018DCDD /* SegmentedSwitch.swift */,
+				C91780F92093A3600018DCDD /* SegmentedView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -723,6 +729,7 @@
 				C9E3E81F2055B23E004798D9 /* Checker.swift in Sources */,
 				C9E3E817205589F3004798D9 /* ImageCache.swift in Sources */,
 				C9C0FC4620494AD3002D636F /* StorageManager.swift in Sources */,
+				C91780F82093A3340018DCDD /* SegmentedSwitch.swift in Sources */,
 				C9E6030C207D21D90085378C /* Extension+UIImage.swift in Sources */,
 				C90A7BFF202AF91600B8DD95 /* AppDelegate.swift in Sources */,
 				C9E60132206A46EA0085378C /* Extension+Error.swift in Sources */,
@@ -736,6 +743,7 @@
 				C90A7C52203727D600B8DD95 /* SearchTableViewCell.swift in Sources */,
 				C9C0FC44204858E7002D636F /* Extension+Date.swift in Sources */,
 				C9E60134206BE2070085378C /* Extension+Notification.swift in Sources */,
+				C91780FA2093A3600018DCDD /* SegmentedView.swift in Sources */,
 				C9A621602089804C00FE8AFB /* Extension+Float.swift in Sources */,
 				C9C0FC48204CF73F002D636F /* DataSerializer.swift in Sources */,
 				C9A46DFA2090F106009BE658 /* SettingTransitionManager.swift in Sources */,
