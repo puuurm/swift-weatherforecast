@@ -16,6 +16,12 @@ class RoundedLayer: CALayer {
 
 }
 
+struct SegmentedSwitchConfigure {
+    var items: [String]
+    var highlightedColor: UIColor
+    var normalColor: UIColor
+}
+
 @IBDesignable
 class SegmentedSwitch: UIView {
 
@@ -63,7 +69,7 @@ class SegmentedSwitch: UIView {
         return RoundedLayer.self
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(indicator.frame) {
             maskViewOfSelectedView.frame = indicator.frame
         }
