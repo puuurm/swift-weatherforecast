@@ -43,7 +43,6 @@ extension UITableView {
         register(uiNib, forHeaderFooterViewReuseIdentifier: T.defaultIdentifier)
     }
 
-
 }
 
 extension UICollectionView {
