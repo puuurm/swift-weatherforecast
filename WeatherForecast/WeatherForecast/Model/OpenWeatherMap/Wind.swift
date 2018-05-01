@@ -49,6 +49,17 @@ extension Wind: AvailableDetailWeather {
     }
 
     var contents: String {
-        return "\(speed)m/s \(degrees)"
+        return "\(speed.convertWindSpeed())\(UserDefaults.Unit.string(forKey: .windSpeed) ?? Unit.WindSpeed.allTypes[0]) \(degrees)"
+    }
+}
+
+extension Speed {
+
+    func convertWindSpeed(to unit: String? = UserDefaults.Unit.string(forKey: .windSpeed)) -> Speed {
+        return unit == Unit.WindSpeed.mph.rawValue ? self.mphValue : self
+    }
+
+    var mphValue: Speed {
+        return self*2.236936
     }
 }

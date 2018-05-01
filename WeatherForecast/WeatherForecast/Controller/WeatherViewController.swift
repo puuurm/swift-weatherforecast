@@ -92,7 +92,7 @@ extension WeatherViewController {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.updateTime()
+            self?.reloadTable()
         }
 
         NotificationCenter.default.addObserver(
@@ -133,6 +133,14 @@ extension WeatherViewController {
             queue: .current
         ) { [weak self]_ in
             self?.updateAllCurrentWeather()
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: .DidUpdateUnit,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.reloadTable()
         }
     }
 
@@ -345,7 +353,7 @@ extension WeatherViewController {
         }
     }
 
-    func updateTime() {
+    func reloadTable() {
         weatherTableView.reloadData()
     }
 

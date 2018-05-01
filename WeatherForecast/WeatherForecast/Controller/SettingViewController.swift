@@ -69,8 +69,8 @@ struct OptionSwitchManager {
 
     init() {
         let models = [
-            OptionSwitchCellModel(title: "온도 단위", dataSource: ["℃", "℉"]),
-            OptionSwitchCellModel(title: "풍속 단위", dataSource: ["meter/s", "miles/h"])
+            OptionSwitchCellModel(title: "온도 단위", dataSource: Unit.Temperature.allTypes),
+            OptionSwitchCellModel(title: "풍속 단위", dataSource: Unit.WindSpeed.allTypes)
         ]
         optionSwitchCellModels.append(contentsOf: models)
     }
@@ -87,6 +87,7 @@ struct OptionSwitchManager {
             where optionSwitchCellModels[i].dataSource.contains(value) {
                 UserDefaults.Unit.set(value, forKey: userdefaultsKey[i])
                 UserDefaults.Unit.synchronize()
+                NotificationCenter.default.post(name: .DidUpdateUnit, object: self)
         }
     }
 

@@ -20,4 +20,6 @@ extension Notification.Name {
     static let DidInsertWeather = Notification.Name(rawValue: "DidInsertWeather")
     static let DidDeleteWeather = Notification.Name(rawValue: "DidDeleteWeather")
 
+    static let DidUpdateUnit = Notification.Name(rawValue: "DidUpdateUnit")
+
 }

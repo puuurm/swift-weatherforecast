@@ -94,12 +94,37 @@ extension Pressure: AvailableDetailWeather {
 
 extension Temperature {
 
+    var fahrenheitValue: Temperature {
+        return 1.8*self+32
+    }
+
     var roundedString: String {
+        let temperature = self.convertTemperature()
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 0
         formatter.roundingMode = .halfEven
-        let numberString = formatter.string(from: NSNumber(value: self)) ?? "0"
+        let numberString = formatter.string(from: NSNumber(value: temperature)) ?? "0"
         return numberString.magnitudeIfNeeded.appending("º")
     }
+
+    func convertTemperature(to unit: String? = UserDefaults.Unit.string(forKey: .temperature)) -> Temperature {
+        return unit == Unit.Temperature.fahrenheit.rawValue ? self.fahrenheitValue : self
+    }
+}
+
+struct Unit {
+
+    enum Temperature: String {
+        case celsius = "℃"
+        case fahrenheit = "℉"
+        static let allTypes: [String] = [celsius.rawValue, fahrenheit.rawValue]
+    }
+
+    enum WindSpeed: String {
+        case ms = "m/s"
+        case mph
+        static let allTypes: [String] = [ms.rawValue, mph.rawValue]
+    }
+
 }

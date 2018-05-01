@@ -34,4 +34,3 @@ class SunInfoCell: ContentsCell {
         sunsetLabel.text = Date(timeIntervalSince1970: sunsetTimeInterval).convertString(format: "HH:mm a")
     }
 }
-
