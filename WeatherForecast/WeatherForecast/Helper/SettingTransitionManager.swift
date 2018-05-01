@@ -16,7 +16,7 @@ struct TransitionConfigure {
     var didTransitionComplete: Bool
 }
 
-class SettingTransitionManager: UIViewController {
+class SettingTransitionManager: NSObject {
 
     private var duration: TimeInterval = 0.7
     private var settingWidth: CGFloat = UIScreen.main.bounds.width * 0.6
@@ -80,7 +80,6 @@ class SettingTransitionManager: UIViewController {
     }
 
 }
-
 
 // MARK: - UIViewControllerAnimatedTransitioning
 

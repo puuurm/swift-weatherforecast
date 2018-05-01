@@ -16,10 +16,8 @@ class RoundedLayer: CALayer {
 
 }
 
-struct SegmentedSwitchConfigure {
-    var items: [String]
-    var highlightedColor: UIColor
-    var normalColor: UIColor
+protocol SegmentedSwitchDelegate: class {
+    func switchValueChanged(_ value: String)
 }
 
 @IBDesignable
@@ -38,6 +36,8 @@ class SegmentedSwitch: UIView {
             initViews()
         }
     }
+
+    weak var delegate: SegmentedSwitchDelegate?
 
     lazy var unselectedView: SegmentedView = {
         return SegmentedView(
@@ -69,7 +69,12 @@ class SegmentedSwitch: UIView {
         return RoundedLayer.self
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
         if keyPath == #keyPath(indicator.frame) {
             maskViewOfSelectedView.frame = indicator.frame
         }
@@ -104,6 +109,12 @@ class SegmentedSwitch: UIView {
         addGestureRecognizer(tapGesture)
     }
 
+    func setValue(_ value: String) {
+        if let index = dataSource.index(of: value) {
+            moveIndicator(index: index)
+        }
+    }
+
     private func switchToItem(index: Int) {
         UIView.animate(
             withDuration: 0.5,
@@ -113,18 +124,23 @@ class SegmentedSwitch: UIView {
             options: [.beginFromCurrentState, .curveEaseInOut],
             animations: { [weak self] in
                 guard let `self` = self else { return }
-                self.indicator.frame.origin = CGPoint(
-                    x: self.marginInset+CGFloat(index)*self.itemWidth,
-                    y: self.marginInset
-                )
+                self.moveIndicator(index: index)
             },
             completion: nil
+        )
+    }
+
+    private func moveIndicator(index: Int) {
+        indicator.frame.origin = CGPoint(
+            x: marginInset+CGFloat(index)*itemWidth,
+            y: marginInset
         )
     }
 
     @objc func handleTapGesture(_ gesture: UITapGestureRecognizer) {
         let location = gesture.location(in: self)
         let index = Int(floor(location.x / itemWidth))
+        delegate?.switchValueChanged(dataSource[index])
         switchToItem(index: index)
     }
 

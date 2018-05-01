@@ -41,7 +41,10 @@ extension HourWeatherCell {
         lineChartView.dataSource = dataSource
         lineChartView.cellIndex = index
         hourLabel.attributedText = NSMutableAttributedString(string: content.date.convertString(format: "H시"), attributes: StringAttribute.textWithBorder(fontSize: 13))
-        temperatureLabel.attributedText = NSMutableAttributedString(string: content.mainWeather.temperature.convertCelsius, attributes: StringAttribute.textWithBorder(fontSize: 17))
+        temperatureLabel.attributedText = NSMutableAttributedString(
+            string: content.mainWeather.temperature.roundedString,
+            attributes: StringAttribute.textWithBorder(fontSize: 17)
+        )
     }
 
     func setImage(_ image: UIImage?) {

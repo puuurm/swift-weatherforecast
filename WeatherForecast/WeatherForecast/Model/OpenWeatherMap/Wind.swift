@@ -8,9 +8,11 @@
 
 import UIKit
 
+typealias Speed = Float
+
 struct Wind {
 
-    private(set) var speed: Float
+    private(set) var speed: Speed
     private(set) var degrees: Float
 
 }
@@ -24,7 +26,7 @@ extension Wind: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        speed = try container.decode(Float.self, forKey: .speed)
+        speed = try container.decode(Speed.self, forKey: .speed)
         degrees = try container.decode(Float.self, forKey: .degrees)
     }
 
@@ -49,6 +51,4 @@ extension Wind: AvailableDetailWeather {
     var contents: String {
         return "\(speed)m/s \(degrees)"
     }
-
-
 }

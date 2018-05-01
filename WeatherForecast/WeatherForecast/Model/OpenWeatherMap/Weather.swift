@@ -7,14 +7,14 @@
 //
 
 import UIKit
-import Foundation
 
 typealias Humidity = Int
 typealias Pressure = Float
+typealias Temperature = Float
 
 struct Weather {
 
-    private(set) var temperature: Float
+    private(set) var temperature: Temperature
     private(set) var minTemperature: Float
     private(set) var maxTemperature: Float
     private(set) var pressure: Pressure?
@@ -38,7 +38,7 @@ extension Weather: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        temperature = try container.decode(Float.self, forKey: .temperature)
+        temperature = try container.decode(Temperature.self, forKey: .temperature)
         minTemperature = try container.decode(Float.self, forKey: .minTemperature)
         maxTemperature = try container.decode(Float.self, forKey: .maxTemperature)
         pressure = try? container.decode(Pressure.self, forKey: .pressure)
@@ -90,4 +90,16 @@ extension Pressure: AvailableDetailWeather {
         return UIImage.Icons.Weather.Pressure
     }
 
+}
+
+extension Temperature {
+
+    var roundedString: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        formatter.roundingMode = .halfEven
+        let numberString = formatter.string(from: NSNumber(value: self)) ?? "0"
+        return numberString.magnitudeIfNeeded.appending("º")
+    }
 }

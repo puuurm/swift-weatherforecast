@@ -104,7 +104,7 @@ final class History {
         let isUserLocation = indexPath.section == 0 ? true : false
         return WeatherTableCellViewModel(
             cityString: cityName,
-            temperatureString: currentWeather.weather.temperature.convertCelsius,
+            temperatureString: currentWeather.weather.temperature.roundedString,
             weatherDetail: currentWeather.weatherDetail.first!,
             isUserLocation: isUserLocation
         )
@@ -130,9 +130,9 @@ final class History {
         return WeatherDetailHeaderViewModel (
             city: cityName,
             weather: weatherDetail,
-            temperature: currentWeather.weather.temperature.convertCelsius,
-            minTemperature: currentWeather.weather.minTemperature.convertCelsius,
-            maxTemperature: currentWeather.weather.maxTemperature.convertCelsius
+            temperature: currentWeather.weather.temperature.roundedString,
+            minTemperature: currentWeather.weather.minTemperature.roundedString,
+            maxTemperature: currentWeather.weather.maxTemperature.roundedString
         )
     }
 

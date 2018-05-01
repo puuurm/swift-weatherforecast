@@ -21,14 +21,20 @@ class OptionSwitchCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
 
-    func setContents(cellModel: OptionSwitchCellModel) {
+    func setContents(cellModel: OptionSwitchCellModel?, delegate: SegmentedSwitchDelegate) {
+        guard let cellModel = cellModel else { return }
         titleLabel.text = cellModel.title
-        segmentedSwitchView.dataSource = cellModel.items
+        segmentedSwitchView.dataSource = cellModel.dataSource
+        segmentedSwitchView.delegate = delegate
+    }
+
+    func updateValue(_ value: String) {
+        segmentedSwitchView.setValue(value)
     }
 
 }
 
 struct OptionSwitchCellModel {
     var title: String
-    var items: [String]
+    var dataSource: [String]
 }

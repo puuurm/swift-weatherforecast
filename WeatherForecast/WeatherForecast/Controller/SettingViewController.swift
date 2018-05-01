@@ -10,14 +10,11 @@ import UIKit
 
 class SettingViewController: UIViewController {
 
-    private lazy var optionSwitchCellModel: [OptionSwitchCellModel] = {
-        return [
-            OptionSwitchCellModel(title: "온도 단위", items: ["℃", "℉"]),
-            OptionSwitchCellModel(title: "풍속 단위", items: ["meter/s", "miles/h"])
-        ]
-    }()
+    // MARK: - Properties
 
     @IBOutlet weak var settingTableView: UITableView!
+    private var optionSwitchManager = OptionSwitchManager()
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -27,24 +24,86 @@ class SettingViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
+
 extension SettingViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return optionSwitchCellModel.count
+        return optionSwitchManager.numberOfRows
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: OptionSwitchCell? = tableView.dequeueReusableCell(for: indexPath)
-        let model = optionSwitchCellModel[indexPath.row]
-        cell?.setContents(cellModel: model)
+        let model: OptionSwitchCellModel? = optionSwitchManager.cellModel(at: indexPath)
+        let selectedValue: String = optionSwitchManager.switchValue(at: indexPath)
+        cell?.setContents(cellModel: model, delegate: self)
+        cell?.updateValue(selectedValue)
         return cell ?? UITableViewCell()
     }
 
 }
 
+// MARK: - UITableViewDelegate
+
 extension SettingViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height * 0.6 / CGFloat(optionSwitchCellModel.count)
+        return UIScreen.main.bounds.height * 0.5 / CGFloat(optionSwitchManager.numberOfRows)
     }
+}
+
+// MARK: - SegmentedSwitchDelegate
+
+extension SettingViewController: SegmentedSwitchDelegate {
+
+    func switchValueChanged(_ value: String) {
+        optionSwitchManager.updateValue(value)
+    }
+
+}
+
+struct OptionSwitchManager {
+
+    private var optionSwitchCellModels: [OptionSwitchCellModel] = []
+    private var userdefaultsKey: [UserDefaults.Unit.StringDefaultKey] = [.temperature, .windSpeed]
+
+    init() {
+        let models = [
+            OptionSwitchCellModel(title: "온도 단위", dataSource: ["℃", "℉"]),
+            OptionSwitchCellModel(title: "풍속 단위", dataSource: ["meter/s", "miles/h"])
+        ]
+        optionSwitchCellModels.append(contentsOf: models)
+    }
+
+    func switchValue(at indexPath: IndexPath) -> String {
+        let row: Int = indexPath.row
+        let defaultValue: String = optionSwitchCellModels[row].dataSource[0]
+        let userDefaultValue: String? = UserDefaults.Unit.string(forKey: userdefaultsKey[row])
+        return userDefaultValue ?? defaultValue
+    }
+
+    func updateValue(_ value: String) {
+        for i in 0..<optionSwitchCellModels.count
+            where optionSwitchCellModels[i].dataSource.contains(value) {
+                UserDefaults.Unit.set(value, forKey: userdefaultsKey[i])
+                UserDefaults.Unit.synchronize()
+        }
+    }
+
+}
+
+extension OptionSwitchManager: AvailableDataSource {
+
+    var numberOfSections: Int {
+        return 1
+    }
+
+    var numberOfRows: Int {
+        return optionSwitchCellModels.count
+    }
+
+    func cellModel<T>(at indexPath: IndexPath) -> T? {
+        return optionSwitchCellModels[indexPath.row] as? T
+    }
+
 }

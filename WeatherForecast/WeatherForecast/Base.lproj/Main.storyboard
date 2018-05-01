@@ -32,15 +32,15 @@
                                     <action selector="closeButtonDidTap:" destination="X7f-Ji-X3U" eventType="touchUpInside" id="kmq-yq-zIh"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UWx-n9-E1K">
-                                <rect key="frame" x="0.0" y="143.5" width="225" height="400"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UWx-n9-E1K">
+                                <rect key="frame" x="0.0" y="177" width="225" height="333.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OptionSwitchCell" rowHeight="115" id="4AS-iS-0a9" customClass="OptionSwitchCell" customModule="WeatherForecast" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="225" height="115"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4AS-iS-0a9" id="9Bu-GB-mo5">
-                                            <rect key="frame" x="0.0" y="0.0" width="225" height="114.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="225" height="115"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Igv-Gn-qFv" customClass="SegmentedSwitch" customModule="WeatherForecast" customModuleProvider="target">
@@ -93,7 +93,7 @@
                             <constraint firstItem="BPw-lW-Dxs" firstAttribute="trailing" secondItem="j1N-Et-26G" secondAttribute="trailing" id="M0j-oR-M3T"/>
                             <constraint firstItem="UWx-n9-E1K" firstAttribute="leading" secondItem="BPw-lW-Dxs" secondAttribute="leading" id="Wlp-Ao-SIy"/>
                             <constraint firstItem="UWx-n9-E1K" firstAttribute="centerY" secondItem="BPw-lW-Dxs" secondAttribute="centerY" id="X56-3k-MnT"/>
-                            <constraint firstItem="UWx-n9-E1K" firstAttribute="height" secondItem="mYX-6w-XTv" secondAttribute="height" multiplier="0.6" id="evi-a4-JEB"/>
+                            <constraint firstItem="UWx-n9-E1K" firstAttribute="height" secondItem="mYX-6w-XTv" secondAttribute="height" multiplier="0.5" id="evi-a4-JEB"/>
                             <constraint firstItem="j1N-Et-26G" firstAttribute="width" secondItem="mYX-6w-XTv" secondAttribute="width" multiplier="0.4" id="s2z-QJ-cN2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BPw-lW-Dxs"/>

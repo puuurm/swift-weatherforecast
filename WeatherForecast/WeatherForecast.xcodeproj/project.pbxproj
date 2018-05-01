@@ -59,6 +59,8 @@
 		C95645782086700C00D92EDB /* FlickerJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95645772086700C00D92EDB /* FlickerJSON.swift */; };
 		C95645792086F6BF00D92EDB /* FlickerJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95645772086700C00D92EDB /* FlickerJSON.swift */; };
 		C9775D452094F4CA003548EA /* OptionSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9775D442094F4CA003548EA /* OptionSwitchCell.swift */; };
+		C9775D75209791E1003548EA /* Extension+Userdefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9775D74209791E1003548EA /* Extension+Userdefaults.swift */; };
+		C9775D7720979271003548EA /* AvailableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9775D7620979271003548EA /* AvailableDataSource.swift */; };
 		C9A46DFA2090F106009BE658 /* SettingTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A46DF92090F106009BE658 /* SettingTransitionManager.swift */; };
 		C9A62156208860F900FE8AFB /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90A7C5B203C088C00B8DD95 /* LocationService.swift */; };
 		C9A621572088644600FE8AFB /* Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E6012C20694CDA0085378C /* Presentable.swift */; };
@@ -181,6 +183,8 @@
 		C942A99F2083D09E00C32D1F /* AvailableFlexibleCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableFlexibleCells.swift; sourceTree = "<group>"; };
 		C95645772086700C00D92EDB /* FlickerJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerJSON.swift; sourceTree = "<group>"; };
 		C9775D442094F4CA003548EA /* OptionSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSwitchCell.swift; sourceTree = "<group>"; };
+		C9775D74209791E1003548EA /* Extension+Userdefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Userdefaults.swift"; sourceTree = "<group>"; };
+		C9775D7620979271003548EA /* AvailableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableDataSource.swift; sourceTree = "<group>"; };
 		C9A46DF92090F106009BE658 /* SettingTransitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTransitionManager.swift; sourceTree = "<group>"; };
 		C9A621592088880500FE8AFB /* Photos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photos.swift; sourceTree = "<group>"; };
 		C9A6215B2088881A00FE8AFB /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
@@ -356,6 +360,7 @@
 				C9E60133206BE2060085378C /* Extension+Notification.swift */,
 				C9E6018F207675380085378C /* Extension+UIView.swift */,
 				C9E6030B207D21D80085378C /* Extension+UIImage.swift */,
+				C9775D74209791E1003548EA /* Extension+Userdefaults.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -452,6 +457,7 @@
 				C9E60191207676C40085378C /* Identifiable.swift */,
 				C942A99F2083D09E00C32D1F /* AvailableFlexibleCells.swift */,
 				C9E3E81B2055ABF8004798D9 /* Storable.swift */,
+				C9775D7620979271003548EA /* AvailableDataSource.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -712,6 +718,7 @@
 				C9C0FC15204333FC002D636F /* HourWeatherCell.swift in Sources */,
 				C9A6215C2088881A00FE8AFB /* Photo.swift in Sources */,
 				C9C0FC17204334C9002D636F /* TodayWeatherCell.swift in Sources */,
+				C9775D7720979271003548EA /* AvailableDataSource.swift in Sources */,
 				C90A7C31202C122C00B8DD95 /* WeeklyForecast.swift in Sources */,
 				C90A7C5E203CACC700B8DD95 /* CurrentWeather.swift in Sources */,
 				C9E601802074835A0085378C /* Clouds.swift in Sources */,
@@ -745,6 +752,7 @@
 				C942A99E2083C0F000C32D1F /* FlexibleCell.swift in Sources */,
 				C90A7C52203727D600B8DD95 /* SearchTableViewCell.swift in Sources */,
 				C9775D452094F4CA003548EA /* OptionSwitchCell.swift in Sources */,
+				C9775D75209791E1003548EA /* Extension+Userdefaults.swift in Sources */,
 				C9C0FC44204858E7002D636F /* Extension+Date.swift in Sources */,
 				C9E60134206BE2070085378C /* Extension+Notification.swift in Sources */,
 				C91780FA2093A3600018DCDD /* SegmentedView.swift in Sources */,
