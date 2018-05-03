@@ -49,14 +49,28 @@ extension Wind: AvailableDetailWeather {
     }
 
     var contents: String {
-        return "\(speed.convertWindSpeed())\(UserDefaults.Unit.string(forKey: .windSpeed) ?? Unit.WindSpeed.allTypes[0]) \(degrees)"
+        return "\(speed.convertWindSpeed()) \(degrees.convertDegrees())"
     }
 }
 
 extension Speed {
 
-    func convertWindSpeed(to unit: String? = UserDefaults.Unit.string(forKey: .windSpeed)) -> Speed {
-        return unit == Unit.WindSpeed.mph.rawValue ? self.mphValue : self
+    func convertWindSpeed(to unit: String? = UserDefaults.Unit.string(forKey: .windSpeed)) -> String {
+        let speed = ( unit == Unit.WindSpeed.mph.rawValue ? self.mphValue : self )
+        return "\(Int(speed.rounded()))".appending(unit ?? Unit.WindSpeed.allTypes[0])
+    }
+
+    func convertDegrees() -> String {
+        switch self {
+        case 360, 0..<1: return"북풍"
+        case 1..<90: return "북동풍"
+        case 90..<91: return "동풍"
+        case 91..<180: return "남동풍"
+        case 180..<181: return "남풍"
+        case 181..<270: return "남서풍"
+        case 270: return "서풍"
+        default: return "북서풍"
+        }
     }
 
     var mphValue: Speed {
