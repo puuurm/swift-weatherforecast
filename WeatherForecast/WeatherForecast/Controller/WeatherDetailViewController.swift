@@ -141,7 +141,9 @@ extension WeatherDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0: return 310
-        case 2: return 300
+        case 2:
+            let count: Int = History.shared.currentDetailCount(at: pageNumber)
+            return CGFloat(100 * (count/2 + count%2))
         default: return 200
         }
     }
