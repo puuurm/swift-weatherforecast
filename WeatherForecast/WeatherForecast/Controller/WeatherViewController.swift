@@ -25,14 +25,8 @@ class WeatherViewController: UIViewController, Presentable {
             }
         }
     }
-    lazy var refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(
-            self,
-            action: #selector(self.handleRefresh(_:)),
-            for: UIControlEvents.valueChanged
-        )
-        return refreshControl
+   private lazy var refreshControl: UIRefreshControl = {
+        return UIRefreshControl()
     }()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -61,9 +55,9 @@ extension WeatherViewController {
         initNotification()
         networkManager = NetworkManager(session: URLSession.shared)
         settingTransitionManager = SettingTransitionManager()
-        weatherTableView.addSubview(refreshControl)
         locationService = LocationService()
         locationService?.delegate = self
+        setupTableView()
         requestFlickerJSON()
         updateUserLocation()
     }
@@ -142,6 +136,15 @@ extension WeatherViewController {
         ) { [weak self] _ in
             self?.reloadTable()
         }
+    }
+
+    private func setupTableView() {
+        if #available(iOS 10.0, *) {
+            weatherTableView.refreshControl = refreshControl
+        } else {
+            weatherTableView.addSubview(refreshControl)
+        }
+        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
     }
 
 }
